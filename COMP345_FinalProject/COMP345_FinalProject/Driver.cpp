@@ -1,5 +1,11 @@
 #include "Driver.h"
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <string>
+#include <fstream>
+
+using namespace sf;
+using namespace std;
 
 /*****************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
@@ -11,7 +17,39 @@
 /****************************************************************************************************************/
 
 int main() {
-	int mapWidth, mapHeight;    //Map dimensions
+
+	RenderWindow window(VideoMode(800, 600), "My window");
+
+	Font font;
+	if (!font.loadFromFile("arial.ttf"))
+	{
+		cout << "Error";
+	}
+
+	// run the program as long as the window is open
+	while (window.isOpen())
+	{
+		
+		// check all the window's events that were triggered since the last iteration of the loop
+		Event event;
+		while (window.pollEvent(event))
+		{
+			// "close requested" event: we close the window
+			if (event.type == Event::Closed)
+				window.close();
+		}
+
+		/*Text text;
+		text.setFont(font);
+		text.setString("Hello World");
+		text.setCharacterSize(24);
+		text.setColor(Color::Red);
+		window.clear();
+		window.draw(text);
+		window.display();*/
+	}
+
+	/*int mapWidth, mapHeight;    //Map dimensions
 	Map gameMap;				//The map that will be created for the user
 	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
 	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
@@ -77,6 +115,7 @@ int main() {
 	addCritterOrTower(coordX, coordY, mapWidth, mapHeight, GridType::Critter, gameMap);
 	
 	cout << "\nYour map has been successfully created\n";
+	*/
 	return 0;
 }
 
