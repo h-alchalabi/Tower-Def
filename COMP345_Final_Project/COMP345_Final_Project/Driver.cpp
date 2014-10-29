@@ -19,12 +19,8 @@ using namespace std;
 int main() {
 
 	RenderWindow window(VideoMode(800, 600), "My window");
-
-	Font font;
-	if (!font.loadFromFile("arial.ttf"))
-	{
-		cout << "Error";
-	}
+	CircleShape shape(100.f);
+	shape.setFillColor(sf::Color::Green);
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -39,6 +35,9 @@ int main() {
 				window.close();
 		}
 
+		window.clear();
+		window.draw(shape);
+		window.display();
 		/*Text text;
 		text.setFont(font);
 		text.setString("Hello World");
