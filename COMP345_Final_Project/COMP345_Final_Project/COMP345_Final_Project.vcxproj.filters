@@ -18,25 +18,25 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Driver.cpp">
+    <ClCompile Include="Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Map.cpp">
+    <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\MapGrid.cpp">
+    <ClCompile Include="MapGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Driver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Driver.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Map.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Map.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\MapGrid.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MapGrid.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
