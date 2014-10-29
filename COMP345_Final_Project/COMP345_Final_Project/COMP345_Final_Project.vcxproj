@@ -84,7 +84,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Driver.cpp" />
+    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Map.cpp" />
+    <ClCompile Include="..\..\COMP345_FinalProject\COMP345_FinalProject\MapGrid.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Driver.h" />
+    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\Map.h" />
+    <ClInclude Include="..\..\COMP345_FinalProject\COMP345_FinalProject\MapGrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
