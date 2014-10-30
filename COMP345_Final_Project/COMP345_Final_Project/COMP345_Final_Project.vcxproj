@@ -84,16 +84,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2013\Projects\SFML1\SFML1\CollisionHandler.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapGrid.cpp" />
-    <ClCompile Include="Test_file.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Documents\Visual Studio 2013\Projects\SFML1\SFML1\CollisionHandler.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Map.h" />
