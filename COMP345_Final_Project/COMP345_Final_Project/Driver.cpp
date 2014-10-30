@@ -1,5 +1,5 @@
 #include "Driver.h"
-#include <SFML/Window.hpp>
+//#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <fstream>
@@ -7,7 +7,7 @@
 using namespace sf;
 using namespace std;
 
-/*****************************************************************************************************************/
+/***************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
 //COMP345 - assignment 1
 //October 17, 2014
