@@ -22,6 +22,8 @@ int main() {
 	CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
+	cout << "nuggets - test" << endl;
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
