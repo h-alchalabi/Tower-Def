@@ -6,11 +6,11 @@
 #include <string>
 class Entity{
 public:
-	Entity();
-	Entity(std::string path);
+	Entity(); 
 	void handleCollision(Entity& e);
 	sf::Rect<float>* getHitbox();
 	sf::Sprite getSprite();
+	void setEntityImage(std::string path);
 private:
 	std::string entityPath;
 	sf::Texture entityTexture;

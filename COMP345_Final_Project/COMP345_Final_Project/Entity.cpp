@@ -5,7 +5,7 @@
 Entity::Entity(){
 	// do nothing
 }
-Entity::Entity(std::string path){
+void Entity::setEntityImage(std::string path){
 	entityTexture.loadFromFile(path);
 	entitySprite.setTexture(entityTexture);
 }
