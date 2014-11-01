@@ -1,20 +1,19 @@
 #include "Critter.h"
 
 
+Critter::Critter(){
 
+}
 
 // this constructor mofifies the critter depending on Wave
-Critter::Critter(int waveNumber){
+Critter::Critter(int waveNumber, CritterType type, string mapPath){
 	
 	hitPoints = 5*waveNumber;
 	speed = speed*waveNumber;
-	level = level*waveNumber;
-	reward = 0*waveNumber;
-	towerDamage = 1;
+	level = 1;
+	reward = 1*level;
 	positionX = 0;
 	positionY = 0;
-	rows = 0;
-	columns = 0;
 }
 
 
@@ -159,6 +158,7 @@ bool Critter::checkHealth(){
 	else
 		return false;
 }
+
 // checking for towers in order to decrement hitPoints
 void Critter::towerCheck(char map[5][5],int rows, int columns){
 	//down tower

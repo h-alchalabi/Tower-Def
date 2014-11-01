@@ -1,11 +1,23 @@
 #pragma once
 #include <iostream>
+enum CritterType { Normal, Fast, Slow };
 using namespace std;
 class Critter
 {
+private:
+	int reward;
+	int hitPoints;
+	int speed;
+	int level;
+	int positionX, positionY;
+	char input;
+	int rows, columns;
+	int towerDamage;
+	CritterType type;
+
 public:
 	Critter();
-	Critter(int Wave);
+	Critter(int wave, CritterType type, string mapPath);
 	int getLevel();
 	void setLevel(int level);
 	int getHitPoints();
@@ -24,13 +36,5 @@ public:
 	
 	~Critter();
 
-private:
-	int reward;
-	int hitPoints;
-	int speed;
-	int level;
-	int positionX, positionY;
-	char input;
-	int rows, columns;
-	int towerDamage;
+
 };
