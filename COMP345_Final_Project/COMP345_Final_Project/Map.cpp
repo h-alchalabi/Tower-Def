@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Map.h"
 #include <vector>
+#include <fstream>
+#include <string>
 using namespace std;
  
 /*******************************************************************************************************************/
@@ -52,20 +54,25 @@ void Map::setCellType(int coordX, int coordY, GridType gridType) {
 }
 
 void Map::printMap() const {
+	ofstream file("Map.txt");
 	cout << endl;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			switch (cells[i][j].getType()) {
 				case GridType::Scenery:
+					file << "0" << " ";
 					cout << " - ";
 					break;
 				case GridType::Start:
+					file << "1" << " ";
 					cout << " S ";
 					break;
 				case GridType::End:
+					file << "3" << " ";
 					cout << " E ";
 					break;
 				case GridType::Path:
+					file << "2" << " ";
 					cout << " 0 ";
 					break;
 				case GridType::Tower:
@@ -75,6 +82,7 @@ void Map::printMap() const {
 					cout << " C ";
 			}
 		}
+		file << endl;
 		cout << endl;
 	}
 	cout << endl;
