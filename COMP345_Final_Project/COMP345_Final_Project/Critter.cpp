@@ -14,6 +14,7 @@ Critter::Critter(int waveNumber, CritterType type, string mapPath){
 	reward = 1*level;
 	positionX = 0;
 	positionY = 0;
+	deploymentTime = 3.0f;
 }
 
 
@@ -23,7 +24,9 @@ Critter::~Critter()
 }
 
 
-
+float Critter::getDeploymentTime(){
+	return deploymentTime;
+}
 int Critter::getLevel(){
 	return level;
 }
@@ -78,7 +81,7 @@ void Critter::choosePath(char map[5][5]){
 	//takes user input, only cases of d,r,q work. 
 	// will loop until user enters q, or user ends up at E. ([4][4] in our case)
 	// if the user encounters a T, it takes damage
-	while (map[rows][columns] != 'E'){
+	/*while (map[rows][columns] != 'E'){
 		cout << "choose a direction: r:right, d:down or q:exit : ";
 		cin >> input;
 		//going down
@@ -142,6 +145,7 @@ void Critter::choosePath(char map[5][5]){
 		else
 			cout << "invalid letter, ";
 	}
+	*/
 }
 //check the health of critter
 // increments reward if critter is dead

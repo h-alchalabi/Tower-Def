@@ -14,6 +14,7 @@ private:
 	int rows, columns;
 	int towerDamage;
 	CritterType type;
+	int deploymentTime;
 
 public:
 	Critter();
@@ -33,7 +34,7 @@ public:
 	void incrementPositionX();
 	void incrementPositionY();
 	void towerCheck(char map[5][5], int rows, int columns);
-	
+	float getDeploymentTime();
 	~Critter();
 
 
