@@ -157,7 +157,7 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	string type = (gridType == GridType::Start ? "start point" : (gridType == GridType::Critter ? "critter" : "tower"));
 	while (!validInput) {
 		//Prompting user to enter the x and y coordinates of the element to insert on the map
-		std::cout << "\nEnter the coordination of the " << type << " to be added on the map." << endl;
+		std::cout << "\nEnter the coordinates of the " << type << " to be added on the map." << endl;
 		std::cout << "Coordination X: ";
 		cin >> coordX;
 		std::cout << "Coordination Y: ";
