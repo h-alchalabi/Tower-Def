@@ -45,5 +45,7 @@ public:
 	void addCritterOrTower(int& coordX, int& coordY, GridType gridType);
 
 	//Validating the end path
-	bool validateEndPath(int pathCoordX, int pathCoordY);
+	bool validateEndPath(int coordX, int coordY);
+
+	bool isNeighbourStart(int coordX, int coordY);
 };
