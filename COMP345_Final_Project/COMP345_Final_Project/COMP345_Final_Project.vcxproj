@@ -95,7 +95,6 @@
   <ItemGroup>
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Critter.h" />
-    <ClInclude Include="Driver.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapGrid.h" />

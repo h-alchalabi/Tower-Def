@@ -30,5 +30,17 @@ public:
 	void printMap() const;
 
 	//Calculating the number of cells around the current cell
-	int calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeight) const; 
+	int calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeight) const;
+
+	//Validating the next path to be traced by the user on the X axis
+	int tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY);
+
+	//Validate the next path to be traced by the user on the Y axis
+	int tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest);
+
+	//Prompting the user to enter the coordinates for the element to be inserted, and then insert the element on the map
+	void insertCoord(int& coordX, int& coordY, GridType gridType);
+
+	//Having the user add as much tower/critter as he/she wants on the map
+	void addCritterOrTower(int& coordX, int& coordY, GridType gridType);
 };

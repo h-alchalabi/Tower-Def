@@ -116,3 +116,98 @@ int Map::calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeigh
 }
 
 Map::~Map(){}
+
+int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
+	if (!(pathCoordXRequest > -1 && pathCoordXRequest < width))
+		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
+	else if (calcNumNeighbourPath(pathCoordXRequest, pathCoordY, width, height) > 1)
+		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
+		"existent path.\n";
+	else if (cells[pathCoordY][pathCoordXRequest].getType() == GridType::Start)
+		std::cout << "\nUnable to move towards this directions since it is the start point";
+	else {
+		//Inserting the path on the map and then updating the X coordinate for the next path to trace
+		cells[pathCoordY][pathCoordXRequest].setType(GridType::Path);
+		pathCoordX = pathCoordXRequest;
+	}
+	return pathCoordX;
+}
+
+int Map::tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest) {
+	if (!(pathCoordYRequest > -1 && pathCoordYRequest < height))
+		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
+	else if (calcNumNeighbourPath(pathCoordX, pathCoordYRequest, width, height) > 1)
+		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
+		"existent path.\n";
+	else if (cells[pathCoordYRequest][pathCoordX].getType() == GridType::Start)
+		std::cout << "\nUnable to move towards this directions since it is the start point";
+	else {
+		//Inserting the path on the map and then updating the Y coordinate for the next path to trace
+		cells[pathCoordYRequest][pathCoordX].setType(GridType::Path);
+		pathCoordY = pathCoordYRequest;
+	}
+
+	return pathCoordY;
+}
+
+void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
+	//Used to determine if user input is valid
+	bool validInput = false;
+	//Used to determine if system outputs for the case of start point, critters or towers
+	string type = (gridType == GridType::Start ? "start point" : (gridType == GridType::Critter ? "critter" : "tower"));
+	while (!validInput) {
+		//Prompting user to enter the x and y coordinates of the element to insert on the map
+		std::cout << "\nEnter the coordination of the " << type << " to be added on the map." << endl;
+		std::cout << "Coordination X: ";
+		cin >> coordX;
+		std::cout << "Coordination Y: ";
+		cin >> coordY;
+		//Validating the x and y coordinates entered by user
+		if (coordX < width && coordX > -1 && coordY < height && coordY > -1) {
+			switch (gridType) {
+			case GridType::Critter:
+				//Critter insertion validation
+				if (cells[coordY][coordX].getType() == GridType::Path)
+					validInput = true;
+				else if (cells[coordY][coordX].getType() == GridType::Critter)
+					std::cout << "You have already inserted a critter on these coordinates";
+				else
+					std::cout << "Unable to place critter in these coordinates because it is not a path. Please try again.\n\n";
+				break;
+			case GridType::Tower:
+				//Tower insertion validation
+				if (cells[coordY][coordX].getType() == GridType::Scenery)
+					validInput = true;
+				else if (cells[coordY][coordX].getType() == GridType::Tower)
+					std::cout << "You have already inserted a tower on these coordinates";
+				else
+					std::cout << "Unable to place tower in these coordinates because it is a path. Please try again.\n\n";
+				break;
+			default:
+				//Start point validated
+				validInput = true;
+				break;
+			}
+		}
+		else
+			std::cout << "Either your X coordinate or your Y coordinate is invalid. Please try again.\n\n";
+	}
+
+	system("cls");
+
+	//Adding the element on the map and then display the map
+	cells[coordY][coordX].setType(gridType);
+	printMap();
+}
+
+void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
+	char moreInput; //Used to keep track for if the user wants to create more towers/critters
+	do {
+		//Inserting the critter or tower on the map
+		insertCoord(coordX, coordY, gridType);
+		//Prompting the user to decide whether to add more critters or not
+		std::cout << "Would you like to create more " << (gridType == GridType::Critter ? "critter" : "tower") <<
+			"? (Enter 'y' for yes and 'n' for no): ";
+		cin >> moreInput;
+	} while (moreInput == 'y');
+}
