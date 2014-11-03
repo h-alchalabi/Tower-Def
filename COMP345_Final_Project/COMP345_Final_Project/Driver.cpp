@@ -1,4 +1,5 @@
-#include "Driver.h"
+#include "Map.h"
+#include <iostream>
 //#include <SFML/Window.hpp>
 //#include <SFML/Graphics.hpp>
 #include <string>
@@ -31,12 +32,12 @@ int main() {
 	//Prompting the user to enter the dimensions of the map, create the map based on the input, and then display it
 	do {
 		//Minimum width user allowed to enter: 5
-		std::cout << "Enter the width of the map (minimum length of 5): ";
+		cout << "Enter the width of the map (minimum length of 5): ";
 		cin >> mapWidth;
 	} while (mapWidth < 5);
 	do {
 		//Minimum height user allowed to enter: 5
-		std::cout << "Enter the height of the map (minimum length of 5): ";
+		cout << "Enter the height of the map (minimum length of 5): ";
 		cin >> mapHeight;
 	} while (mapHeight < 5);
 
@@ -52,7 +53,7 @@ int main() {
 	pathCoordY = coordY;
 	fileOpen << pathCoordX << "," << pathCoordY << endl;
 	while (pathDirection != 'e') {
-		std::cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
+		cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
 		cin >> pathDirection;
 		system("cls");
 		switch (pathDirection) {
@@ -88,7 +89,7 @@ int main() {
 			break;
 		default:
 			//Invalid input
-			std::cout << "What you entered was invalid. Try again" << endl;
+			cout << "What you entered was invalid. Try again" << endl;
 			break;
 		}
 
@@ -100,6 +101,6 @@ int main() {
 	//Inserting critters on the map
 	gameMap.addCritterOrTower(coordX, coordY, GridType::Critter);
 
-	std::cout << "\nYour map has been successfully created\n";
+	cout << "\nYour map has been successfully created\n";
 	return 0;
 }
