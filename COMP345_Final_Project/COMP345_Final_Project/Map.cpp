@@ -88,12 +88,12 @@ void Map::printMap() const {
 	cout << endl;
 }
 
-int Map::calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeight) const {
+int Map::calcNumNeighbourPath(int coordX, int coordY) const {
 	int numOfNeighbour = 0; //Used to determine the number of scenery cells that are around the current cell
 	if (coordY == 0)
 		//At the top of the map
 		numOfNeighbour = cells[coordY + 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
-	else if (coordY == (mapHeight - 1))
+	else if (coordY == (height - 1))
 		//At the bottom of the map
 		numOfNeighbour = cells[coordY - 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
 	else {
@@ -104,7 +104,7 @@ int Map::calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeigh
 	if (coordX == 0)
 		//On the far left side of the map
 		numOfNeighbour = cells[coordY][coordX + 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
-	else if (coordX == (mapWidth - 1))
+	else if (coordX == (width - 1))
 		//On the far right side of the map
 		numOfNeighbour = cells[coordY][coordX - 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
 	else {
@@ -120,7 +120,7 @@ Map::~Map(){}
 int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
 	if (!(pathCoordXRequest > -1 && pathCoordXRequest < width))
 		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
-	else if (calcNumNeighbourPath(pathCoordXRequest, pathCoordY, width, height) > 1)
+	else if (calcNumNeighbourPath(pathCoordXRequest, pathCoordY) > 1)
 		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
 		"existent path.\n";
 	else if (cells[pathCoordY][pathCoordXRequest].getType() == GridType::Start)
@@ -136,7 +136,7 @@ int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
 int Map::tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest) {
 	if (!(pathCoordYRequest > -1 && pathCoordYRequest < height))
 		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
-	else if (calcNumNeighbourPath(pathCoordX, pathCoordYRequest, width, height) > 1)
+	else if (calcNumNeighbourPath(pathCoordX, pathCoordYRequest) > 1)
 		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
 		"existent path.\n";
 	else if (cells[pathCoordYRequest][pathCoordX].getType() == GridType::Start)
@@ -210,4 +210,20 @@ void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
 			"? (Enter 'y' for yes and 'n' for no): ";
 		cin >> moreInput;
 	} while (moreInput == 'y');
+}
+
+bool Map::validateEndPath(int pathCoordX, int pathCoordY) {
+	bool isValidated = false;
+	if (cells[pathCoordY][pathCoordX].getType() == GridType::Start) {
+		cout << "Unable to end the path at the start point. Try again." << endl;
+	}
+	else if (cells[pathCoordY - 1][pathCoordX].getType() == GridType::Start ||
+		cells[pathCoordY + 1][pathCoordX].getType() == GridType::Start ||
+		cells[pathCoordY][pathCoordX - 1].getType() == GridType::Start ||
+		cells[pathCoordY][pathCoordX + 1].getType() == GridType::Start) {
+		cout << "Unable to end the path here because there are no path between the start and end point" << endl;
+	} else {
+		isValidated = true;
+	}
+	return isValidated;
 }

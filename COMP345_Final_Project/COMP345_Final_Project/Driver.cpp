@@ -79,9 +79,8 @@ int main() {
 			break;
 		case 'e':
 			//End the path
-			if (gameMap.getCell(pathCoordX, pathCoordY).getType() == GridType::Start) {
+			if (!gameMap.validateEndPath(pathCoordX, pathCoordY)) {
 				pathDirection = 's';
-				cout << "Unable to end the path at the start point. Try again." << endl;
 			} else {
 				gameMap.setCellType(pathCoordX, pathCoordY, GridType::End);
 				fileOpen << pathCoordX << "," << pathCoordY << endl;

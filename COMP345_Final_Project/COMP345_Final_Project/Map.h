@@ -30,7 +30,7 @@ public:
 	void printMap() const;
 
 	//Calculating the number of cells around the current cell
-	int calcNumNeighbourPath(int coordX, int coordY, int mapWidth, int mapHeight) const;
+	int calcNumNeighbourPath(int coordX, int coordY) const;
 
 	//Validating the next path to be traced by the user on the X axis
 	int tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY);
@@ -43,4 +43,7 @@ public:
 
 	//Having the user add as much tower/critter as he/she wants on the map
 	void addCritterOrTower(int& coordX, int& coordY, GridType gridType);
+
+	//Validating the end path
+	bool validateEndPath(int pathCoordX, int pathCoordY);
 };
