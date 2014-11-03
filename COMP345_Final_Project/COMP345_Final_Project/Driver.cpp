@@ -15,36 +15,6 @@ using namespace std;
 //
 /****************************************************************************************************************/
 int main() {
-	/*RenderWindow window(VideoMode(800, 600), "My window");
-	CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
-	std::cout << "nuggets - test" << endl;
-	// run the program as long as the window is open
-	while (window.isOpen())
-	{
-
-	// check all the window's events that were triggered since the last iteration of the loop
-	Event event;
-	while (window.pollEvent(event))
-	{
-	// "close requested" event: we close the window
-	if (event.type == Event::Closed)
-	window.close();
-	}
-	*
-	window.clear();
-	window.draw(shape);
-	window.display();
-	*/
-	/*Text text;
-	text.setFont(font);
-	text.setString("Hello World");
-	text.setCharacterSize(24);
-	text.setColor(Color::Red);
-	window.clear();
-	window.draw(text);
-	window.display();*/
-	//}
 	int mapWidth, mapHeight;    //Map dimensions
 	Map gameMap;				//The map that will be created for the user
 	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
@@ -62,6 +32,9 @@ int main() {
 		std::cout << "Enter the height of the map (minimum length of 5): ";
 		cin >> mapHeight;
 	} while (mapHeight < 5);
+
+	system("cls");
+
 	gameMap = Map(mapWidth, mapHeight);
 	gameMap.printMap();
 	//Inserting the start point
@@ -75,6 +48,7 @@ int main() {
 	while (pathDirection != 'e') {
 		std::cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
 		cin >> pathDirection;
+		system("cls");
 		switch (pathDirection) {
 		case 'w':
 			//Going up
@@ -98,14 +72,20 @@ int main() {
 			break;
 		case 'e':
 			//End the path
-			gameMap.setCellType(pathCoordX, pathCoordY, GridType::End);
-			fileOpen << pathCoordX << "," << pathCoordY << endl;
+			if (gameMap.getCell(pathCoordX, pathCoordY).getType() == GridType::Start) {
+				pathDirection = 's';
+				cout << "Unable to end the path at the start point. Try again." << endl;
+			} else {
+				gameMap.setCellType(pathCoordX, pathCoordY, GridType::End);
+				fileOpen << pathCoordX << "," << pathCoordY << endl;
+			}
 			break;
 		default:
 			//Invalid input
-			std::cout << "What you entered was invalid, try again" << endl;
+			std::cout << "What you entered was invalid. Try again" << endl;
 			break;
 		}
+
 		//Updating the map to the user with the path that was traced
 		gameMap.printMap();
 	}
@@ -115,7 +95,6 @@ int main() {
 	addCritterOrTower(coordX, coordY, mapWidth, mapHeight, GridType::Critter, gameMap);
 
 	std::cout << "\nYour map has been successfully created\n";
-
 	return 0;
 }
 void insertCoord(int& coordX, int& coordY, int mapWidth, int mapHeight, GridType gridType, Map& gameMap) {
@@ -160,6 +139,9 @@ void insertCoord(int& coordX, int& coordY, int mapWidth, int mapHeight, GridType
 		else
 			std::cout << "Either your X coordinate or your Y coordinate is invalid. Please try again.\n\n";
 	}
+
+	system("cls");
+
 	//Adding the element on the map and then display the map
 	gameMap.setCellType(coordX, coordY, gridType);
 	gameMap.printMap();
