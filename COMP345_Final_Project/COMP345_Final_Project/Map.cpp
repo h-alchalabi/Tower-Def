@@ -158,9 +158,9 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	while (!validInput) {
 		//Prompting user to enter the x and y coordinates of the element to insert on the map
 		std::cout << "\nEnter the coordinates of the " << type << " to be added on the map." << endl;
-		std::cout << "Coordination X: ";
+		std::cout << "Coordinate X: ";
 		cin >> coordX;
-		std::cout << "Coordination Y: ";
+		std::cout << "Coordinate Y: ";
 		cin >> coordY;
 		//Validating the x and y coordinates entered by user
 		if (coordX < width && coordX > -1 && coordY < height && coordY > -1) {
