@@ -96,9 +96,9 @@ int main() {
 		gameMap.printMap();
 	}
 	//Inserting towers on the map
-	gameMap.addCritterOrTower(coordX, coordY, GridType::Tower);
+	//gameMap.addCritterOrTower(coordX, coordY, GridType::Tower);
 	//Inserting critters on the map
-	gameMap.addCritterOrTower(coordX, coordY, GridType::Critter);
+	//gameMap.addCritterOrTower(coordX, coordY, GridType::Critter);
 
 	cout << "\nYour map has been successfully created\n";
 	return 0;
