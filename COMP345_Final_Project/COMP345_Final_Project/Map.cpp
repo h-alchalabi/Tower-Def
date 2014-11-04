@@ -4,7 +4,8 @@
 #include <fstream>
 #include <string>
 using namespace std;
- 
+ofstream filePath("Path.txt");
+
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
 //COMP345 - assignment 1
@@ -50,7 +51,12 @@ void Map::setHeight(int h) {
 }
 
 void Map::setCellType(int coordX, int coordY, GridType gridType) {
+
 	cells[coordY][coordX].setType(gridType);
+	if (gridType == GridType::Start || gridType == GridType::Path){
+		filePath << coordX << "," << coordY << endl;
+	}
+
 }
 
 void Map::printMap() const {
@@ -59,22 +65,23 @@ void Map::printMap() const {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			switch (cells[i][j].getType()) {
-				case GridType::Scenery:
-					file << "0" << " ";
-					cout << " - ";
-					break;
-				case GridType::Start:
-					file << "1" << " ";
-					cout << " S ";
-					break;
-				case GridType::End:
-					file << "3" << " ";
-					cout << " E ";
-					break;
-				case GridType::Path:
-					file << "2" << " ";
-					cout << " 0 ";
-					break;
+			case GridType::Scenery:
+				file << "0" << " ";
+				cout << " - ";
+				break;
+			case GridType::Start:
+				file << "1" << " ";
+				cout << " S ";
+				break;
+			case GridType::End:
+				file << "3" << " ";
+				cout << " E ";
+				break;
+			case GridType::Path:
+				file << "2" << " ";
+				cout << " 0 ";
+				break;
+
 			}
 		}
 		file << endl;
@@ -110,7 +117,9 @@ int Map::calcNumNeighbourPath(int coordX, int coordY) const {
 	return numOfNeighbour;
 }
 
-Map::~Map(){}
+Map::~Map(){
+
+}
 
 int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
 	if (!(pathCoordXRequest > -1 && pathCoordXRequest < width))
@@ -122,7 +131,8 @@ int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
 		//Inserting the path on the map and then updating the X coordinate for the next path to trace
-		cells[pathCoordY][pathCoordXRequest].setType(GridType::Path);
+		//cells[pathCoordY][pathCoordXRequest].setType(GridType::Path);
+		setCellType(pathCoordXRequest, pathCoordY, GridType::Path);
 		pathCoordX = pathCoordXRequest;
 	}
 	return pathCoordX;
@@ -138,7 +148,8 @@ int Map::tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest) {
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
 		//Inserting the path on the map and then updating the Y coordinate for the next path to trace
-		cells[pathCoordYRequest][pathCoordX].setType(GridType::Path);
+		//cells[pathCoordYRequest][pathCoordX].setType(GridType::Path);
+		setCellType(pathCoordX, pathCoordYRequest, GridType::Path);
 		pathCoordY = pathCoordYRequest;
 	}
 
@@ -191,7 +202,8 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	system("cls");
 
 	//Adding the element on the map and then display the map
-	cells[coordY][coordX].setType(gridType);
+	setCellType(coordY, coordX, gridType);
+	//cells[coordY][coordX].set(gridType);
 	printMap();
 }
 
@@ -213,7 +225,7 @@ bool Map::validateEndPath(int coordX, int coordY) {
 		cout << "Unable to end the path at the start point. Try again." << endl;
 	else if (isNeighbourStart(coordX, coordY))
 		cout << "Unable to end the path here because there are no path between the start and end point" << endl;
-	else 
+	else
 		isValidated = true;
 	return isValidated;
 }

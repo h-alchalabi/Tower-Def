@@ -10,12 +10,15 @@ public:
 	~Wave(void);
 	void createCritters(int waveNumber);
 	void deploy(float deploymentTime, vector<Critter>critter);
+	void move();
 private:
 	int waveNumber;
 	int level;
 	int numOfCritters;
 	int moddedWave;
-	int dtime;
+	int critterDeployed;
+	clock_t elapsedTime;
+	Critter *critter;
 	vector <Critter> critterVec;
 	//Critter* critterHolder;
 };
