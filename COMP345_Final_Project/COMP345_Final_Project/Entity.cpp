@@ -20,3 +20,27 @@ sf::Rect<float>* Entity::getHitbox(){
 sf::Sprite Entity::getSprite(){
 	return this->entitySprite;
 }
+float Entity::getX() const{
+	return this->x;
+}
+float Entity::getY() const{
+	return this->y;
+}
+float Entity::getCenterX() const{
+	return this->centerX;
+}
+float Entity::getCenterY() const{
+	return this->centerY;
+}
+void Entity::setPostion(float newX, float newY){
+	this->x = newX;
+	this->y = newY;
+	this->centerX = newX + (this->entitySprite.getLocalBounds().width / 2);
+	this->centerY = newY + (this->entitySprite.getLocalBounds().height / 2);
+}
+void Entity::setCenterPostion(float newCenterX, float newCenterY){
+	this->centerX = newCenterX;
+	this->centerY = newCenterY;
+	this->x = newCenterX - (this->entitySprite.getLocalBounds().width / 2);
+	this->y = newCenterY - (this->entitySprite.getLocalBounds().height / 2);
+}
