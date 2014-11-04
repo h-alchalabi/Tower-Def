@@ -1,4 +1,5 @@
 #include "Critter.h"
+#include <fstream>
 
 
 Critter::Critter(){
@@ -8,6 +9,8 @@ Critter::Critter(){
 // this constructor mofifies the critter depending on Wave
 Critter::Critter(int waveNumber, CritterType type, string mapPath){
 	
+	ifstream file("Path.txt"); // close the file in destructor.
+
 	hitPoints = 5*waveNumber;
 	speed = speed*waveNumber;
 	level = 1;
@@ -21,6 +24,7 @@ Critter::Critter(int waveNumber, CritterType type, string mapPath){
 
 Critter::~Critter()
 {
+	// close file here.
 }
 
 

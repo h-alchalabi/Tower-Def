@@ -75,11 +75,6 @@ void Map::printMap() const {
 					file << "2" << " ";
 					cout << " 0 ";
 					break;
-				case GridType::Tower:
-					cout << " T ";
-					break;
-				case GridType::Critter:
-					cout << " C ";
 			}
 		}
 		file << endl;
