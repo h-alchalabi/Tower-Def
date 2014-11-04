@@ -212,18 +212,40 @@ void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
 	} while (moreInput == 'y');
 }
 
-bool Map::validateEndPath(int pathCoordX, int pathCoordY) {
+bool Map::validateEndPath(int coordX, int coordY) {
 	bool isValidated = false;
-	if (cells[pathCoordY][pathCoordX].getType() == GridType::Start) {
+	if (cells[coordY][coordX].getType() == GridType::Start)
 		cout << "Unable to end the path at the start point. Try again." << endl;
-	}
-	else if (cells[pathCoordY - 1][pathCoordX].getType() == GridType::Start ||
-		cells[pathCoordY + 1][pathCoordX].getType() == GridType::Start ||
-		cells[pathCoordY][pathCoordX - 1].getType() == GridType::Start ||
-		cells[pathCoordY][pathCoordX + 1].getType() == GridType::Start) {
+	else if (isNeighbourStart(coordX, coordY))
 		cout << "Unable to end the path here because there are no path between the start and end point" << endl;
-	} else {
+	else 
 		isValidated = true;
-	}
 	return isValidated;
+}
+
+bool Map::isNeighbourStart(int coordX, int coordY) {
+	bool isNeighbourStart;
+	if (coordY == 0)
+		//At the top of the map
+		isNeighbourStart = cells[coordY + 1][coordX].getType() == GridType::Start ? true : false;
+	else if (coordY == (height - 1))
+		//At the bottom of the map
+		isNeighbourStart = cells[coordY - 1][coordX].getType() == GridType::Start ? true : false;
+	else {
+		isNeighbourStart = cells[coordY - 1][coordX].getType() == GridType::Start ? true : false;
+		isNeighbourStart = cells[coordY + 1][coordX].getType() == GridType::Start ? true : false;
+	}
+
+	if (coordX == 0)
+		//On the far left side of the map
+		isNeighbourStart = cells[coordY][coordX + 1].getType() == GridType::Start ? true : false;
+	else if (coordX == (width - 1))
+		//On the far right side of the map
+		isNeighbourStart = cells[coordY][coordX - 1].getType() == GridType::Start ? true : false;
+	else {
+		isNeighbourStart = cells[coordY][coordX + 1].getType() == GridType::Start ? true : false;
+		isNeighbourStart = cells[coordY][coordX - 1].getType() == GridType::Start ? true : false;
+	}
+
+	return isNeighbourStart;
 }
