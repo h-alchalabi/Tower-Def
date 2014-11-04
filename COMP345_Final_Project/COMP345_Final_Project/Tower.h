@@ -38,12 +38,12 @@ private:
 	float range;
 	float fireRate;
 	int lvl;
-	const int type;
-	const int buyingCost;
+	int type;
+	int buyingCost;
 	int resellVal;
 	int atk;
-	const int upgradeCost;
-	const Effect status;
+	int upgradeCost;
+	Effect status;
 };
 
 #endif // !TOWER_H
