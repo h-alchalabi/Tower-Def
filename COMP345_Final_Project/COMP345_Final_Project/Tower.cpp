@@ -1,5 +1,18 @@
 #include "Tower.h"
 
+Tower::Tower(){
+	
+	lvl = 1;
+	buyingCost = 150;
+	resellVal = 100;
+	range = 3;
+	atk = 30;
+	status = NONE;
+	fireRate = 2;
+	upgradeCost = 45;
+	
+	}
+
 Tower::Tower(int type){
 
 	//Average Tower
@@ -62,7 +75,14 @@ float Tower::getRate(){
 int Tower::getUpgradeCost(){
 	return upgradeCost;
 }
+int Tower::getstatusEffect(){
+	return status;
+}
+string Tower::displayStatus(Effect status){
+	char* statusEffect[] = { "NONE", "SLOW" };
+	return statusEffect[status];
 
+}
 void Tower::setUpgradeStats()
 {
 	++lvl;

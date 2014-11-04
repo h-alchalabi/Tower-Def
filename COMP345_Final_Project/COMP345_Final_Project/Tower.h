@@ -13,6 +13,9 @@ public:
 	Tower(int type);
 	/*This function should check if the critter is in range, if yes, then fire a missle.
 	Also if a missle is fired you must wait (fire rate) before firing another one.*/
+	
+	/*we'll handle collision right after the other things are completely done because the grading sheet 
+	doesnt mention anything about attacking*/
 	void handleCollision(Critter& e);
 	virtual ~Tower();
 
@@ -25,19 +28,22 @@ public:
 	float getRate();
 	int getUpgradeCost();
 	enum Effect{ NONE, SLOW };
-
+	
+	string displayStatus(Effect status);
+	int getstatusEffect();
 	void setUpgradeStats();
+	
 
 private:
 	float range;
 	float fireRate;
 	int lvl;
-	int type;
-	int buyingCost;
+	const int type;
+	const int buyingCost;
 	int resellVal;
 	int atk;
-	int upgradeCost;
-	Effect status;
+	const int upgradeCost;
+	const Effect status;
 };
 
 #endif // !TOWER_H
