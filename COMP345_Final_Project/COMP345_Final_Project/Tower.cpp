@@ -47,6 +47,13 @@ Tower::Tower(int type){
 	}
 }
 
+void Tower::handleCollision(Entity& e){
+	// check if a critter is in range (use critter's center coordinates and radius)
+	// if yes, handle the collision by creating a missle via MissleController and st it's target to the given Critter.
+	// All this should occur once per <fireRate>
+	// Use timers.
+}
+
 Tower::~Tower(){}
 
 int Tower::getLvl(){

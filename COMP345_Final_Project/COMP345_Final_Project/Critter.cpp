@@ -191,3 +191,9 @@ void Critter::towerCheck(char map[5][5],int rows, int columns){
 	}
 
 }
+
+void Critter::handleCollision(Entity& e){
+	// check if missle has hit (via hitboxes)
+	// if yes, handle the collision by dealing damage and destroying missle.
+	// missle should be destroyed via the Missle Controller.
+}

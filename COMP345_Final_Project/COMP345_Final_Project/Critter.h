@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
+#include "Entity.h"
 enum CritterType { Normal, Fast, Slow };
 using namespace std;
-class Critter
+class Critter : public Entity
 {
 private:
 	int reward;
@@ -35,6 +36,7 @@ public:
 	void incrementPositionY();
 	void towerCheck(char map[5][5], int rows, int columns);
 	float getDeploymentTime();
+	void handleCollision(Entity& e);
 	~Critter();
 
 

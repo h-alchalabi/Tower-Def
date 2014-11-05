@@ -7,7 +7,7 @@
 class Entity{
 public:
 	Entity(); 
-	void handleCollision(Entity& e);
+	virtual void handleCollision(Entity& e) = 0;
 	sf::Rect<float>* getHitbox();
 	sf::Sprite getSprite();
 	void setEntityImage(std::string path);

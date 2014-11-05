@@ -16,7 +16,7 @@ public:
 	
 	/*we'll handle collision right after the other things are completely done because the grading sheet 
 	doesnt mention anything about attacking*/
-	void handleCollision(Critter& e);
+	void handleCollision(Entity& e);
 	virtual ~Tower();
 
 	
