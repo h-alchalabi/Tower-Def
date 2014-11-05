@@ -10,7 +10,8 @@ Tower::Tower(){
 	status = NONE;
 	fireRate = 2;
 	upgradeCost = 45;
-	
+	positionY = 0;
+	positionX = 0;
 	}
 
 Tower::Tower(int type){
@@ -26,6 +27,8 @@ Tower::Tower(int type){
 		status = NONE;
 		fireRate = 2;
 		upgradeCost = 45;
+		positionY = 0;
+		positionX = 0;
 	}
 
 	//Special Type of Tower
@@ -39,6 +42,8 @@ Tower::Tower(int type){
 		status = SLOW;
 		fireRate = 1;
 		upgradeCost = 55;
+		positionY = 0;
+		positionX = 0;
 	}
 }
 
@@ -83,6 +88,22 @@ string Tower::displayStatus(Effect status){
 	return statusEffect[status];
 
 }
+void Tower::setPostionY(int y){
+	positionY = y;
+}
+void Tower::setPostionX(int x){
+	positionX = x;
+}
+int Tower::getPositionX(){ 
+	return positionX;
+}
+int Tower::getPositionY(){
+	return positionY;
+}
+
+//void Tower::placeTower(){}
+
+
 void Tower::setUpgradeStats()
 {
 	++lvl;

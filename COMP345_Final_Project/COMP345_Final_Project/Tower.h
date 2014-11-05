@@ -19,6 +19,7 @@ public:
 	void handleCollision(Critter& e);
 	virtual ~Tower();
 
+	
 	int getLvl();
 	int getType();
 	int getBuyCost();
@@ -28,13 +29,19 @@ public:
 	float getRate();
 	int getUpgradeCost();
 	enum Effect{ NONE, SLOW };
-	
+	void setPostionX(int x);
+	void setPostionY(int y);
+	int getPositionX();
+	int getPositionY();
+	void placeTower();
 	string displayStatus(Effect status);
 	int getstatusEffect();
 	void setUpgradeStats();
 	
 
 private:
+	int positionX;
+	int positionY;
 	float range;
 	float fireRate;
 	int lvl;
