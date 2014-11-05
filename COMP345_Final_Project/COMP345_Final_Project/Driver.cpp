@@ -3,7 +3,6 @@
 //#include <SFML/Window.hpp>
 //#include <SFML/Graphics.hpp>
 #include <string>
-#include <fstream>
 
 //using namespace sf;
 using namespace std;
@@ -28,7 +27,6 @@ int main() {
 	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
 	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
 	char pathDirection = 's';   //Used to verify if user wants to end path tracing
-	ofstream fileOpen("Path.txt");
 	//Prompting the user to enter the dimensions of the map, create the map based on the input, and then display it
 	do {
 		//Minimum width user allowed to enter: 5
@@ -51,7 +49,6 @@ int main() {
 	//Prompting the user to trace the path on the map
 	pathCoordX = coordX;
 	pathCoordY = coordY;
-	fileOpen << pathCoordX << "," << pathCoordY << endl;
 	while (pathDirection != 'e') {
 		cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
 		cin >> pathDirection;
@@ -60,22 +57,18 @@ int main() {
 		case 'w':
 			//Going up
 			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY - 1);
-			fileOpen << pathCoordX << "," << pathCoordY << endl;
 			break;
 		case 's':
 			//Going down
 			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY + 1);
-			fileOpen << pathCoordX << "," << pathCoordY << endl;
 			break;
 		case 'a':
 			//Going left
 			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX - 1, pathCoordY);
-			fileOpen << pathCoordX << "," << pathCoordY << endl;
 			break;
 		case 'd':
 			//Going right
 			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX + 1, pathCoordY);
-			fileOpen << pathCoordX << "," << pathCoordY << endl;
 			break;
 		case 'e':
 			//End the path
@@ -83,7 +76,6 @@ int main() {
 				pathDirection = 's';
 			} else {
 				gameMap.setCellType(pathCoordX, pathCoordY, GridType::End);
-				fileOpen << pathCoordX << "," << pathCoordY << endl;
 			}
 			break;
 		default:
