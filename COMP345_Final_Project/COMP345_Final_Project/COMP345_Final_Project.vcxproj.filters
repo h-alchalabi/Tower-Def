@@ -65,10 +65,13 @@
     <ClInclude Include="Tower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Missle.h">
+    <ClInclude Include="SharedSingleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MissleController.h">
+    <ClInclude Include="ProjectileController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

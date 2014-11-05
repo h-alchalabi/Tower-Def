@@ -99,8 +99,9 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapGrid.h" />
-    <ClInclude Include="Missle.h" />
-    <ClInclude Include="MissleController.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileController.h" />
+    <ClInclude Include="SharedSingleton.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="TowerController.h" />
     <ClInclude Include="Wave.h" />
