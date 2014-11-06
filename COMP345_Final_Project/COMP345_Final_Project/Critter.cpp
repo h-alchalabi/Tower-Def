@@ -8,13 +8,11 @@ Critter::Critter(){
 
 // this constructor mofifies the critter depending on Wave
 Critter::Critter(int waveNumber, CritterType type, string mapPath){
-	
-	ifstream file("Path.txt"); // close the file in destructor.
 
-	hitPoints = 5*waveNumber;
+	hitPoints = 5 * waveNumber;
 	speed = speed*waveNumber;
 	level = 1;
-	reward = 1*level;
+	reward = 1 * level;
 	positionX = 0;
 	positionY = 0;
 	deploymentTime = 3.0f;
@@ -71,85 +69,36 @@ int Critter::getPositionY(){
 	return positionY;
 }
 
-void Critter::incrementPositionX(){
-	++positionX;
+void Critter::setPositionX(int positionX){
+	this->positionX = positionX;
 }
 
-void Critter::incrementPositionY(){
-	++positionY;
+void Critter::setPositionY(int positionY){
+	this->positionY = positionY;
 }
 
-void Critter::choosePath(char map[5][5]){
-
-	// start at [0][0] , end at [4][4]
-	//takes user input, only cases of d,r,q work. 
-	// will loop until user enters q, or user ends up at E. ([4][4] in our case)
-	// if the user encounters a T, it takes damage
-	/*while (map[rows][columns] != 'E'){
-		cout << "choose a direction: r:right, d:down or q:exit : ";
-		cin >> input;
-		//going down
-		if (input == 'd'){
-			++rows;
-			cout << "Critter chooses to go to position " << rows << columns << endl;
-			if (map[rows][columns] == 'V' && rows <= 4){
-				incrementPositionY(); 
-				towerCheck(map, rows, columns);
-				if (checkHealth() == true){
-					break;
-				}
-				cout << "valid path" << endl;
-				cout << map[rows][columns] << endl;
-
-			}
-			// if the next cell is E, the critter stops, since it's the end of the path
-			//userPoints is also decremented because the critter reached the end
-			else if (map[rows][columns] == 'E' && columns <= 4){
-				incrementPositionY();
-				cout << map[rows][columns] << endl;
-				cout << "this is the end" << endl;
-				//--Wave::userPoints;
-			}
-
-
-
-			else {
-				cout << "invalid path, " << endl;
-				cout << map[rows][columns] << endl;
-				--rows;
-
-			}
+void Critter::move(){
+	string line, token;
+	int x, y;
+	ifstream file("Path.txt");
+	if (file.is_open()){
+		file >> line;
+		if (file.eof()){
+			return;
 		}
-		//going right
-		else if (input == 'r'){
-			++columns;
-			cout << "Critter chooses to go to position " << rows << columns << endl;
-			if (map[rows][columns] == 'V' && columns <= 4){
-				incrementPositionX();
-				//calls function towerCheck which checks if there are any towers adjacent to the critter
-				towerCheck(map, rows, columns);
-				//checkHealth() checks if the critter is dead, HP=0
-				if (checkHealth() == true){
-					break;
-				}
-				cout << "valid path" << endl;
-				cout << map[rows][columns] << endl;
-			}
-			
-			else{
-				cout << "invalid letter, ";
-				cout << map[rows][columns] << endl;
-				--columns;
-			}
+		else{
+			token = line.substr(0, line.find(delimiter));
+			istringstream(token) >> x;
+			setPositionX(x);
+			token = line.substr(line.find(delimiter) + 1);
+			istringstream(token) >> y;
+			setPositionY(y);
 		}
 
-		else if (input == 'q'){
-			exit(1);
-		}
-		else
-			cout << "invalid letter, ";
 	}
-	*/
+
+
+
 }
 //check the health of critter
 // increments reward if critter is dead
@@ -160,7 +109,7 @@ bool Critter::checkHealth(){
 		cout << "Critter is dead" << endl;
 		cout << "Reward = " << reward << endl;
 		//cout << "User points = " << Wave::userPoints << endl;
-	
+
 		return true;
 	}
 	else
@@ -168,25 +117,25 @@ bool Critter::checkHealth(){
 }
 
 // checking for towers in order to decrement hitPoints
-void Critter::towerCheck(char map[5][5],int rows, int columns){
+void Critter::towerCheck(char map[5][5], int rows, int columns){
 	//down tower
-	if (map[rows+1][columns] == 'T'&& rows<4){
-	//	this->hitPoints -= Wave::towerDamage;
+	if (map[rows + 1][columns] == 'T'&& rows<4){
+		//	this->hitPoints -= Wave::towerDamage;
 		cout << "Critter HP= " << hitPoints << endl;
 	}
 	//right tower
-	if (map[rows][columns +1] == 'T'&& columns<4){
-	//	this->hitPoints -= Wave::towerDamage;
-		cout << "Critter HP= " << hitPoints <<endl;
+	if (map[rows][columns + 1] == 'T'&& columns<4){
+		//	this->hitPoints -= Wave::towerDamage;
+		cout << "Critter HP= " << hitPoints << endl;
 	}
 	//up tower
-	if (map[rows-1][columns] == 'T'&& rows>0){
-	//	this->hitPoints -= Wave::towerDamage;
+	if (map[rows - 1][columns] == 'T'&& rows>0){
+		//	this->hitPoints -= Wave::towerDamage;
 		cout << "Critter HP= " << hitPoints << endl;
 	}
 	//left tower
-	if (map[rows][columns-1] == 'T'&& columns >0){
-	//	this->hitPoints -= Wave::towerDamage;
+	if (map[rows][columns - 1] == 'T'&& columns >0){
+		//	this->hitPoints -= Wave::towerDamage;
 		cout << "Critter HP= " << hitPoints << endl;
 	}
 
@@ -197,3 +146,4 @@ void Critter::handleCollision(Entity& e){
 	// if yes, handle the collision by dealing damage and destroying missle.
 	// missle should be destroyed via the Missle Controller.
 }
+
