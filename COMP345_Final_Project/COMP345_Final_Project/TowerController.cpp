@@ -1,6 +1,6 @@
 #include "TowerController.h"
 #include "Tower.h"
-
+#include "Map.h"
 #include <vector>
 
 Tower* tower;
@@ -8,10 +8,15 @@ vector<Tower>::iterator i;
 int input;
 int index;
 
-void TowerController::addTower(int type, int posX, int posY){
+
+TowerController::TowerController(){
+	money = 4000;
+}
+void TowerController::addTower(int type, int posX, int posY, Map *map){
+	purchaseTower(type);
 	tower = new Tower(type);
-	//Need to tell the tower where it is placed on the map
-	towerList.push_back(*tower);
+	map->addCritterOrTower(posX, posY, GridType::TOWER);
+	towerList.push_back(*tower); 
 	cout << "You purchased a " << tower->getType() << endl;
 };
 
@@ -53,4 +58,23 @@ void TowerController::printTowerStats(Tower* tower){
 			"\nPower: " << tower->getAtk() <<
 			"\nRate of Fire Attack: " << tower->getRate() <<
 			"\nUpgrade Cost: " << tower->getUpgradeCost() << endl;
+}
+int TowerController::getMoney(){
+	return money;
+}
+void TowerController::setMoney(int money){
+	this->money = money;
+}
+int TowerController::getPrice(int type){
+	if (type == 1)
+		return 175;
+	return 150;
+}
+void TowerController::purchaseTower(int type){
+	setMoney(getMoney() - getPrice(type));
+}
+bool TowerController::purchaseVerif( int type){
+	if (getMoney() < getPrice(type))
+		return false;
+	return true;
 }

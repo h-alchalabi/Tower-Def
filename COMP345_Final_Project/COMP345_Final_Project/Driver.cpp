@@ -28,6 +28,9 @@ using namespace std;
 void openMapTxt(string mapName, string mapFileName, Map& gameMap);
 void mapCreateOrEdit(Map& gameMap);
 void startGame(Map& gameMap);
+void createMap(Map& gameMap);
+void loadMap(Map& gameMap);
+void placeTowers(Map& gameMap);
 
 int main() {
 	Map gameMap;				//The map that will be created for the user
@@ -75,11 +78,14 @@ void mapCreateOrEdit(Map& gameMap) {
 
 	//Prompting the user whether he/she wants to create a map or use an existing map
 	do {
-		cout << "Enter the following to select an option:" << endl << "c -> Create a map" << endl <<
-			"e -> Edit an existent map" << endl;
+		cout << "Enter the following to select an option:" << endl 
+			<< "c -> Create a map" << endl 
+			<< "x -> Edit an existent map" << endl
+			<< "t -> Add towers to an existing map" << endl
+			<< "e -> Return to Main Menu" << endl;
 		cin >> gameOption;
 
-		if (!(gameOption == 'c' || gameOption == 'e'))
+		if (!(gameOption == 'c' || gameOption == 'x' || gameOption == 't' || gameOption == 'e'))
 			cout << "What you entered is invalid. Please try again.\n\n";
 		else
 			validInput = true;
@@ -88,99 +94,135 @@ void mapCreateOrEdit(Map& gameMap) {
 	system("cls");
 
 	if (gameOption == 'c') {
-		//Prompting the user to enter the name of the map
-		validInput = false;
-		do {
-			cout << "Enter the name of your map: ";
-			cin >> mapName;
-			mapFileName = "map/" + mapName + "_map.txt";
-			if (ifstream(mapFileName.c_str()))
-				cout << "This map already exists. Please enter another name\n\n";
-			else
-				validInput = true;
-		} while (!validInput);
+		createMap(gameMap);
+	}
+	else if (gameOption == 'x'){
+		cout << "Edit file options" << endl;
+	}
+	else if (gameOption == 't'){
+		placeTowers(gameMap);
+	}
+}
+void placeTowers(Map& gameMap){
+	loadMap(gameMap);
+	while (true){
+		char selection = '0';
+		cout << "What would you like to do?" << endl
+			<< "b -> Buy a Tower" << endl
+			<< "u -> Upgrade a Tower" << endl
+			<< "s -> Sell a Tower" << endl
+			<< "e -> Return to previous Menu" << endl;
+		cin >> selection;
+		if (selection == ('b'|'u'|'s'|'e')){
+			cout << "chyea - hella nuggets" << endl;
+			break;
+		}
+	}
+
+}
+void loadMap(Map& gameMap){
+	string mapName;             //The name of the map to be loaded or to be stored
+	string mapFileName;         //Used to create the text file from the file name entered by user
+	bool validInput = false;
+	do {
+		cout << "Enter the name of the map that you want to open: ";
+		cin >> mapName;
+		mapFileName = "map/" + mapName + "_map.txt";
+		if (ifstream(mapFileName.c_str()))
+			validInput = true;
+		else
+			cout << "This map does not exist. Please try again\n\n";
+	} while (!validInput);
+
+	openMapTxt(mapName, mapFileName, gameMap);
+}
+
+void createMap(Map& gameMap){
+	int mapWidth, mapHeight;    //Map dimensions
+	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
+	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
+	string mapName;             //The name of the map to be loaded or to be stored
+	string mapFileName;         //Used to create the text file from the file name entered by user
+	bool validInput = false;
+	char pathDirection = 's';
+
+	//Prompting the user to enter the name of the map
+	do {
+		cout << "Enter the name of your map: ";
+		cin >> mapName;
+		mapFileName = "map/" + mapName + "_map.txt";
+		if (ifstream(mapFileName.c_str()))
+			cout << "This map already exists. Please enter another name\n\n";
+		else
+			validInput = true;
+	} while (!validInput);
+	system("cls");
+
+	//Prompting the user to enter the dimensions of the map, create the map based on the input, and then display it
+	do {
+		//Minimum width user allowed to enter: 5
+		cout << "Enter the width of the map (minimum length of 5): ";
+		cin >> mapWidth;
+	} while (mapWidth < 5);
+	do {
+		//Minimum height user allowed to enter: 5
+		cout << "Enter the height of the map (minimum length of 5): ";
+		cin >> mapHeight;
+	} while (mapHeight < 5);
+
+	system("cls");
+
+	gameMap = Map(mapWidth, mapHeight, mapName);
+	gameMap.printMap();
+	//Inserting the start point
+	gameMap.insertCoord(coordX, coordY, GridType::START);
+
+	//Prompting the user to trace the path on the map
+	pathCoordX = coordX;
+	pathCoordY = coordY;
+	while (pathDirection != 'e') {
+		cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
+		cin >> pathDirection;
 		system("cls");
-
-		//Prompting the user to enter the dimensions of the map, create the map based on the input, and then display it
-		do {
-			//Minimum width user allowed to enter: 5
-			cout << "Enter the width of the map (minimum length of 5): ";
-			cin >> mapWidth;
-		} while (mapWidth < 5);
-		do {
-			//Minimum height user allowed to enter: 5
-			cout << "Enter the height of the map (minimum length of 5): ";
-			cin >> mapHeight;
-		} while (mapHeight < 5);
-
-		system("cls");
-
-		gameMap = Map(mapWidth, mapHeight, mapName);
-		gameMap.printMap();
-		//Inserting the start point
-		gameMap.insertCoord(coordX, coordY, GridType::START);
-
-		//Prompting the user to trace the path on the map
-		pathCoordX = coordX;
-		pathCoordY = coordY;
-		while (pathDirection != 'e') {
-			cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
-			cin >> pathDirection;
-			system("cls");
-			switch (pathDirection) {
-			case 'w':
-				//Going up
-				pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY - 1);
-				break;
-			case 's':
-				//Going down
-				pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY + 1);
-				break;
-			case 'a':
-				//Going left
-				pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX - 1, pathCoordY);
-				break;
-			case 'd':
-				//Going right
-				pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX + 1, pathCoordY);
-				break;
-			case 'e':
-				//End the path
-				if (!gameMap.validateEndPath(pathCoordX, pathCoordY)) {
-					pathDirection = 's';
-				}
-				else {
-					gameMap.setCellType(pathCoordX, pathCoordY, GridType::END, FileAction::STORE);
-				}
-				break;
-			default:
-				//Invalid input
-				cout << "What you entered was invalid. Try again" << endl;
-				break;
+		switch (pathDirection) {
+		case 'w':
+			//Going up
+			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY - 1);
+			break;
+		case 's':
+			//Going down
+			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY + 1);
+			break;
+		case 'a':
+			//Going left
+			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX - 1, pathCoordY);
+			break;
+		case 'd':
+			//Going right
+			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX + 1, pathCoordY);
+			break;
+		case 'e':
+			//End the path
+			if (!gameMap.validateEndPath(pathCoordX, pathCoordY)) {
+				pathDirection = 's';
 			}
-
-			//Updating the map to the user with the path that was traced
-			gameMap.printMap();
+			else {
+				gameMap.setCellType(pathCoordX, pathCoordY, GridType::END, FileAction::STORE);
+			}
+			break;
+		default:
+			//Invalid input
+			cout << "What you entered was invalid. Try again" << endl;
+			break;
 		}
 
-		gameMap.storeMapTxt();
-		
-		cout << "\nYour map has been successfully created\n";
+		//Updating the map to the user with the path that was traced
+		gameMap.printMap();
 	}
-	else {
-		//Prompt user to select one of the existent map
-		do {
-			cout << "Enter the name of the map that you want to edit: ";
-			cin >> mapName;
-			mapFileName = "map/" + mapName + "_map.txt";
-			if (ifstream(mapFileName.c_str()))
-				validInput = true;
-			else
-				cout << "This map does not exist. Please try again\n\n";
-		} while (!validInput);
 
-		openMapTxt(mapName, mapFileName, gameMap);
-	}
+	gameMap.storeMapTxt();
+
+	cout << "\nYour map has been successfully created\n";
 }
 
 void startGame(Map& gameMap) {
@@ -209,6 +251,7 @@ void startGame(Map& gameMap) {
 	int numOfCrit = wave->getNumOfCritters();
 	
 	while (true){
+		wave->deploy();
 		for (int i = 0; i < numOfCrit; ++i){
 			gameMap.setCellType(temp.at(i).getPositionX(), temp.at(i).getPositionY(), GridType::CRITTER, FileAction::STORE);
 			cout << temp.at(i).getPositionX() << "," << temp.at(i).getPositionY() << endl;

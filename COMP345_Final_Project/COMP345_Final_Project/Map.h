@@ -1,3 +1,4 @@
+#pragma once
 #include "MapGrid.h"
 #include <vector>
 
