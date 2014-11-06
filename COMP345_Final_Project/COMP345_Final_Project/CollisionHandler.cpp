@@ -12,15 +12,15 @@ void CollisionHandler::addCollision(std::vector<Entity> target, std::vector<Enti
 	this->targetList[this->interactingList.size() - 1] = interacting;
 }
 void CollisionHandler::checkCollisions(){
-	for (int k = 0; k < targetList.size(); ++k){
+	for (int k = 0; k < (int)targetList.size(); ++k){
 		std::vector<Entity> target = targetList[k];
 		std::vector<Entity> interacting = interactingList[k];
 
-		for (int i = 0; i < target.size(); ++i){
+		for (int i = 0; i < (int)target.size(); ++i){
 			Entity currTarget = target[i];
-			for (int j = 0; j < target.size(); ++j){
+			for (int j = 0; j < (int)target.size(); ++j){
 				Entity currInteracting = interacting[j];
-				currTarget.handleCollision(currInteracting);
+				//currTarget.handleCollision(currInteracting);
 
 			}
 		}

@@ -2,7 +2,7 @@
 #define TOWER_H
 
 #include "Entity.h"
-#include "Critter.h";
+#include "Critter.h"
 
 class Tower: public Entity{
 public:
