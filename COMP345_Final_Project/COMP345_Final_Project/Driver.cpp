@@ -4,6 +4,7 @@
 //#include <SFML/Graphics.hpp>
 #include <string>
 #include <fstream>
+#include "Wave.h"
 
 //using namespace sf;
 using namespace std;
@@ -121,13 +122,16 @@ int main() {
 			//Updating the map to the user with the path that was traced
 			gameMap.printMap();
 		}
+	
 		//Inserting towers on the map
 		//gameMap.addCritterOrTower(coordX, coordY, GridType::Tower);
 		//Inserting critters on the map
 		//gameMap.addCritterOrTower(coordX, coordY, GridType::Critter);
 
 		gameMap.storeMapTxt();
-
+		string mapPath = "path/" + mapName + "_path.txt";
+		Wave* wave = new Wave();
+		wave->createCritters(1, mapPath);
 		cout << "\nYour map has been successfully created\n";
 	} else {
 		//Prompt user to select one of the existent map

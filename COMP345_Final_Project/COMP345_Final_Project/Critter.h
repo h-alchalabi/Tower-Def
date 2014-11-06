@@ -15,9 +15,12 @@ private:
 	char input;
 	int rows, columns;
 	int towerDamage;
+	string mapPath;
 	CritterType type;
 	int deploymentTime;
 	const string delimiter = ",";
+	int x, y;
+	string line, token;
 
 public:
 	Critter();
@@ -34,6 +37,7 @@ public:
 	int getPositionY();
 	bool checkHealth();
 	void move();
+	string getMapPath();
 	void setPositionX(int positionX);
 	void setPositionY(int positionY);
 	void towerCheck(char map[5][5], int rows, int columns);

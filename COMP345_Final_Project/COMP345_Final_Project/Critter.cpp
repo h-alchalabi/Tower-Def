@@ -2,12 +2,13 @@
 #include <fstream>
 
 
+
 Critter::Critter(){
 
 }
 
 // this constructor mofifies the critter depending on Wave
-Critter::Critter(int waveNumber, CritterType type, string mapPath){
+Critter::Critter(int waveNumber, CritterType type, string critterMapPath){
 
 	hitPoints = 5 * waveNumber;
 	speed = speed*waveNumber;
@@ -16,8 +17,9 @@ Critter::Critter(int waveNumber, CritterType type, string mapPath){
 	positionX = 0;
 	positionY = 0;
 	deploymentTime = 3.0f;
-}
+	mapPath = critterMapPath;
 
+}
 
 
 Critter::~Critter()
@@ -25,7 +27,9 @@ Critter::~Critter()
 	// close file here.
 }
 
-
+string Critter::getMapPath(){
+	return mapPath;
+}
 float Critter::getDeploymentTime(){
 	return deploymentTime;
 }
@@ -78,26 +82,24 @@ void Critter::setPositionY(int positionY){
 }
 
 void Critter::move(){
-	string line, token;
-	int x, y;
-	ifstream file("Path.txt");
-	if (file.is_open()){
-		file >> line;
+	ifstream file(mapPath);
+	string line1;
+	if (!file.eof()){
+		file >> line1;
 		if (file.eof()){
 			return;
 		}
 		else{
-			token = line.substr(0, line.find(delimiter));
+			token = line1.substr(0, line1.find(delimiter));
 			istringstream(token) >> x;
-			setPositionX(x);
-			token = line.substr(line.find(delimiter) + 1);
+			positionX = x;
+			token = line1.substr(line1.find(delimiter) + 1);
 			istringstream(token) >> y;
-			setPositionY(y);
+			positionY = y;
+			cout << positionX << "," << positionY << endl;
 		}
-
 	}
-
-
+		
 
 }
 //check the health of critter

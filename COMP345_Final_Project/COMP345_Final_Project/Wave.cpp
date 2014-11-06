@@ -1,5 +1,5 @@
 #include "Wave.h"
-
+#include <iterator>
 Wave::Wave(void)
 {
 	waveNumber = 1;
@@ -13,7 +13,7 @@ Wave::~Wave(void)
 {
 
 }
-void Wave::createCritters(int waveNumber){
+void Wave::createCritters(int waveNumber, string mapPath){
 	if (waveNumber % 3 == 0){
 		critterVec.resize(numOfCritters*level);
 	}
@@ -21,22 +21,26 @@ void Wave::createCritters(int waveNumber){
 	//filling vector with critter based on waveNumber
 	switch (moddedWave){
 	case 1:
-		 critter = new Critter(waveNumber, CritterType::Normal, "Path.txt");
+		 critter = new Critter(waveNumber, CritterType::Normal, mapPath);
 		for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
 		}
+		deploy();
 		break;
 	case 2:
-		critter = new Critter(waveNumber, CritterType::Fast, "Path.txt");
+		critter = new Critter(waveNumber, CritterType::Fast, mapPath);
 		for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
+			
 		}
+		//deploy();
 		break;
 	case 0:
-		critter = new Critter(waveNumber, CritterType::Slow, "Path.txt");
+		critter = new Critter(waveNumber, CritterType::Slow, mapPath);
 		for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
 		}
+		deploy();
 		break;
 		if (waveNumber % 3 == 0){
 			level++;
@@ -44,22 +48,20 @@ void Wave::createCritters(int waveNumber){
 		waveNumber++;
 	}
 }
-void Wave::deploy(float deploymentTime, vector<Critter>critterVec){
-
-
-	if (critterVec.at(critterDeployed).getDeploymentTime() - elapsedTime <=0){
-		//critterVec.at(critterDeployed).deploy();
+void Wave::deploy(){
+	while (critterDeployed < numOfCritters*level){
 		++critterDeployed;
-
-		elapsedTime = 0;
+		cout << "CD= " << critterDeployed << endl;
+		move();
+		
 	}
-	
+		
 
-	
 }
 
 void Wave::move(){
-	for (int i = 0; i < critterDeployed; ++i){
-		//critterVec.at(i).choosePath();
+	
+	for (int i=0; i<critterDeployed; ++i){
+		critterVec.at(i).move();
 	}
 }

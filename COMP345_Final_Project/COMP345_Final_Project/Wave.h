@@ -8,8 +8,8 @@ class Wave
 public:
 	Wave(void);
 	~Wave(void);
-	void createCritters(int waveNumber);
-	void deploy(float deploymentTime, vector<Critter>critter);
+	void createCritters(int waveNumber, string mapPath);
+	void deploy();
 	void move();
 private:
 	int waveNumber;
