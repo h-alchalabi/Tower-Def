@@ -1,6 +1,8 @@
 #include "MapGrid.h"
 #include <vector>
- 
+
+enum FileAction { STORE, LOAD };
+
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
 //COMP345 - assignment 1
@@ -29,7 +31,7 @@ public:
 	MapGrid getCell(int coordX, int coordY) const;
 	void setWidth(int w);
 	void setHeight(int h);
-	void setCellType(int coordX, int coordY, GridType gridType);
+	void setCellType(int coordX, int coordY, GridType gridType, FileAction fileAction);
 	void printMap() const;
 
 	//Calculating the number of cells around the current cell

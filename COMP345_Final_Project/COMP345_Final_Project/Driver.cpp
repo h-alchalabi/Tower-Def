@@ -23,7 +23,7 @@ using namespace std;
 //
 /****************************************************************************************************************/
 
-void openMapTxt(string mapName, string mapFileName);
+void openMapTxt(string mapName, string mapFileName, Map& gameMap);
 
 int main() {
 	int mapWidth, mapHeight;    //Map dimensions
@@ -31,23 +31,23 @@ int main() {
 	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
 	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
 	char pathDirection = 's';   //Used to verify if user wants to end path tracing
-	char mapOption;
-	string mapName;
-	string mapFileName;
-	bool validInput = false;
+	char gameOption;            //Used to prompt user to select options throughout the game
+	string mapName;             //The name of the map to be loaded or to be stored
+	string mapFileName;         //Used to create the text file from the file name entered by user
+	bool validInput = false;    //Used during input validation
 	
 	//Prompting the user whether he/she wants to create a map or use an existing map
 	do {
 		cout << "Welcome to the tower defense game. Enter the following to select an option:" << endl <<
-			"c -> Create a map" << endl << "u -> Use an existent map" << endl;
-		cin >> mapOption;
+			"c -> Create a map" << endl << "e -> Edit an existent map" << endl;
+		cin >> gameOption;
 		
-		if (!(mapOption == 'c' || mapOption == 'u'))
+		if (!(gameOption == 'c' || gameOption == 'e'))
 			cout << "What you entered is invalid. Please try again.\n\n";
-	} while (!(mapOption == 'c' || mapOption == 'u'));
+	} while (!(gameOption == 'c' || gameOption == 'e'));
 	system("cls");
 
-	if (mapOption == 'c') {
+	if (gameOption == 'c') {
 		//Prompting the user to enter the name of the map
 		cout << "Enter the name of your map: ";
 		cin >> mapName;
@@ -102,7 +102,7 @@ int main() {
 					pathDirection = 's';
 				}
 				else {
-					gameMap.setCellType(pathCoordX, pathCoordY, GridType::END);
+					gameMap.setCellType(pathCoordX, pathCoordY, GridType::END, FileAction::STORE);
 				}
 				break;
 			default:
@@ -135,32 +135,59 @@ int main() {
 			}
 		} while (!validInput);
 
-		openMapTxt(mapName, mapFileName);
+		openMapTxt(mapName, mapFileName, gameMap);
 	}
 	return 0;
 }
 
-void openMapTxt(string mapName, string mapFileName) {
-	Map gameMap;
-	ifstream mapFile(mapFileName);
-	unsigned char ch;
-	int mapWidth = 0;
-	int mapHeight = 0;
+void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
+	ifstream mapFile(mapFileName);  //Used to open the file that contains the map to be loaded
+	unsigned char ch;               //Used for verifications of data in the file
+	int mapWidth = 0;               //Used to retrieve the width of the map from the file
+	int mapHeight = 0;              //Used to retrieve the height of the map from the file
+	bool isMaxHeight = false;       //Used during the process of retrieving the height of the map
+	int xCoord = 0;                 //Used during the process of creating the map object
+	int yCoord = 0;					//Used during the process of creating the map object
 
+	//Retrieving the width and height of the map from the file and then creating a map object from that
 	while (!mapFile.eof()) {
-		if (mapFile.get() == '\n')
+		ch = mapFile.get();
+		if (ch == '\n') {
 			mapWidth++;
+			isMaxHeight = true;
+		} else if (!isMaxHeight && ch != ' ')
+			mapHeight++;
 	}
-
 	gameMap = Map(mapWidth, mapHeight, mapName);
-	cout << gameMap.getHeight() << " " << gameMap.getWidth();
-	//mapFile.seekg(0, ios::beg);
 
-	/*while (!mapFile.eof()) {
+	//Reread the file to retrieve the content of the map and transfer them to the map object
+	mapFile.clear();
+	mapFile.seekg(0, ios_base::beg);
+	while (!mapFile.eof()) {
 		ch = mapFile.get();
 		switch (ch) {
 			case '0':
-
+				gameMap.setCellType(xCoord++, yCoord, GridType::SCENERY, FileAction::LOAD);
+				break;
+			case '1':
+				gameMap.setCellType(xCoord++, yCoord, GridType::START, FileAction::LOAD);
+				break;
+			case '2':
+				gameMap.setCellType(xCoord++, yCoord, GridType::PATH, FileAction::LOAD);
+				break;
+			case '3':
+				gameMap.setCellType(xCoord++, yCoord, GridType::END, FileAction::LOAD);
+				break;
+			case '\n':
+				yCoord++;
+				xCoord = 0;
+				break;
 		}
-	}*/
+	}
+
+	//Displaying the map
+	gameMap.printMap();
+
+	//Closing the file
+	mapFile.close();
 }

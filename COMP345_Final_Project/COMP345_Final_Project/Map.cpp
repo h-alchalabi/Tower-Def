@@ -54,23 +54,24 @@ void Map::setHeight(int h) {
 	height = h;
 }
 
-void Map::setCellType(int coordX, int coordY, GridType gridType) {
-	if (ifstream(filePathName.c_str())) {
-		cout << "file exist";
-		file.open(filePathName, ios::app);
-	}
-	else {
-		cout << "file not exist";
-		file.open(filePathName);
-	}
-		
-
+void Map::setCellType(int coordX, int coordY, GridType gridType, FileAction fileAction) {
 	cells[coordY][coordX].setType(gridType);
-	if (gridType == GridType::START || gridType == GridType::PATH){
-		file << coordX << "," << coordY << endl;
-	}
 
-	file.close();
+	//Storing the path in a file
+	if (fileAction == FileAction::STORE) {
+		if (ifstream(filePathName.c_str())) {
+			file.open(filePathName, ios::app);
+		}
+		else {
+			file.open(filePathName);
+		}
+
+		if (gridType == GridType::START || gridType == GridType::PATH){
+			file << coordX << "," << coordY << endl;
+		}
+
+		file.close();
+	}
 }
 
 void Map::printMap() const {
@@ -139,7 +140,7 @@ int Map::tracePathX(int PathCoordX, int PathCoordXRequest, int PathCoordY) {
 	else {
 		//Inserting the Path on the map and then updating the X coordinate for the next Path to trace
 		//cells[PathCoordY][PathCoordXRequest].setType(GridType::PATH);
-		setCellType(PathCoordXRequest, PathCoordY, GridType::PATH);
+		setCellType(PathCoordXRequest, PathCoordY, GridType::PATH, FileAction::STORE);
 		PathCoordX = PathCoordXRequest;
 	}
 	return PathCoordX;
@@ -156,7 +157,7 @@ int Map::tracePathY(int PathCoordX, int PathCoordY, int PathCoordYRequest) {
 	else {
 		//Inserting the Path on the map and then updating the Y coordinate for the next Path to trace
 		//cells[PathCoordYRequest][PathCoordX].setType(GridType::PATH);
-		setCellType(PathCoordX, PathCoordYRequest, GridType::PATH);
+		setCellType(PathCoordX, PathCoordYRequest, GridType::PATH, FileAction::STORE);
 		PathCoordY = PathCoordYRequest;
 	}
 
@@ -209,7 +210,7 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	system("cls");
 
 	//Adding the element on the map and then display the map
-	setCellType(coordY, coordX, gridType);
+	setCellType(coordY, coordX, gridType, FileAction::STORE);
 	//cells[coordY][coordX].set(gridType);
 	printMap();
 }
