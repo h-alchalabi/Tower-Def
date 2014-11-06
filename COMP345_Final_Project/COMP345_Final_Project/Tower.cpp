@@ -12,6 +12,7 @@ Tower::Tower(){
 	upgradeCost = 45;
 	positionY = 0;
 	positionX = 0;
+	type = 0;
 	}
 
 Tower::Tower(int type){
