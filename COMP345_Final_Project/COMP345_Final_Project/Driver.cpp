@@ -75,11 +75,14 @@ void mapCreateOrEdit(Map& gameMap) {
 
 	//Prompting the user whether he/she wants to create a map or use an existing map
 	do {
-		cout << "Enter the following to select an option:" << endl << "c -> Create a map" << endl <<
-			"e -> Edit an existent map" << endl;
+		cout << "Enter the following to select an option:" << endl 
+			<< "c -> Create a map" << endl 
+			<< "x -> Edit an existent map" << endl
+			<< "t -> Add towers to an existing map" << endl
+			<< "e -> Return to Main Menu";
 		cin >> gameOption;
 
-		if (!(gameOption == 'c' || gameOption == 'e'))
+		if (!(gameOption == 'c' || gameOption == 'x' || gameOption == 't' || gameOption == 'e'))
 			cout << "What you entered is invalid. Please try again.\n\n";
 		else
 			validInput = true;
