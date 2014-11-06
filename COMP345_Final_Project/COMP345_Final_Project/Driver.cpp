@@ -6,6 +6,8 @@
 #include <fstream>
 #include "Wave.h"
 #include <windows.h>
+#include "Tower.h"
+#include "TowerController.h"
 
 //using namespace sf;
 using namespace std;
@@ -120,6 +122,26 @@ void placeTowers(Map& gameMap){
 	}
 	switch (selection){
 	case 'b':{
+				 while (true){
+					 cout << "Which type of tower would you like to buy?" << endl
+						 << "1 -> Normal Tower" << endl
+						 << "2 -> Slowing Tower" << endl
+						 << "e -> Go back to previous menu" << endl;
+					 cin >> selection;
+					 if (selection == '1' | '2' | 'e'){
+						 break;
+					 }
+				 }
+
+				 if (selection == '1'){
+					 Tower::towerPreview(0);
+				 }
+				 else if (selection == '2'){
+					 Tower::towerPreview(1);
+				 }
+				 else{
+					 return;
+				 }
 
 	}break;
 	case 'u':{
