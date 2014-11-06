@@ -32,7 +32,7 @@ void Wave::createCritters(int waveNumber, string mapPath){
 		 for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
 		}
-		deploy();
+		//deploy();
 		break;
 	case 2:
 		critter = new Critter(waveNumber, CritterType::Fast, mapPath);

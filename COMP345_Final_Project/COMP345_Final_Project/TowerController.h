@@ -2,6 +2,7 @@
 #define TOWERCONTROLLER_H
 
 #include "Tower.h"
+#include "Map.h"
 #include <vector>
 
 class TowerController{

@@ -15,7 +15,7 @@ TowerController::TowerController(){
 void TowerController::addTower(int type, int posX, int posY, Map *map){
 	purchaseTower(type);
 	tower = new Tower(type);
-	map->addCritterOrTower(posX, posY, TOWER);
+	map->addCritterOrTower(posX, posY, GridType::TOWER);
 	towerList.push_back(*tower); 
 	cout << "You purchased a " << tower->getType() << endl;
 };
