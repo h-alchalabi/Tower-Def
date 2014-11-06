@@ -49,8 +49,15 @@ int main() {
 
 	if (gameOption == 'c') {
 		//Prompting the user to enter the name of the map
-		cout << "Enter the name of your map: ";
-		cin >> mapName;
+		do {
+			cout << "Enter the name of your map: ";
+			cin >> mapName;
+			mapFileName = "map/" + mapName + "_map.txt";
+			if (ifstream(mapFileName.c_str()))
+				cout << "This map already exists. Please enter another name\n\n";
+			else
+				validInput = true;
+		} while (!validInput);
 		system("cls");
 
 		//Prompting the user to enter the dimensions of the map, create the map based on the input, and then display it
@@ -128,11 +135,10 @@ int main() {
 			cout << "Enter the name of the map that you want to load: ";
 			cin >> mapName;
 			mapFileName = "map/" + mapName + "_map.txt";
-			if (ifstream(mapFileName.c_str())) {
+			if (ifstream(mapFileName.c_str()))
 				validInput = true;
-			} else {
+			else
 				cout << "This map does not exist. Please try again\n\n";
-			}
 		} while (!validInput);
 
 		openMapTxt(mapName, mapFileName, gameMap);
