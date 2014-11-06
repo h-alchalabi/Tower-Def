@@ -75,6 +75,6 @@ void TowerController::purchaseTower(int type){
 }
 bool TowerController::purchaseVerif( int type){
 	if (getMoney() < getPrice(type))
-		return true;
-	return false;
+		return false;
+	return true;
 }
