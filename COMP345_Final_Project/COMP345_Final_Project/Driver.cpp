@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include "Wave.h"
+#include <windows.h>
 
 //using namespace sf;
 using namespace std;
@@ -25,10 +26,45 @@ using namespace std;
 /****************************************************************************************************************/
 
 void openMapTxt(string mapName, string mapFileName, Map& gameMap);
+void mapCreateOrEdit(Map& gameMap);
+void startGame(Map& gameMap);
 
 int main() {
-	int mapWidth, mapHeight;    //Map dimensions
 	Map gameMap;				//The map that will be created for the user
+	char gameOption;            //Used to prompt user to select options throughout the game
+	bool validInput = false;    //Used during input validation
+
+	cout << "Welcome to the tower defense game.";
+	Sleep(3000);
+
+	do {
+		//Prompting the user to choose between creating or editing the map, start the game, and exit the game
+		system("cls");
+		do {
+			cout << "Please enter one of the following option:" << endl << "c -> Create or edit a map" << endl <<
+				"s -> Start the game" << endl << "e -> Exit game\n";
+			cin >> gameOption;
+
+			if (!(gameOption == 'c' || gameOption == 's' || gameOption == 'e'))
+				cout << "What you entered is invalid. Please try again.\n\n";
+			else
+				validInput = true;
+		} while (!validInput);
+		system("cls");
+
+		if (gameOption == 'c')
+			mapCreateOrEdit(gameMap);  //Creating or editing a map
+		else if (gameOption == 's')
+			startGame(gameMap);        //Starting the game
+	} while (gameOption != 'e');
+
+	//End of application
+	cout << "See you soon!\n";
+	return 0;
+}
+
+void mapCreateOrEdit(Map& gameMap) {
+	int mapWidth, mapHeight;    //Map dimensions
 	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
 	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
 	char pathDirection = 's';   //Used to verify if user wants to end path tracing
@@ -36,20 +72,24 @@ int main() {
 	string mapName;             //The name of the map to be loaded or to be stored
 	string mapFileName;         //Used to create the text file from the file name entered by user
 	bool validInput = false;    //Used during input validation
-	
+
 	//Prompting the user whether he/she wants to create a map or use an existing map
 	do {
-		cout << "Welcome to the tower defense game. Enter the following to select an option:" << endl <<
-			"c -> Create a map" << endl << "e -> Edit an existent map" << endl;
+		cout << "Enter the following to select an option:" << endl << "c -> Create a map" << endl <<
+			"e -> Edit an existent map" << endl;
 		cin >> gameOption;
-		
+
 		if (!(gameOption == 'c' || gameOption == 'e'))
 			cout << "What you entered is invalid. Please try again.\n\n";
-	} while (!(gameOption == 'c' || gameOption == 'e'));
+		else
+			validInput = true;
+
+	} while (!validInput);
 	system("cls");
 
 	if (gameOption == 'c') {
 		//Prompting the user to enter the name of the map
+		validInput = false;
 		do {
 			cout << "Enter the name of your map: ";
 			cin >> mapName;
@@ -122,21 +162,15 @@ int main() {
 			//Updating the map to the user with the path that was traced
 			gameMap.printMap();
 		}
-	
-		//Inserting towers on the map
-		//gameMap.addCritterOrTower(coordX, coordY, GridType::Tower);
-		//Inserting critters on the map
-		//gameMap.addCritterOrTower(coordX, coordY, GridType::Critter);
 
 		gameMap.storeMapTxt();
-		string mapPath = "path/" + mapName + "_path.txt";
-		Wave* wave = new Wave();
-		wave->createCritters(1, mapPath);
+		
 		cout << "\nYour map has been successfully created\n";
-	} else {
+	}
+	else {
 		//Prompt user to select one of the existent map
 		do {
-			cout << "Enter the name of the map that you want to load: ";
+			cout << "Enter the name of the map that you want to edit: ";
 			cin >> mapName;
 			mapFileName = "map/" + mapName + "_map.txt";
 			if (ifstream(mapFileName.c_str()))
@@ -147,7 +181,28 @@ int main() {
 
 		openMapTxt(mapName, mapFileName, gameMap);
 	}
-	return 0;
+}
+
+void startGame(Map& gameMap) {
+	bool validInput = false;
+	string mapName;
+	string mapFileName;
+
+	do {
+		cout << "Enter the name of the map that you want to play with: ";
+		cin >> mapName;
+		mapFileName = "map/" + mapName + "_map.txt";
+		if (ifstream(mapFileName.c_str()))
+			validInput = true;
+		else
+			cout << "This map does not exist. Please try again\n\n";
+	} while (!validInput);
+
+	openMapTxt(mapName, mapFileName, gameMap);
+
+	//string mapPath = "path/" + mapName + "_path.txt";
+	Wave* wave = new Wave();
+	wave->createCritters(1, gameMap.getFilePathName());
 }
 
 void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
@@ -176,22 +231,22 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 	while (!mapFile.eof()) {
 		ch = mapFile.get();
 		switch (ch) {
-			case '0':
-				gameMap.setCellType(xCoord++, yCoord, GridType::SCENERY, FileAction::LOAD);
-				break;
-			case '1':
-				gameMap.setCellType(xCoord++, yCoord, GridType::START, FileAction::LOAD);
-				break;
-			case '2':
-				gameMap.setCellType(xCoord++, yCoord, GridType::PATH, FileAction::LOAD);
-				break;
-			case '3':
-				gameMap.setCellType(xCoord++, yCoord, GridType::END, FileAction::LOAD);
-				break;
-			case '\n':
-				yCoord++;
-				xCoord = 0;
-				break;
+		case '0':
+			gameMap.setCellType(xCoord++, yCoord, GridType::SCENERY, FileAction::LOAD);
+			break;
+		case '1':
+			gameMap.setCellType(xCoord++, yCoord, GridType::START, FileAction::LOAD);
+			break;
+		case '2':
+			gameMap.setCellType(xCoord++, yCoord, GridType::PATH, FileAction::LOAD);
+			break;
+		case '3':
+			gameMap.setCellType(xCoord++, yCoord, GridType::END, FileAction::LOAD);
+			break;
+		case '\n':
+			yCoord++;
+			xCoord = 0;
+			break;
 		}
 	}
 
