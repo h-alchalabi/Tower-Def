@@ -22,7 +22,7 @@ void Wave::createCritters(int waveNumber, string mapPath){
 	switch (moddedWave){
 	case 1:
 		 critter = new Critter(waveNumber, CritterType::Normal, mapPath);
-		for (int i = 0; i<level * numOfCritters; ++i){
+		 for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
 		}
 		deploy();
@@ -60,8 +60,8 @@ void Wave::deploy(){
 }
 
 void Wave::move(){
-	
 	for (int i=0; i<critterDeployed; ++i){
+		cout << "deploying at " << i << endl;
 		critterVec.at(i).move();
 	}
 }

@@ -18,7 +18,7 @@ Critter::Critter(int waveNumber, CritterType type, string critterMapPath){
 	positionY = 0;
 	deploymentTime = 3.0f;
 	mapPath = critterMapPath;
-	file->open(mapPath);
+	file = new ifstream(mapPath);
 }
 
 
@@ -82,25 +82,20 @@ void Critter::setPositionY(int positionY){
 }
 
 void Critter::move(){
-
-	if (!file->eof()){
-		*(file) >> line;
-		if (file->eof()){
-			file->close();
-			return;
-		}
-		else{
-			token = line.substr(0, line.find(delimiter));
-			istringstream(token) >> x;
-			positionX = x;
-			token = line.substr(line.find(delimiter) + 1);
-			istringstream(token) >> y;
-			positionY = y;
-			cout << positionX << "," << positionY << endl;
-		}
+	(*file) >> line;
+	if (file->eof()){
+		file->close();
+		return;
 	}
-		
-
+	else{
+		token = line.substr(0, line.find(delimiter));
+		istringstream(token) >> x;
+		positionX = x;
+		token = line.substr(line.find(delimiter) + 1);
+		istringstream(token) >> y;
+		positionY = y;
+		cout << positionX << "," << positionY << endl;
+	}
 }
 //check the health of critter
 // increments reward if critter is dead
