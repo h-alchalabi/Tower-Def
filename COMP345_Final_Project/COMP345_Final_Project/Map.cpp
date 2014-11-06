@@ -24,7 +24,7 @@ Map::Map(int w, int h, string name) :
 width(w),
 height(h),
 mapName(name){
-	filePathName = "Path/" + mapName + "_Path.txt";
+	filePathName = "path/" + mapName + "_path.txt";
 	fileMapName = "map/" + mapName + "_map.txt";
 
 	//Creating multidimensional vector for the map
@@ -139,7 +139,6 @@ int Map::tracePathX(int PathCoordX, int PathCoordXRequest, int PathCoordY) {
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
 		//Inserting the Path on the map and then updating the X coordinate for the next Path to trace
-		//cells[PathCoordY][PathCoordXRequest].setType(GridType::PATH);
 		setCellType(PathCoordXRequest, PathCoordY, GridType::PATH, FileAction::STORE);
 		PathCoordX = PathCoordXRequest;
 	}
@@ -156,7 +155,6 @@ int Map::tracePathY(int PathCoordX, int PathCoordY, int PathCoordYRequest) {
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
 		//Inserting the Path on the map and then updating the Y coordinate for the next Path to trace
-		//cells[PathCoordYRequest][PathCoordX].setType(GridType::PATH);
 		setCellType(PathCoordX, PathCoordYRequest, GridType::PATH, FileAction::STORE);
 		PathCoordY = PathCoordYRequest;
 	}
@@ -198,7 +196,7 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 					std::cout << "Unable to place tower in these coordinates because it is a Path. Please try again.\n\n";
 				break;
 			default:
-				//START point validated
+				//start point validated
 				validInput = true;
 				break;
 			}
