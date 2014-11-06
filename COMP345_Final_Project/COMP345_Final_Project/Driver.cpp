@@ -105,18 +105,29 @@ void mapCreateOrEdit(Map& gameMap) {
 }
 void placeTowers(Map& gameMap){
 	loadMap(gameMap);
+	char selection = '0';
 	while (true){
-		char selection = '0';
 		cout << "What would you like to do?" << endl
 			<< "b -> Buy a Tower" << endl
 			<< "u -> Upgrade a Tower" << endl
 			<< "s -> Sell a Tower" << endl
 			<< "e -> Return to previous Menu" << endl;
 		cin >> selection;
-		if (selection == ('b'|'u'|'s'|'e')){
+		if (selection == 'b'|'u'|'s'|'e'){
 			cout << "chyea - hella nuggets" << endl;
 			break;
 		}
+	}
+	switch (selection){
+	case 'b':{
+
+	}break;
+	case 'u':{
+
+	}break;
+	case 's':{
+
+	}break;
 	}
 
 }
