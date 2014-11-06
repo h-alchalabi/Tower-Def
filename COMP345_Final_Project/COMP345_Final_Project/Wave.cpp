@@ -4,7 +4,7 @@ Wave::Wave(void)
 {
 	waveNumber = 1;
 	level = 1;
-	numOfCritters = 8;
+	numOfCritters = 4;
 	moddedWave = 0;
 	critterDeployed = 0;
 	elapsedTime = 0;
@@ -12,6 +12,13 @@ Wave::Wave(void)
 Wave::~Wave(void)
 {
 
+}
+
+int Wave::getNumOfCritters(){
+	return level*numOfCritters;
+}
+vector<Critter> Wave::getCritterVec(){
+	return critterVec;
 }
 void Wave::createCritters(int waveNumber, string mapPath){
 	if (waveNumber % 3 == 0){
@@ -52,10 +59,10 @@ void Wave::deploy(){
 	while (critterDeployed < numOfCritters*level){
 		++critterDeployed;
 		cout << "CD= " << critterDeployed << endl;
-		move();
+		
 		
 	}
-		
+		move();
 
 }
 

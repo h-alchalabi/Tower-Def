@@ -11,6 +11,8 @@ public:
 	void createCritters(int waveNumber, string mapPath);
 	void deploy();
 	void move();
+	vector <Critter> getCritterVec();
+	int getNumOfCritters();
 private:
 	int waveNumber;
 	int level;
