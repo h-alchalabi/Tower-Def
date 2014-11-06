@@ -12,6 +12,8 @@ public:
 	void addTower(int type, int x, int y);
 	// remove a tower from the list, trim list to proper size.
 	void removeTower(Tower* tower);
+	// upgrade a tower from the list
+	void upgradeTower(Tower* tower);
 	// return the pointer to the tower at the given index.
 	Tower* getTower(int i);
 	// return the list of towers.
