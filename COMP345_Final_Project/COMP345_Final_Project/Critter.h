@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Entity.h"
 #include <sstream>
+#include<fstream>
 enum CritterType { Normal, Fast, Slow };
 using namespace std;
 class Critter : public Entity
@@ -21,6 +22,7 @@ private:
 	const string delimiter = ",";
 	int x, y;
 	string line, token;
+	ifstream* file;
 
 public:
 	Critter();
