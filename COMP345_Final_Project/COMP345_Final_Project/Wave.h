@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include "windows.h"
+#include <fstream>
 class Wave
 {
 public:
@@ -13,6 +14,12 @@ public:
 	void move();
 	vector <Critter> getCritterVec();
 	int getNumOfCritters();
+	void readFile(string file);
+	const string delimiter = ",";
+	int x, y;
+	string line, token;
+	vector<int> coordinates;
+
 private:
 	int waveNumber;
 	int level;
