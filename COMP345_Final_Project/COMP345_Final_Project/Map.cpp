@@ -4,14 +4,14 @@
 #include <fstream>
 #include <string>
 using namespace std;
-ofstream filePath("Path.txt");
+ofstream file;
 
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
 //COMP345 - assignment 1
 //October 17, 2014
 //
-//This is the map class in order to create maps for the tower defense game.
+//This is the map class in order to create maps for the Tower defense game.
 //
 /*******************************************************************************************************************/
 
@@ -20,9 +20,13 @@ Map::Map() {
 	height = 0;
 }
 
-Map::Map(int w, int h) :
+Map::Map(int w, int h, string name) :
 width(w),
-height(h) {
+height(h),
+mapName(name){
+	filePathName = "Path/" + mapName + "_Path.txt";
+	fileMapName = "map/" + mapName + "_map.txt";
+
 	//Creating multidimensional vector for the map
 	cells.resize(height);
 	for (int i = 0; i < height; i++) {
@@ -51,40 +55,43 @@ void Map::setHeight(int h) {
 }
 
 void Map::setCellType(int coordX, int coordY, GridType gridType) {
+	if (ifstream(filePathName.c_str())) {
+		cout << "file exist";
+		file.open(filePathName, ios::app);
+	}
+	else {
+		cout << "file not exist";
+		file.open(filePathName);
+	}
+		
 
 	cells[coordY][coordX].setType(gridType);
-	if (gridType == GridType::Start || gridType == GridType::Path){
-		filePath << coordX << "," << coordY << endl;
+	if (gridType == GridType::START || gridType == GridType::PATH){
+		file << coordX << "," << coordY << endl;
 	}
 
+	file.close();
 }
 
 void Map::printMap() const {
-	ofstream file("Map.txt");
 	cout << endl;
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			switch (cells[i][j].getType()) {
-			case GridType::Scenery:
-				file << "0" << " ";
+			case GridType::SCENERY:
 				cout << " - ";
 				break;
-			case GridType::Start:
-				file << "1" << " ";
+			case GridType::START:
 				cout << " S ";
 				break;
-			case GridType::End:
-				file << "3" << " ";
+			case GridType::END:
 				cout << " E ";
 				break;
-			case GridType::Path:
-				file << "2" << " ";
+			case GridType::PATH:
 				cout << " 0 ";
 				break;
-
 			}
 		}
-		file << endl;
 		cout << endl;
 	}
 	cout << endl;
@@ -94,24 +101,24 @@ int Map::calcNumNeighbourPath(int coordX, int coordY) const {
 	int numOfNeighbour = 0; //Used to determine the number of scenery cells that are around the current cell
 	if (coordY == 0)
 		//At the top of the map
-		numOfNeighbour = cells[coordY + 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY + 1][coordX].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	else if (coordY == (height - 1))
 		//At the bottom of the map
-		numOfNeighbour = cells[coordY - 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY - 1][coordX].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	else {
-		numOfNeighbour = cells[coordY - 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
-		numOfNeighbour = cells[coordY + 1][coordX].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY - 1][coordX].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY + 1][coordX].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	}
 
 	if (coordX == 0)
 		//On the far left side of the map
-		numOfNeighbour = cells[coordY][coordX + 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY][coordX + 1].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	else if (coordX == (width - 1))
 		//On the far right side of the map
-		numOfNeighbour = cells[coordY][coordX - 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY][coordX - 1].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	else {
-		numOfNeighbour = cells[coordY][coordX + 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
-		numOfNeighbour = cells[coordY][coordX - 1].getType() == GridType::Scenery ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY][coordX + 1].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
+		numOfNeighbour = cells[coordY][coordX - 1].getType() == GridType::SCENERY ? numOfNeighbour : numOfNeighbour + 1;
 	}
 
 	return numOfNeighbour;
@@ -121,46 +128,46 @@ Map::~Map(){
 
 }
 
-int Map::tracePathX(int pathCoordX, int pathCoordXRequest, int pathCoordY) {
-	if (!(pathCoordXRequest > -1 && pathCoordXRequest < width))
-		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
-	else if (calcNumNeighbourPath(pathCoordXRequest, pathCoordY) > 1)
-		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
-		"existent path.\n";
-	else if (cells[pathCoordY][pathCoordXRequest].getType() == GridType::Start)
+int Map::tracePathX(int PathCoordX, int PathCoordXRequest, int PathCoordY) {
+	if (!(PathCoordXRequest > -1 && PathCoordXRequest < width))
+		std::cout << "\nUnable to move towards this direction since the Path will be out of the map.\n";
+	else if (calcNumNeighbourPath(PathCoordXRequest, PathCoordY) > 1)
+		std::cout << "\nUnable to move towards this direction since either the Path is already traced, or it is close to an " <<
+		"existent Path.\n";
+	else if (cells[PathCoordY][PathCoordXRequest].getType() == GridType::START)
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
-		//Inserting the path on the map and then updating the X coordinate for the next path to trace
-		//cells[pathCoordY][pathCoordXRequest].setType(GridType::Path);
-		setCellType(pathCoordXRequest, pathCoordY, GridType::Path);
-		pathCoordX = pathCoordXRequest;
+		//Inserting the Path on the map and then updating the X coordinate for the next Path to trace
+		//cells[PathCoordY][PathCoordXRequest].setType(GridType::PATH);
+		setCellType(PathCoordXRequest, PathCoordY, GridType::PATH);
+		PathCoordX = PathCoordXRequest;
 	}
-	return pathCoordX;
+	return PathCoordX;
 }
 
-int Map::tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest) {
-	if (!(pathCoordYRequest > -1 && pathCoordYRequest < height))
-		std::cout << "\nUnable to move towards this direction since the path will be out of the map.\n";
-	else if (calcNumNeighbourPath(pathCoordX, pathCoordYRequest) > 1)
-		std::cout << "\nUnable to move towards this direction since either the path is already traced, or it is close to an " <<
-		"existent path.\n";
-	else if (cells[pathCoordYRequest][pathCoordX].getType() == GridType::Start)
+int Map::tracePathY(int PathCoordX, int PathCoordY, int PathCoordYRequest) {
+	if (!(PathCoordYRequest > -1 && PathCoordYRequest < height))
+		std::cout << "\nUnable to move towards this direction since the Path will be out of the map.\n";
+	else if (calcNumNeighbourPath(PathCoordX, PathCoordYRequest) > 1)
+		std::cout << "\nUnable to move towards this direction since either the Path is already traced, or it is close to an " <<
+		"existent Path.\n";
+	else if (cells[PathCoordYRequest][PathCoordX].getType() == GridType::START)
 		std::cout << "\nUnable to move towards this directions since it is the start point";
 	else {
-		//Inserting the path on the map and then updating the Y coordinate for the next path to trace
-		//cells[pathCoordYRequest][pathCoordX].setType(GridType::Path);
-		setCellType(pathCoordX, pathCoordYRequest, GridType::Path);
-		pathCoordY = pathCoordYRequest;
+		//Inserting the Path on the map and then updating the Y coordinate for the next Path to trace
+		//cells[PathCoordYRequest][PathCoordX].setType(GridType::PATH);
+		setCellType(PathCoordX, PathCoordYRequest, GridType::PATH);
+		PathCoordY = PathCoordYRequest;
 	}
 
-	return pathCoordY;
+	return PathCoordY;
 }
 
 void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	//Used to determine if user input is valid
 	bool validInput = false;
-	//Used to determine if system outputs for the case of start point, critters or towers
-	string type = (gridType == GridType::Start ? "start point" : (gridType == GridType::Critter ? "critter" : "tower"));
+	//Used to determine if system outputs for the case of start point, critters or Towers
+	string type = (gridType == GridType::START ? "start point" : (gridType == GridType::CRITTER ? "critter" : "tower"));
 	while (!validInput) {
 		//Prompting user to enter the x and y coordinates of the element to insert on the map
 		std::cout << "\nEnter the coordinates of the " << type << " to be added on the map." << endl;
@@ -171,26 +178,26 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 		//Validating the x and y coordinates entered by user
 		if (coordX < width && coordX > -1 && coordY < height && coordY > -1) {
 			switch (gridType) {
-			case GridType::Critter:
-				//Critter insertion validation
-				if (cells[coordY][coordX].getType() == GridType::Path)
+			case GridType::CRITTER:
+				//critter insertion validation
+				if (cells[coordY][coordX].getType() == GridType::PATH)
 					validInput = true;
-				else if (cells[coordY][coordX].getType() == GridType::Critter)
+				else if (cells[coordY][coordX].getType() == GridType::CRITTER)
 					std::cout << "You have already inserted a critter on these coordinates";
 				else
-					std::cout << "Unable to place critter in these coordinates because it is not a path. Please try again.\n\n";
+					std::cout << "Unable to place critter in these coordinates because it is not a Path. Please try again.\n\n";
 				break;
-			case GridType::Tower:
+			case GridType::TOWER:
 				//Tower insertion validation
-				if (cells[coordY][coordX].getType() == GridType::Scenery)
+				if (cells[coordY][coordX].getType() == GridType::SCENERY)
 					validInput = true;
-				else if (cells[coordY][coordX].getType() == GridType::Tower)
+				else if (cells[coordY][coordX].getType() == GridType::TOWER)
 					std::cout << "You have already inserted a tower on these coordinates";
 				else
-					std::cout << "Unable to place tower in these coordinates because it is a path. Please try again.\n\n";
+					std::cout << "Unable to place tower in these coordinates because it is a Path. Please try again.\n\n";
 				break;
 			default:
-				//Start point validated
+				//START point validated
 				validInput = true;
 				break;
 			}
@@ -213,7 +220,7 @@ void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
 		//Inserting the critter or tower on the map
 		insertCoord(coordX, coordY, gridType);
 		//Prompting the user to decide whether to add more critters or not
-		std::cout << "Would you like to create more " << (gridType == GridType::Critter ? "critter" : "tower") <<
+		std::cout << "Would you like to create more " << (gridType == GridType::CRITTER ? "critter" : "tower") <<
 			"? (Enter 'y' for yes and 'n' for no): ";
 		cin >> moreInput;
 	} while (moreInput == 'y');
@@ -221,38 +228,63 @@ void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
 
 bool Map::validateEndPath(int coordX, int coordY) {
 	bool isValidated = false;
-	if (cells[coordY][coordX].getType() == GridType::Start)
-		cout << "Unable to end the path at the start point. Try again." << endl;
+	if (cells[coordY][coordX].getType() == GridType::START)
+		cout << "Unable to end the Path at the start point. Try again." << endl;
 	else if (isNeighbourStart(coordX, coordY))
-		cout << "Unable to end the path here because there are no path between the start and end point" << endl;
+		cout << "Unable to end the Path here because there are no Path between the start and end point" << endl;
 	else
 		isValidated = true;
 	return isValidated;
 }
 
 bool Map::isNeighbourStart(int coordX, int coordY) {
-	bool isNeighbourStart;
+	bool isNeighbourSTART;
 	if (coordY == 0)
 		//At the top of the map
-		isNeighbourStart = cells[coordY + 1][coordX].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY + 1][coordX].getType() == GridType::START ? true : false;
 	else if (coordY == (height - 1))
 		//At the bottom of the map
-		isNeighbourStart = cells[coordY - 1][coordX].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY - 1][coordX].getType() == GridType::START ? true : false;
 	else {
-		isNeighbourStart = cells[coordY - 1][coordX].getType() == GridType::Start ? true : false;
-		isNeighbourStart = cells[coordY + 1][coordX].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY - 1][coordX].getType() == GridType::START ? true : false;
+		isNeighbourSTART = cells[coordY + 1][coordX].getType() == GridType::START ? true : false;
 	}
 
 	if (coordX == 0)
 		//On the far left side of the map
-		isNeighbourStart = cells[coordY][coordX + 1].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY][coordX + 1].getType() == GridType::START ? true : false;
 	else if (coordX == (width - 1))
 		//On the far right side of the map
-		isNeighbourStart = cells[coordY][coordX - 1].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY][coordX - 1].getType() == GridType::START ? true : false;
 	else {
-		isNeighbourStart = cells[coordY][coordX + 1].getType() == GridType::Start ? true : false;
-		isNeighbourStart = cells[coordY][coordX - 1].getType() == GridType::Start ? true : false;
+		isNeighbourSTART = cells[coordY][coordX + 1].getType() == GridType::START ? true : false;
+		isNeighbourSTART = cells[coordY][coordX - 1].getType() == GridType::START ? true : false;
 	}
 
-	return isNeighbourStart;
+	return isNeighbourSTART;
+}
+
+void Map::storeMapTxt() {
+	file.open("map/" + mapName.append("_map.txt"));
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			switch (cells[i][j].getType()) {
+			case GridType::SCENERY:
+				file << "0" << " ";
+				break;
+			case GridType::START:
+				file << "1" << " ";
+				break;
+			case GridType::END:
+				file << "3" << " ";
+				break;
+			case GridType::PATH:
+				file << "2" << " ";
+				break;
+			}
+		}
+		file << endl;
+	}
+
+	file.close();
 }

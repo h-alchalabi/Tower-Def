@@ -13,7 +13,7 @@
 MapGrid::MapGrid() {
 	coordX = 0;
 	coordY = 0;
-	gridType = GridType::Scenery;
+	gridType = GridType::SCENERY;
 }
 
 MapGrid::~MapGrid() {}

@@ -1,5 +1,5 @@
 using namespace std;
-enum GridType { Start, End, Path, Scenery, Tower, Critter };
+enum GridType { START, END, PATH, SCENERY, TOWER, CRITTER };
  
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706

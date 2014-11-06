@@ -15,12 +15,15 @@ class Map {
 private:
 	int width;
 	int height;
+	string mapName;
+	string filePathName;
+	string fileMapName;
 	vector<vector<MapGrid>> cells;
 
 public:
 	~Map();
 	Map();
-	Map(int width, int height);
+	Map(int width, int height, string name);
 	int getWidth() const;
 	int getHeight() const;
 	MapGrid getCell(int coordX, int coordY) const;
@@ -47,5 +50,9 @@ public:
 	//Validating the end path
 	bool validateEndPath(int coordX, int coordY);
 
+	//Verify if the coordinate is near the start point
 	bool isNeighbourStart(int coordX, int coordY);
+
+	//Storing the created map in a text file
+	void storeMapTxt();
 };
