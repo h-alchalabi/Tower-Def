@@ -42,3 +42,15 @@ void TowerController::upgradeTower(Tower* tower){
 
 	towerList.at(index).setUpgradeStats();
 }
+
+void TowerController::printTowerStats(Tower* tower){
+	cout << "\n Tower Stats" <<
+			"\n========================" <<
+			"\nType: " << tower->getType() <<
+			"\nBuying Cost: " << tower->getBuyCost() <<
+			"\nResell Vall: " << tower->getResellVal() <<
+			"\nAttack Range: " << tower->getRange() <<
+			"\nPower: " << tower->getAtk() <<
+			"\nRate of Fire Attack: " << tower->getRate() <<
+			"\nUpgrade Cost: " << tower->getUpgradeCost() << endl;
+}

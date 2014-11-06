@@ -14,6 +14,8 @@ public:
 	void removeTower(Tower* tower);
 	// upgrade a tower from the list
 	void upgradeTower(Tower* tower);
+	// print Tower stats of a single tower
+	void printTowerStats(Tower* tower);
 	// return the pointer to the tower at the given index.
 	Tower* getTower(int i);
 	// return the list of towers.
