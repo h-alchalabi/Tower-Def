@@ -19,16 +19,16 @@ private:
 	string mapPath;
 	CritterType type;
 	int deploymentTime;
-	const string delimiter = ",";
 	int x, y;
-	string line, token;
-	ifstream* file;
+	int steps;
+
 
 public:
 	Critter();
 	Critter(int wave, CritterType type, string mapPath);
 	int getLevel();
 	void setLevel(int level);
+	int getSteps();
 	int getHitPoints();
 	void setHitPoints(int hitPoints);
 	int getSpeed();
@@ -38,7 +38,8 @@ public:
 	int getPositionX();
 	int getPositionY();
 	bool checkHealth();
-	void move();
+	void setSteps(int steps);
+	void move(vector <int> coordinates);
 	string getMapPath();
 	void setPositionX(int positionX);
 	void setPositionY(int positionY);

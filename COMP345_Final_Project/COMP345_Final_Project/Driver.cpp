@@ -253,9 +253,10 @@ void startGame(Map& gameMap) {
 
 	openMapTxt(mapName, mapFileName, gameMap);
 
-	//string mapPath = "path/" + mapName + "_path.txt";
+	string mapPath = "path/" + mapName + "_path.txt";
 	Wave* wave = new Wave();
 	wave->createCritters(1, gameMap.getFilePathName());
+
 	int size = wave->getCritterVec().size();
 	vector <Critter> temp = wave->getCritterVec();
 	int numOfCrit = wave->getNumOfCritters();
@@ -264,6 +265,7 @@ void startGame(Map& gameMap) {
 		wave->deploy();
 		for (int i = 0; i < numOfCrit; ++i){
 			gameMap.setCellType(temp.at(i).getPositionX(), temp.at(i).getPositionY(), GridType::CRITTER, FileAction::STORE);
+			cout << temp.at(i).getPositionX() << "," << temp.at(i).getPositionY() << endl;
 			gameMap.printMap();
 			Sleep(3000);
 		}

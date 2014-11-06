@@ -32,7 +32,6 @@ void Wave::createCritters(int waveNumber, string mapPath){
 		 for (int i = 0; i<level * numOfCritters; ++i){
 			critterVec.push_back(*critter);
 		}
-		//deploy();
 		break;
 	case 2:
 		critter = new Critter(waveNumber, CritterType::Fast, mapPath);
@@ -55,20 +54,43 @@ void Wave::createCritters(int waveNumber, string mapPath){
 		waveNumber++;
 	}
 }
+
+void Wave::readFile(string mapPath){
+	int path;
+	ifstream file(mapPath);
+	while (!file.eof()){
+			file >> line;
+			token = line.substr(0, line.find(delimiter));
+			istringstream(token) >> x;
+			coordinates.push_back(x);
+			token = line.substr(line.find(delimiter) + 1);
+			istringstream(token) >> y;
+			coordinates.push_back(y);
+			//cout << x << "," << y << endl;
+		}
+	file.close();
+	
+}
+
 void Wave::deploy(){
+	
 	while (critterDeployed < numOfCritters*level){
 		++critterDeployed;
+		
 		cout << "CD= " << critterDeployed << endl;
-		
-		
-	}
 		move();
+
+	}
+		
 
 }
 
 void Wave::move(){
 	for (int i=0; i<critterDeployed; ++i){
-		cout << "deploying at " << i << endl;
-		critterVec.at(i).move();
+		cout << "deploying critter: " << i << endl;
+		critterVec.at(i).move(coordinates);
+		//critterVec.at(i).setPositionX(coordinates.at(z));
+		//critterVec.at(i).setPositionY(coordinates.at(z + 1));
+		//critterVec.at(i).setSteps(z + 2);
 	}
 }
