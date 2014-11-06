@@ -28,6 +28,9 @@ public:
 	Map(int width, int height, string name);
 	int getWidth() const;
 	int getHeight() const;
+	string getMapName() const;
+	string getFilePathName() const;
+	string getFileMapName() const;
 	MapGrid getCell(int coordX, int coordY) const;
 	void setWidth(int w);
 	void setHeight(int h);

@@ -46,6 +46,18 @@ MapGrid Map::getCell(int coordX, int coordY) const {
 	return cells[coordY][coordX];
 }
 
+string Map::getMapName() const {
+	return mapName;
+}
+
+string Map::getFileMapName() const {
+	return fileMapName;
+}
+
+string Map::getFilePathName() const {
+	return filePathName;
+}
+
 void Map::setWidth(int w) {
 	width = w;
 }
