@@ -6,6 +6,9 @@
 #include <fstream>
 #include "Wave.h"
 #include <windows.h>
+#include "Tower.h"
+#include "TowerController.h"
+#include "SharedSingleton.h" 
 
 //using namespace sf;
 using namespace std;
@@ -31,7 +34,6 @@ void startGame(Map& gameMap);
 void createMap(Map& gameMap);
 void loadMap(Map& gameMap);
 void placeTowers(Map& gameMap);
-
 int main() {
 	Map gameMap;				//The map that will be created for the user
 	char gameOption;            //Used to prompt user to select options throughout the game
@@ -67,13 +69,7 @@ int main() {
 }
 
 void mapCreateOrEdit(Map& gameMap) {
-	int mapWidth, mapHeight;    //Map dimensions
-	int pathCoordX, pathCoordY; //Used to keep track of the path traced by user
-	int coordX, coordY;			//Coordination of the start point, towers, or critters to be added on the map
-	char pathDirection = 's';   //Used to verify if user wants to end path tracing
 	char gameOption;            //Used to prompt user to select options throughout the game
-	string mapName;             //The name of the map to be loaded or to be stored
-	string mapFileName;         //Used to create the text file from the file name entered by user
 	bool validInput = false;    //Used during input validation
 
 	//Prompting the user whether he/she wants to create a map or use an existing map
@@ -105,18 +101,65 @@ void mapCreateOrEdit(Map& gameMap) {
 }
 void placeTowers(Map& gameMap){
 	loadMap(gameMap);
+	char selection = '0';
 	while (true){
-		char selection = '0';
-		cout << "What would you like to do?" << endl
+		cout << "What would you like to do? (Money: "  << "):" << endl
 			<< "b -> Buy a Tower" << endl
 			<< "u -> Upgrade a Tower" << endl
 			<< "s -> Sell a Tower" << endl
 			<< "e -> Return to previous Menu" << endl;
 		cin >> selection;
-		if (selection == ('b'|'u'|'s'|'e')){
-			cout << "chyea - hella nuggets" << endl;
+		if (selection == 'b'|'u'|'s'|'e'){
+			//cout << "chyea - hella nuggets" << endl;
 			break;
 		}
+	}
+	switch (selection){
+	case 'b':{
+				 system("cls");
+				 while (true){
+					 cout << "Which type of tower would you like to buy? (Money: "<<"):" << endl
+						 << "1 -> Normal Tower" << endl
+						 << "2 -> Slowing Tower" << endl
+						 << "e -> Go back to previous menu" << endl;
+					 cin >> selection;
+					 if (selection == '1' | '2' | 'e'){
+						 break;
+					 }
+					 cout << "Invalid Selection." << endl;
+				 }
+				 int type = -1;
+				 if (selection == '1'){
+					 type = 0;
+				 }
+				 else if (selection == '2'){
+					 type = 1;
+				 }
+				 else{
+					 return;
+				 }
+					 Tower::towerPreview(type);
+				 while (true){
+					 cout << endl << "Would you like to purchase this tower? (y/n): ";
+					 cin >> selection;
+					 if (selection == 'y'|'n'){
+						 break;
+					 }
+					 cout << "Invlaid Selection.";
+				 }
+				 int coordX = 0, coordY = 0;
+				 if (selection == 'y'){
+					 int tempX = 0, tempY = 0;
+					// mtc.addTower(type, tempX, tempY, gameMap, ss);
+				 }
+
+	}break;
+	case 'u':{
+
+	}break;
+	case 's':{
+
+	}break;
 	}
 
 }

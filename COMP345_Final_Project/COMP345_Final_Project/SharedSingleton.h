@@ -7,14 +7,15 @@
 
 class SharedSingleton{
 public:
-	const TowerController mainTowerController();
-	const ProjectileController mainProjectileController();
-	const Wave mainWave();
-	SharedSingleton* getInstance();
-	~SharedSingleton();
-private:
+	//TowerController* mainTowerController;
+	int money;
 	SharedSingleton();
 	SharedSingleton(const SharedSingleton&  s);
+	
+	//const ProjectileController mainProjectileController();
+	//const Wave mainWave();
+	SharedSingleton* getInstance();
+	~SharedSingleton();
 };
 
 #endif // SHAREDSINGLETON_H
