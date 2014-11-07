@@ -2,6 +2,8 @@
 #define TOWERCONTROLLER_H
 
 #include "Tower.h"
+#include "Map.h"
+#include "SharedSingleton.h"
 #include <vector>
 
 class TowerController{
@@ -9,7 +11,7 @@ public:
 	// constructor initialize the vector
 	TowerController();
 	// create and a tower to the list.
-	void addTower(int type, int x, int y /*Map *map*/);
+	void addTower(int type, int x, int y, Map& map);
 	// remove a tower from the list, trim list to proper size.
 	void removeTower(Tower* tower);
 	// upgrade a tower from the list
@@ -32,8 +34,6 @@ public:
 	bool purchaseVerif(int type);
 private:
 	vector<Tower> towerList;
-	int money;
-
 };
 
 #endif // !TOWERCONTROLLER_H

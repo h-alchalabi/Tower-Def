@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Critter.h"
+#include <string>
 
 class Tower: public Entity{
 public:
@@ -37,6 +38,32 @@ public:
 	string displayStatus(Effect status);
 	int getstatusEffect();
 	void setUpgradeStats();
+	static std::string towerPreview(int type){
+		std::string preview = "";
+		switch (type){
+		case 1:{
+				   preview += "Type: Slowing Tower\n";
+				   preview += "Level: 1\n";
+				   preview += "Attack: 10\n";
+				   preview += "Range: 6\n";
+				   preview += "Fire Rate: 1\n";
+				   preview += "Cost: 175\n";
+				   preview += "Sell Value: 125\n";
+				   preview += "Upgrade Cost: 55\n";
+		}break;
+		default:{
+					preview += "Type: Normal Tower\n";
+					preview += "Level: 1\n";
+					preview += "Attack: 30\n";
+					preview += "Range: 3\n";
+					preview += "Fire Rate: 2\n";
+					preview += "Cost: 150\n";
+					preview += "Sell Value: 100\n";
+					preview += "Upgrade Cost: 45\n";
+		}break;
+		}
+		return preview;
+	}
 	
 
 private:

@@ -103,6 +103,9 @@ void Map::printMap() const {
 			case GridType::PATH:
 				cout << " 0 ";
 				break;
+			case GridType::CRITTER:
+				cout << " C ";
+				break;
 			}
 		}
 		cout << endl;
