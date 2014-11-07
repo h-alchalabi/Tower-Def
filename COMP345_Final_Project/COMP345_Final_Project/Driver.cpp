@@ -151,13 +151,38 @@ void placeTowers(Map& gameMap){
 					 int coordX = 0, coordY = 0;
 					 if (selection == 'y'){
 						 int tempX = 0, tempY = 0;
-						 ss_ptr->money -= 100;
 						 ss_ptr->tc_ptr->addTower(type, tempX, tempY, gameMap);
 					 }
 
 		}break;
 		case 'u':{
-
+					 while (true){
+						 int input = -1;
+						 vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
+						 cout << "Current number of towers owned: " << temp.size() << endl;
+						 for (int i = 0; i != ss_ptr->tc_ptr->getTowerList.end(); ++i){
+							 cout << "Index " << i << "\tType: " << temp.at(i).getType() <<
+								 "\tUpgrade Cost value: " << temp.at(i).getUpgradeCost() << endl;
+						 }
+						 while (true){
+							 cout << "\nTo upgrade a tower, input its index:" << endl;
+							 cin >> input;
+							 if (input >= 0 && input < temp.size()){
+								 break;
+							 }
+						 }
+						 while (true){
+							 cout << endl << "Would you like to upgrade this tower? (y/n): ";
+							 cin >> selection;
+							 if (selection == 'y' | 'n'){
+								 break;
+							 }
+							 cout << "Invlaid Selection.";
+						 }
+						 if (selection == 'y'){
+							 ss_ptr->tc_ptr->upgradeTower(input);
+						 }
+					 }
 		}break;
 		case 's':{
 
