@@ -21,8 +21,6 @@ private:
 	int deploymentTime;
 	int x, y;
 	int steps;
-
-
 public:
 	Critter();
 	Critter(int wave, CritterType type, string mapPath);
