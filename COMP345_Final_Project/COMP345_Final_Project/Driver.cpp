@@ -308,7 +308,7 @@ void startGame(Map& gameMap) {
 			if (c.getSteps() - 2 < 0){
 				//int* a = c.previousPos();
 			} //reverting the old space.
-			cout << x << "," << y << endl;
+			//cout << x << "," << y << endl;
 			//Sleep(3000);
 			}
 		}
@@ -332,10 +332,10 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 	while (!mapFile.eof()) {
 		ch = mapFile.get();
 		if (ch == '\n') {
-			mapWidth++;
+			mapHeight++;
 			isMaxHeight = true;
 		} else if (!isMaxHeight && ch != ' ')
-			mapHeight++;
+			mapWidth++;
 	}
 	gameMap = Map(mapWidth, mapHeight, mapName);
 
