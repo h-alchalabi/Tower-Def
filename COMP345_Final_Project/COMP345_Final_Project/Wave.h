@@ -18,7 +18,7 @@ public:
 	const string delimiter = ",";
 	int x, y;
 	string line, token;
-	vector<int> coordinates;
+	const vector <int> getCoordinateVec();
 	int getNumberOfDeployed();
 
 private:
@@ -27,8 +27,9 @@ private:
 	int numOfCritters;
 	int moddedWave;
 	int critterDeployed;
-	clock_t elapsedTime;
+	//clock_t elapsedTime;
 	Critter *critter;
 	vector <Critter> critterVec;
-	//Critter* critterHolder;
+	vector<int> coordinates;
+	
 };

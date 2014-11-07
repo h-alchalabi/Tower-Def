@@ -7,10 +7,12 @@ Wave::Wave(void)
 	numOfCritters = 4;
 	moddedWave = 0;
 	critterDeployed = 0;
-	elapsedTime = 0;
 }
 Wave::~Wave(void)
 {
+	critterVec.clear();
+	coordinates.clear();
+	delete critter;
 
 }
 
@@ -70,8 +72,6 @@ void Wave::readFile(string mapPath){
 			istringstream(token) >> y;
 			coordinates.push_back(y);
 		}
-	//coordinates giving error in size. Its making the array 3154 bigger.
-	//Problem isn't here it is in the path.txt
 	file.close();
 	
 }
@@ -83,7 +83,6 @@ void Wave::deploy(){
 	if (critterDeployed < numOfCritters){
 		++critterDeployed;
 	}
-		//cout << "CD= " << critterDeployed << endl;
 		move();
 }
 
@@ -96,13 +95,11 @@ void Wave::move(){
 	}
 	else{
 		for (int i = 0; i < critterDeployed; ++i){
-			cout << "deploying critter: " << i << endl;
 			critterVec.at(i).move(coordinates);
-			//cout << "move was called for  " << i << "\n"; //for 0 only been called 4 times.
-
-			//critterVec.at(i).setPositionX(coordinates.at(z));
-			//critterVec.at(i).setPositionY(coordinates.at(z + 1));
-			//critterVec.at(i).setSteps(z + 2);
 		}
 	}
+}
+
+const vector<int> Wave::getCoordinateVec(){
+	return coordinates;
 }
