@@ -62,6 +62,7 @@ public:
 					preview += "Upgrade Cost: 45\n";
 		}break;
 		}
+		return preview;
 	}
 	
 
