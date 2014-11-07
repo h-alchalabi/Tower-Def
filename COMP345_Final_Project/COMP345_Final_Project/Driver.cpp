@@ -316,48 +316,46 @@ void startGame(Map& gameMap) {
 
 	placeTowers(gameMap);
 
-	string mapPath = "path/" + mapName + "_path.txt";
 	Wave* wave = new Wave();
 	wave->createCritters(1, gameMap.getFilePathName());
 	wave->readFile(gameMap.getFilePathName());
 	int size = wave->getCritterVec().size();
-	//vector <Critter> *temp = &wave->getCritterVec();
 	int numOfCrit = wave->getNumOfCritters();
 	int x, y;
-	//Huge issue, Size of coordinates is 3154. Its repeating way too many times.
-	cout << wave->coordinates.size() << endl;
-	while (true){
+	int* previousIndex = new int[2];
+	int critterNoMore = 0;
+	while (critterNoMore <= numOfCrit + 2){
 		wave->deploy();
 		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
 			Critter c = wave->getCritterVec().at(i);
 			x = c.getPositionX();
 			y = c.getPositionY();
 			if (gameMap.getCell(x, y).getType() == GridType::END){
+				++critterNoMore;
+				if (critterNoMore >= numOfCrit){
+					previousIndex = c.previousPos(wave->getCoordinateVec());
+					gameMap.setCellType(previousIndex[0], previousIndex[1], GridType::PATH, FileAction::LOAD);
+
+				}
 				//Delete critter if it reached end. 
 			}
-			else { //If the next tile is not empty, then move the critter to it and attempt to revert the old tile into a path tile.
-				cout << "Critter[" << i << "]" << c.getSteps() << endl;
+			else {
+				//If the next tile is not empty, then move the critter to it and attempt to revert the old tile into a path tile.
 				gameMap.setCellType(x, y, GridType::CRITTER, FileAction::LOAD);
 				if (c.getSteps() - 2 > 0){
-					int* a = new int[2];
-					a = c.previousPos(wave->coordinates);
-					gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::LOAD);
+					previousIndex = c.previousPos(wave->getCoordinateVec());
+					gameMap.setCellType(previousIndex[0], previousIndex[1], GridType::PATH, FileAction::LOAD);
 				} //reverting the old space.
 			}
-			
-			
-			/*Problems:
-			1. Path.txt for whatever file is being saved in an odd way, for some reason it is repeating the input an undetermined amount of times
-			2. In turn the coordinates is being stored in a vector of size exponentially larger than the size needed because of repeating sequence in the above.
-			3. Destructor of critter after it is reached the end. Alternatively, we have a boolean variable status which representes if the critter is active(true)
-			or inactive(false). Keep in mind this is just an idea and doesn't have to be implemented this way.
-			4. End Condition is necessary for the while loop, Do we want to keep going or stop after wave:1, level:1?
-			*/
+
 		}
+		system("cls");
 		gameMap.printMap();
-		cin >> x;
+		Sleep(500);
 
 	}
+	gameMap.setCellType(0, 0, GridType::START, FileAction::LOAD);
+	delete wave;
 
 }
 
