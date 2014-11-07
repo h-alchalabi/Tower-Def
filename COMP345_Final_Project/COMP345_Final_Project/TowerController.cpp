@@ -12,10 +12,11 @@ int index;
 TowerController::TowerController(){
 	money = 4000;
 }
-void TowerController::addTower(int type, int posX, int posY, Map *map){
-	purchaseTower(type);
+void TowerController::addTower(int type, int posX, int posY /*Map *map*/){
+	
+    purchaseTower(type);
 	tower = new Tower(type);
-	map->addCritterOrTower(posX, posY, TOWER);
+	//addCritterOrTower(posX, posY, TOWER);
 	towerList.push_back(*tower); 
 	cout << "You purchased a " << tower->getType() << endl;
 };
@@ -71,9 +72,10 @@ int TowerController::getPrice(int type){
 	return 150;
 }
 void TowerController::purchaseTower(int type){
+	
 	setMoney(getMoney() - getPrice(type));
 }
-bool TowerController::purchaseVerif( int type){
+bool TowerController::purchaseVerif(int type){
 	if (getMoney() < getPrice(type))
 		return false;
 	return true;
