@@ -106,6 +106,9 @@ void Map::printMap() const {
 			case GridType::CRITTER:
 				cout << " C ";
 				break;
+			case GridType::TOWER:
+				cout << " T ";
+				break;
 			}
 		}
 		cout << endl;
@@ -177,7 +180,7 @@ int Map::tracePathY(int PathCoordX, int PathCoordY, int PathCoordYRequest) {
 	return PathCoordY;
 }
 
-void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
+void Map::insertCoord(int& coordX, int& coordY, GridType gridType, FileAction fileAction) {
 	//Used to determine if user input is valid
 	bool validInput = false;
 	//Used to determine if system outputs for the case of start point, critters or Towers
@@ -223,7 +226,7 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType) {
 	system("cls");
 
 	//Adding the element on the map and then display the map
-	setCellType(coordY, coordX, gridType, FileAction::STORE);
+	setCellType(coordY, coordX, gridType, fileAction);
 	//cells[coordY][coordX].set(gridType);
 	printMap();
 }
@@ -232,7 +235,7 @@ void Map::addCritterOrTower(int& coordX, int& coordY, GridType gridType) {
 	char moreInput; //Used to keep track for if the user wants to create more towers/critters
 	do {
 		//Inserting the critter or tower on the map
-		insertCoord(coordX, coordY, gridType);
+		insertCoord(coordX, coordY, gridType, FileAction::STORE);
 		//Prompting the user to decide whether to add more critters or not
 		std::cout << "Would you like to create more " << (gridType == GridType::CRITTER ? "critter" : "tower") <<
 			"? (Enter 'y' for yes and 'n' for no): ";

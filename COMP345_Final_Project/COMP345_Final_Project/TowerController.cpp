@@ -11,7 +11,7 @@ TowerController::TowerController(){
 void TowerController::addTower(int type, int posX, int posY, Map& map){
 	purchaseTower(type);
 	tower = new Tower(type);
-	map.insertCoord(posX, posY, GridType::TOWER);
+	map.insertCoord(posX, posY, GridType::TOWER, FileAction::LOAD);
 	tower->setPostionX(posX);
 	tower->setPostionY(posY);
 	towerList.push_back(*tower); 

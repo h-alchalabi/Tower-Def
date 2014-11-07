@@ -48,7 +48,7 @@ public:
 	int tracePathY(int pathCoordX, int pathCoordY, int pathCoordYRequest);
 
 	//Prompting the user to enter the coordinates for the element to be inserted, and then insert the element on the map
-	void insertCoord(int& coordX, int& coordY, GridType gridType);
+	void insertCoord(int& coordX, int& coordY, GridType gridType, FileAction fileAction);
 
 	//Having the user add as much tower/critter as he/she wants on the map
 	void addCritterOrTower(int& coordX, int& coordY, GridType gridType);

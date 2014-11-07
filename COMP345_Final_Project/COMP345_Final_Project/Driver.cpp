@@ -99,67 +99,71 @@ void mapCreateOrEdit(Map& gameMap) {
 	}
 }
 void placeTowers(Map& gameMap){
-	loadMap(gameMap);
 	char selection = '0';
-	while (true){
-		cout << "What would you like to do? (Money: " << ss_ptr->money <<  "):" << endl
-			<< "b -> Buy a Tower" << endl
-			<< "u -> Upgrade a Tower" << endl
-			<< "s -> Sell a Tower" << endl
-			<< "e -> Return to previous Menu" << endl;
-		cin >> selection;
-		if (selection == 'b' | 'u' | 's' | 'e'){
-			//cout << "chyea - hella nuggets" << endl;
-			break;
+	while (selection != 'e'){
+		while (true){
+			system("cls");
+			gameMap.printMap();
+			cout << "What would you like to do? (Money: " << ss_ptr->money << "):" << endl
+				<< "b -> Buy a Tower" << endl
+				<< "u -> Upgrade a Tower" << endl
+				<< "s -> Sell a Tower" << endl
+				<< "e -> Done" << endl;
+			cin >> selection;
+			if (selection == 'b' | 'u' | 's' | 'e'){
+				//cout << "chyea - hella nuggets" << endl;
+				break;
+			}
 		}
-	}
-	switch (selection){
-	case 'b':{
-				 system("cls");
-				 while (true){
-					 cout << "Which type of tower would you like to buy? (Money: " << ss_ptr->money << "):" << endl
-						 << "1 -> Normal Tower" << endl
-						 << "2 -> Slowing Tower" << endl
-						 << "e -> Go back to previous menu" << endl;
-					 cin >> selection;
-					 if (selection == '1' | '2' | 'e'){
-						 break;
+		switch (selection){
+		case 'b':{
+					 
+					 while (true){
+						 cout << "Which type of tower would you like to buy? (Money: " << ss_ptr->money << "):" << endl
+							 << "1 -> Normal Tower" << endl
+							 << "2 -> Slowing Tower" << endl
+							 << "e -> Go back to previous menu" << endl;
+						 cin >> selection;
+						 if (selection == '1' | '2' | 'e'){
+							 break;
+						 }
+						 cout << "Invalid Selection." << endl;
 					 }
-					 cout << "Invalid Selection." << endl;
-				 }
-				 int type = -1;
-				 if (selection == '1'){
-					 type = 0;
-				 }
-				 else if (selection == '2'){
-					 type = 1;
-				 }
-				 else{
-					 return;
-				 }
-				 Tower::towerPreview(type);
-				 while (true){
-					 cout << endl << "Would you like to purchase this tower? (y/n): ";
-					 cin >> selection;
-					 if (selection == 'y' | 'n'){
-						 break;
+					 int type = -1;
+					 if (selection == '1'){
+						 type = 0;
 					 }
-					 cout << "Invlaid Selection.";
-				 }
-				 int coordX = 0, coordY = 0;
-				 if (selection == 'y'){
-					 int tempX = 0, tempY = 0;
-					 ss_ptr->money -= 100;
-					 ss_ptr->tc_ptr->addTower(type, tempX, tempY, gameMap);
-				 }
+					 else if (selection == '2'){
+						 type = 1;
+					 }
+					 else{
+						 return;
+					 }
+					 cout << endl << Tower::towerPreview(type) << endl;
+					 while (true){
+						 cout << endl << "Would you like to purchase this tower? (y/n): ";
+						 cin >> selection;
+						 if (selection == 'y' | 'n'){
+							 break;
+						 }
+						 cout << "Invlaid Selection.";
+					 }
+					 int coordX = 0, coordY = 0;
+					 if (selection == 'y'){
+						 int tempX = 0, tempY = 0;
+						 ss_ptr->money -= 100;
+						 ss_ptr->tc_ptr->addTower(type, tempX, tempY, gameMap);
+					 }
 
-	}break;
-	case 'u':{
+		}break;
+		case 'u':{
 
-	}break;
-	case 's':{
+		}break;
+		case 's':{
 
-	}break;
+		}break;
+
+		}
 	}
 
 }
@@ -218,7 +222,7 @@ void createMap(Map& gameMap){
 	gameMap = Map(mapWidth, mapHeight, mapName);
 	gameMap.printMap();
 	//Inserting the start point
-	gameMap.insertCoord(coordX, coordY, GridType::START);
+	gameMap.insertCoord(coordX, coordY, GridType::START, FileAction::STORE);
 
 	//Prompting the user to trace the path on the map
 	pathCoordX = coordX;
@@ -308,11 +312,11 @@ void startGame(Map& gameMap) {
 			}
 			else { //If the next tile is not empty, then move the critter to it and attempt to revert the old tile into a path tile.
 				cout << "Critter[" << i << "]" << c.getSteps() << endl;
-				gameMap.setCellType(x, y, GridType::CRITTER, FileAction::STORE);
+				gameMap.setCellType(x, y, GridType::CRITTER, FileAction::LOAD);
 				if (c.getSteps() - 2 > 0){
 					int* a = new int[2];
 					a = c.previousPos(wave->coordinates);
-					gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::STORE);
+					gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::LOAD);
 				} //reverting the old space.
 			}
 			
