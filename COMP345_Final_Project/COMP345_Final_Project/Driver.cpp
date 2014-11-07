@@ -305,8 +305,12 @@ void startGame(Map& gameMap) {
 			}
 			else{
 			gameMap.setCellType(x,y, GridType::CRITTER, FileAction::STORE);
-			if (c.getSteps() - 2 < 0){
-				int* a = c.previousPos(wave->coordinates);
+			if (c.getSteps() - 2 > 0){
+				int* a = new int[2];
+				a = c.previousPos(wave->coordinates);
+				//cout << "Critter[" << i << "]" << endl;
+				//cout << c.getSteps() << endl;
+				//cout << "a[0]" << a[0] << "," << a[1] << "," << x << ", " << y << endl;
 				gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::STORE);
 			} //reverting the old space.
 			}

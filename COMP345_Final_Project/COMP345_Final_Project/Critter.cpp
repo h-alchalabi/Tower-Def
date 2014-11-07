@@ -102,9 +102,9 @@ void Critter::move(vector<int> coordinates){
 }
 
 int* Critter::previousPos(vector <int> coordinates){
-	int previosPos[2];
-	previosPos[0] = coordinates.at(steps - 2);
-	previosPos[1] = coordinates.at(steps - 1);
+	int* previosPos = new int[2];
+	previosPos[0] = coordinates.at(steps - 4);
+	previosPos[1] = coordinates.at(steps - 3);
 	return previosPos;
 }
 
