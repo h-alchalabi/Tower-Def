@@ -324,7 +324,7 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 	unsigned char ch;               //Used for verifications of data in the file
 	int mapWidth = 0;               //Used to retrieve the width of the map from the file
 	int mapHeight = 0;              //Used to retrieve the height of the map from the file
-	bool isMaxHeight = false;       //Used during the process of retrieving the height of the map
+	bool isMaxWidth = false;       //Used during the process of retrieving the height of the map
 	int xCoord = 0;                 //Used during the process of creating the map object
 	int yCoord = 0;					//Used during the process of creating the map object
 
@@ -332,10 +332,10 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 	while (!mapFile.eof()) {
 		ch = mapFile.get();
 		if (ch == '\n') {
-			mapWidth++;
-			isMaxHeight = true;
-		} else if (!isMaxHeight && ch != ' ')
 			mapHeight++;
+			isMaxWidth = true;
+		} else if (!isMaxWidth && ch != ' ')
+			mapWidth++;
 	}
 	gameMap = Map(mapWidth, mapHeight, mapName);
 
