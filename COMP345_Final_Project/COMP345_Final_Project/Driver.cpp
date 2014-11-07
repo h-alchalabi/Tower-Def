@@ -15,11 +15,11 @@ using namespace std;
 
 /***************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
-//Amanda Tom -
-//Awais Ali -
+//Amanda Tom - 6633463
+//Awais Ali - 6849040
 //Haani Al-Chalabi - 9521577
 //Van Do - 6526276
-//Djamil Francis - 
+//Djamil Francis - 1308637
 //
 //COMP345 - Final Project
 //
@@ -188,7 +188,34 @@ void placeTowers(Map& gameMap){
 					 }
 		}break;
 		case 's':{
-
+					 while (true){
+						 int input = -1;
+						 //vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
+						 cout << "Current number of towers owned: " << ss_ptr->tc_ptr->size() << endl;
+						 for (int i = 0; i != ss_ptr->tc_ptr->size(); ++i){
+							 cout << "Index " << i << "\tType: " << ss_ptr->tc_ptr->getTower(i)->getType() <<
+								 "\tSell value: " << ss_ptr->tc_ptr->getTower(i)->getResellVal() << endl;
+						 }
+						 while (true){
+							 cout << "\nTo sell a tower, input its index:" << endl;
+							 cin >> input;
+							 if (input >= 0 && input < ss_ptr->tc_ptr->size()){
+								 break;
+							 }
+						 }
+						 while (true){
+							 cout << endl << "Would you like to sell this tower? (y/n): ";
+							 cin >> selection;
+							 if (selection == 'y' | 'n'){
+								 break;
+							 }
+							 cout << "Invlaid Selection.";
+						 }
+						 if (selection == 'y'){
+							 ss_ptr->tc_ptr->removeTower(input, gameMap);
+							 break;
+						 }
+					 }
 		}break;
 
 		}

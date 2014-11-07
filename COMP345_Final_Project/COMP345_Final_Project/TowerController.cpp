@@ -19,21 +19,17 @@ void TowerController::addTower(int type, int posX, int posY, Map& map){
 	//cout << "You purchased a " << tower->getType() << endl;
 }
 
-void TowerController::removeTower(Tower* tower){
-	cout << "Current number of towers owned: " << towerList.size() << endl;
-	index = 0;
-	for (i = towerList.begin(); i != towerList.end(); ++i){
-		cout << "Index " << index << "\tType: " << i->getType() <<
-			"\tResell value: " << i->getResellVal() << endl;
-		++index;
-	}
-	cout << "\nTo sell a tower, input its index." << endl;
-	cin >> input;
-
+void TowerController::removeTower(int index, Map& map){
+	sellTower(&towerList.at(index));
+	int x =	towerList.at(index).getPositionX();
+	int y = towerList.at(index).getPositionY();
+	map.setCellType(x, y, GridType::SCENERY, FileAction::LOAD);
 	towerList.erase(towerList.begin() + input);
+	towerList.shrink_to_fit();
 }
 
 void TowerController::upgradeTower(int index){
+	ss2_ptr->money -= towerList.at(index).getUpgradeCost();
 	towerList.at(index).setUpgradeStats();
 }
 int TowerController::getPrice(int type){

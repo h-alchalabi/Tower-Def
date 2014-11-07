@@ -11,7 +11,7 @@ public:
 	// create and a tower to the list.
 	void addTower(int type, int x, int y, Map& map);
 	// remove a tower from the list, trim list to proper size.
-	void removeTower(Tower* tower);
+	void removeTower(int index, Map& map);
 	// upgrade a tower from the list
 	void upgradeTower(int index);
 	// return the pointer to the tower at the given index.
