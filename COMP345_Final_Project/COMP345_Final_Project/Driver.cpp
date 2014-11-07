@@ -23,7 +23,6 @@ using namespace std;
 //
 //COMP345 - Final Project
 //
-//
 //Main application
 //
 /****************************************************************************************************************/
@@ -111,7 +110,6 @@ void placeTowers(Map& gameMap){
 				<< "e -> Done" << endl;
 			cin >> selection;
 			if (selection == 'b' | 'u' | 's' | 'e'){
-				//cout << "chyea - hella nuggets" << endl;
 				break;
 			}
 		}
@@ -146,7 +144,7 @@ void placeTowers(Map& gameMap){
 						 if (selection == 'y' | 'n'){
 							 break;
 						 }
-						 cout << "Invlaid Selection.";
+						 cout << "Invalid Selection.";
 					 }
 					 int coordX = 0, coordY = 0;
 					 if (selection == 'y'){
@@ -158,7 +156,6 @@ void placeTowers(Map& gameMap){
 		case 'u':{
 					 while (true){
 						 int input = -1;
-						 //vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
 						 cout << "Current number of towers owned: " << ss_ptr->tc_ptr->size() << endl;
 						 for (int i = 0; i != ss_ptr->tc_ptr->size(); ++i){
 							 cout << "Index " << i << "\tType: " << ss_ptr->tc_ptr->getTower(i)->getType() <<
@@ -190,7 +187,6 @@ void placeTowers(Map& gameMap){
 		case 's':{
 					 while (true){
 						 int input = -1;
-						 //vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
 						 cout << "Current number of towers owned: " << ss_ptr->tc_ptr->size() << endl;
 						 for (int i = 0; i != ss_ptr->tc_ptr->size(); ++i){
 							 cout << "Index " << i << "\tType: " << ss_ptr->tc_ptr->getTower(i)->getType() <<
@@ -216,7 +212,7 @@ void placeTowers(Map& gameMap){
 							 break;
 						 }
 					 }
-		}break;
+			}break;
 
 		}
 	}
@@ -386,7 +382,6 @@ void startGame(Map& gameMap) {
 	}
 	gameMap.setCellType(0, 0, GridType::START, FileAction::LOAD);
 	delete wave;
-
 }
 
 void openMapTxt(string mapName, string mapFileName, Map& gameMap) {

@@ -46,6 +46,7 @@ public:
 				   preview += "Level: 1\n";
 				   preview += "Attack: 10\n";
 				   preview += "Range: 6\n";
+				   preview += "Status Effect: Slow\n";
 				   preview += "Fire Rate: 1\n";
 				   preview += "Cost: 175\n";
 				   preview += "Sell Value: 125\n";
@@ -58,6 +59,7 @@ public:
 					preview += "Sell Value: 100\n";
 					preview += "Attack: 30\n";
 					preview += "Range: 3\n";
+					preview += "Status Effect: None\n";
 					preview += "Fire Rate: 2\n";
 					preview += "Upgrade Cost: 45\n";
 		}break;

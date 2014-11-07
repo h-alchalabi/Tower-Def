@@ -112,7 +112,6 @@ int Tower::getPositionY() const{
 
 //void Tower::placeTower(){}
 
-
 void Tower::setUpgradeStats()
 {
 	++lvl;
@@ -129,6 +128,7 @@ void Tower::printTowerStats() const{
 		"\nLevel: " << this->getLvl() <<
 		"\nBuying Cost: " << this->getBuyCost() <<
 		"\nResell Value: " << this->getResellVal() <<
+		"\nStatus Effect: " << this->displayStatus(status) <<
 		"\nAttack: " << this->getAtk() <<
 		"\nRange: " << this->getRange() <<
 		"\nFire Rate: " << this->getRate() <<
