@@ -80,11 +80,10 @@ void mapCreateOrEdit(Map& gameMap) {
 		cout << "Enter the following to select an option:" << endl
 			<< "c -> Create a map" << endl
 			<< "x -> Edit an existent map" << endl
-			<< "t -> Add towers to an existing map" << endl
 			<< "e -> Return to Main Menu" << endl;
 		cin >> gameOption;
 
-		if (!(gameOption == 'c' || gameOption == 'x' || gameOption == 't' || gameOption == 'e'))
+		if (!(gameOption == 'c' || gameOption == 'x' || gameOption == 'e'))
 			cout << "What you entered is invalid. Please try again.\n\n";
 		else
 			validInput = true;
@@ -97,9 +96,6 @@ void mapCreateOrEdit(Map& gameMap) {
 	}
 	else if (gameOption == 'x'){
 		cout << "Edit file options" << endl;
-	}
-	else if (gameOption == 't'){
-		placeTowers(gameMap);
 	}
 }
 void placeTowers(Map& gameMap){
@@ -154,7 +150,7 @@ void placeTowers(Map& gameMap){
 				 if (selection == 'y'){
 					 int tempX = 0, tempY = 0;
 					 ss_ptr->money -= 100;
-					 //mtc.addTower(type, tempX, tempY, gameMap);
+					 ss_ptr->tc_ptr->addTower(type, tempX, tempY, gameMap);
 				 }
 
 	}break;
@@ -288,6 +284,8 @@ void startGame(Map& gameMap) {
 	} while (!validInput);
 
 	openMapTxt(mapName, mapFileName, gameMap);
+
+	placeTowers(gameMap);
 
 	string mapPath = "path/" + mapName + "_path.txt";
 	Wave* wave = new Wave();

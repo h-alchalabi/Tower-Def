@@ -4,7 +4,7 @@
 #include "Map.h"
 #include <vector>
 
-SharedSingleton* ss_ptr = SharedSingleton::getInstance();
+SharedSingleton* ss2_ptr = SharedSingleton::getInstance();
 
 TowerController::TowerController(){
 }
@@ -52,8 +52,8 @@ int TowerController::getPrice(int type){
 }
 void TowerController::purchaseTower(int type){
 	cout << "good job" << endl;
-	ss_ptr->money -= getPrice(type);
+	ss2_ptr->money -= getPrice(type);
 }
 void TowerController::sellTower(Tower* tower){
-	ss_ptr->money += tower->getResellVal();
+	ss2_ptr->money += tower->getResellVal();
 }
