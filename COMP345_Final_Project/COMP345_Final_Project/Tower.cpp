@@ -1,7 +1,7 @@
 #include "Tower.h"
 
 Tower::Tower(){
-	
+	type = 0;
 	lvl = 1;
 	buyingCost = 150;
 	resellVal = 100;
@@ -12,7 +12,6 @@ Tower::Tower(){
 	upgradeCost = 45;
 	positionY = 0;
 	positionX = 0;
-	type = 0;
 	}
 
 Tower::Tower(int type){
@@ -20,12 +19,23 @@ Tower::Tower(int type){
 	//Average Tower
 	if (type == 0)
 	{
-		Tower();
+		this->type = type;
+		lvl = 1;
+		buyingCost = 150;
+		resellVal = 100;
+		range = 3;
+		atk = 30;
+		status = NONE;
+		fireRate = 2;
+		upgradeCost = 45;
+		positionY = 0;
+		positionX = 0;
 	}
 
 	//Special Type of Tower
 	if (type == 1)
 	{
+		this->type = type;
 		lvl = 1;
 		buyingCost = 175;
 		resellVal = 125;

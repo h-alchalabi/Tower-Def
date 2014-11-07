@@ -158,16 +158,16 @@ void placeTowers(Map& gameMap){
 		case 'u':{
 					 while (true){
 						 int input = -1;
-						 vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
-						 cout << "Current number of towers owned: " << temp.size() << endl;
-						 for (int i = 0; i != ss_ptr->tc_ptr->getTowerList.end(); ++i){
-							 cout << "Index " << i << "\tType: " << temp.at(i).getType() <<
-								 "\tUpgrade Cost value: " << temp.at(i).getUpgradeCost() << endl;
+						 //vector<Tower> temp = ss_ptr->tc_ptr->getTowerList();
+						 cout << "Current number of towers owned: " << ss_ptr->tc_ptr->size() << endl;
+						 for (int i = 0; i != ss_ptr->tc_ptr->size(); ++i){
+							 cout << "Index " << i << "\tType: " << ss_ptr->tc_ptr->getTower(i)->getType() <<
+								 "\tUpgrade Cost value: " << ss_ptr->tc_ptr->getTower(i)->getUpgradeCost() << endl;
 						 }
 						 while (true){
 							 cout << "\nTo upgrade a tower, input its index:" << endl;
 							 cin >> input;
-							 if (input >= 0 && input < temp.size()){
+							 if (input >= 0 && input < ss_ptr->tc_ptr->size()){
 								 break;
 							 }
 						 }
@@ -181,6 +181,9 @@ void placeTowers(Map& gameMap){
 						 }
 						 if (selection == 'y'){
 							 ss_ptr->tc_ptr->upgradeTower(input);
+							 ss_ptr->tc_ptr->getTower(input)->printTowerStats();
+							 Sleep(3000);
+							 break;
 						 }
 					 }
 		}break;

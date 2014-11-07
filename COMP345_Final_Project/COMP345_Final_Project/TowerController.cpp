@@ -11,6 +11,7 @@ TowerController::TowerController(){
 void TowerController::addTower(int type, int posX, int posY, Map& map){
 	purchaseTower(type);
 	tower = new Tower(type);
+	tower->printTowerStats();
 	map.insertCoord(posX, posY, GridType::TOWER, FileAction::LOAD);
 	tower->setPostionX(posX);
 	tower->setPostionY(posY);
@@ -46,4 +47,11 @@ void TowerController::purchaseTower(int type){
 }
 void TowerController::sellTower(Tower* tower){
 	ss2_ptr->money += tower->getResellVal();
+}
+
+Tower* TowerController::getTower(int i){
+	return &(towerList.at(i));
+}
+int TowerController::size(){
+	return towerList.size();
 }

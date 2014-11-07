@@ -30,6 +30,8 @@ public:
 	void sellTower(Tower* tower);
 	//return true or false depending if purchase is possible
 	bool purchaseVerif(int type);
+	// get size of tower list
+	int size();
 private:
 	vector<Tower> towerList;
 	Tower* tower;
