@@ -39,10 +39,8 @@ public:
 	void setSteps(int steps);
 	void move(vector <int> coordinates);
 	int* previousPos(vector<int> coordinates);
-	string getMapPath();
 	void setPositionX(int positionX);
 	void setPositionY(int positionY);
-	void towerCheck(char map[5][5], int rows, int columns);
 	float getDeploymentTime();
 	void handleCollision(Entity& e);
 	~Critter();

@@ -22,11 +22,9 @@ Critter::Critter(int waveNumber, CritterType type, string critterMapPath){
 
 Critter::~Critter()
 {
-	// close file here.
+	
 }
-string Critter::getMapPath(){
-	return mapPath;
-}
+
 float Critter::getDeploymentTime(){
 	return deploymentTime;
 }
@@ -98,53 +96,15 @@ void Critter::move(vector<int> coordinates){
 }
 
 int* Critter::previousPos(vector <int> coordinates){
-	int* previosPos = new int[2];
-	previosPos[0] = coordinates.at(steps - 4);
-	previosPos[1] = coordinates.at(steps - 3);
-	return previosPos;
+	int* previousPos = new int[2];
+	previousPos[0] = coordinates.at(steps - 4);
+	previousPos[1] = coordinates.at(steps - 3);
+	return previousPos;
 }
 
 
-//check the health of critter
-// increments reward if critter is dead
-bool Critter::checkHealth(){
-	if (hitPoints <= 0){
-		++reward;
-		//++Wave::userPoints;
-		cout << "Critter is dead" << endl;
-		cout << "Reward = " << reward << endl;
-		//cout << "User points = " << Wave::userPoints << endl;
 
-		return true;
-	}
-	else
-		return false;
-}
 
-// checking for towers in order to decrement hitPoints
-void Critter::towerCheck(char map[5][5], int rows, int columns){
-	//down tower
-	if (map[rows + 1][columns] == 'T'&& rows<4){
-		//	this->hitPoints -= Wave::towerDamage;
-		cout << "Critter HP= " << hitPoints << endl;
-	}
-	//right tower
-	if (map[rows][columns + 1] == 'T'&& columns<4){
-		//	this->hitPoints -= Wave::towerDamage;
-		cout << "Critter HP= " << hitPoints << endl;
-	}
-	//up tower
-	if (map[rows - 1][columns] == 'T'&& rows>0){
-		//	this->hitPoints -= Wave::towerDamage;
-		cout << "Critter HP= " << hitPoints << endl;
-	}
-	//left tower
-	if (map[rows][columns - 1] == 'T'&& columns >0){
-		//	this->hitPoints -= Wave::towerDamage;
-		cout << "Critter HP= " << hitPoints << endl;
-	}
-
-}
 
 void Critter::handleCollision(Entity& e){
 	// check if missle has hit (via hitboxes)
