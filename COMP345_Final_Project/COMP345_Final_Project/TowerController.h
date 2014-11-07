@@ -1,9 +1,7 @@
-#ifndef TOWERCONTROLLER_H
-#define TOWERCONTROLLER_H
-
+#pragma once
 #include "Tower.h"
 #include "Map.h"
-#include "SharedSingleton.h"
+//#include "SharedSingleton.h"
 #include <vector>
 
 class TowerController{
@@ -16,8 +14,6 @@ public:
 	void removeTower(Tower* tower);
 	// upgrade a tower from the list
 	void upgradeTower(Tower* tower);
-	// print Tower stats of a single tower
-	void printTowerStats(Tower* tower);
 	// return the pointer to the tower at the given index.
 	Tower* getTower(int i);
 	// return the list of towers.
@@ -30,10 +26,14 @@ public:
 	void purchaseTower(int type);
 	//get price of tower type
 	int getPrice(int type);
+	//
+	void sellTower(Tower* tower);
 	//return true or false depending if purchase is possible
 	bool purchaseVerif(int type);
 private:
 	vector<Tower> towerList;
-};
-
-#endif // !TOWERCONTROLLER_H
+	Tower* tower;
+	vector<Tower>::iterator i;
+	int input;
+	int index;
+}; 

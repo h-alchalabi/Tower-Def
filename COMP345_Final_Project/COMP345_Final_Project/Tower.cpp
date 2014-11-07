@@ -20,16 +20,7 @@ Tower::Tower(int type){
 	//Average Tower
 	if (type == 0)
 	{
-		lvl = 1;
-		buyingCost = 150;
-		resellVal = 100;
-		range = 3;
-		atk = 30;
-		status = NONE;
-		fireRate = 2;
-		upgradeCost = 45;
-		positionY = 0;
-		positionX = 0;
+		Tower();
 	}
 
 	//Special Type of Tower
@@ -57,41 +48,41 @@ void Tower::handleCollision(Entity& e){
 
 Tower::~Tower(){}
 
-int Tower::getLvl(){
+int Tower::getLvl() const{
 	return lvl;
 }
 
-int Tower::getType(){
+int Tower::getType() const{
 	return type;
 }
 
-int Tower::getBuyCost(){
+int Tower::getBuyCost() const{
 	return buyingCost;
 }
 
-int Tower::getResellVal(){
+int Tower::getResellVal()const{
 	return resellVal;
 }
 
-float Tower::getRange(){
+float Tower::getRange() const{
 	return range;
 }
 
-int Tower::getAtk(){
+int Tower::getAtk() const{
 	return atk;
 }
 
-float Tower::getRate(){
+float Tower::getRate() const{
 	return fireRate;
 }
 
-int Tower::getUpgradeCost(){
+int Tower::getUpgradeCost() const{
 	return upgradeCost;
 }
-int Tower::getstatusEffect(){
+int Tower::getstatusEffect() const{
 	return status;
 }
-string Tower::displayStatus(Effect status){
+string Tower::displayStatus(Effect status) const{
 	char* statusEffect[] = { "NONE", "SLOW" };
 	return statusEffect[status];
 
@@ -102,10 +93,10 @@ void Tower::setPostionY(int y){
 void Tower::setPostionX(int x){
 	positionX = x;
 }
-int Tower::getPositionX(){ 
+int Tower::getPositionX() const{ 
 	return positionX;
 }
-int Tower::getPositionY(){
+int Tower::getPositionY() const{
 	return positionY;
 }
 
@@ -120,4 +111,16 @@ void Tower::setUpgradeStats()
 	atk += 5;
 	++fireRate;
 
+}
+void Tower::printTowerStats() const{
+	cout << "\n Tower Stats" <<
+		"\n========================" <<
+		"\nType: " << this->getType() <<
+		"\nLevel: " << this->getLvl() <<
+		"\nBuying Cost: " << this->getBuyCost() <<
+		"\nResell Value: " << this->getResellVal() <<
+		"\nAttack: " << this->getAtk() <<
+		"\nRange: " << this->getRange() <<
+		"\nFire Rate: " << this->getRate() <<
+		"\nUpgrade Cost: " << this->getUpgradeCost() << endl;
 }

@@ -1,5 +1,4 @@
-#ifndef SHAREDSINGLETON_H
-#define SHAREDSINGLETON_H
+#pragma once
 
 #include "TowerController.h"
 #include "ProjectileController.h"
@@ -14,5 +13,3 @@ private:
 	SharedSingleton();
 	static SharedSingleton* ss_ptr;
 };
-
-#endif // SHAREDSINGLETON_H

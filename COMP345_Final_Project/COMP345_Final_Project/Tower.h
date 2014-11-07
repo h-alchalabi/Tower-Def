@@ -21,22 +21,22 @@ public:
 	virtual ~Tower();
 
 	
-	int getLvl();
-	int getType();
-	int getBuyCost();
-	int getResellVal();
-	float getRange();
-	int getAtk();
-	float getRate();
-	int getUpgradeCost();
+	int getLvl() const;
+	int getType() const;
+	int getBuyCost() const;
+	int getResellVal() const;
+	float getRange() const;
+	int getAtk() const;
+	float getRate() const;
+	int getUpgradeCost() const;
 	enum Effect{ NONE, SLOW };
 	void setPostionX(int x);
 	void setPostionY(int y);
-	int getPositionX();
-	int getPositionY();
+	int getPositionX() const;
+	int getPositionY() const;
 	void placeTower();
-	string displayStatus(Effect status);
-	int getstatusEffect();
+	string displayStatus(Effect status) const;
+	int getstatusEffect() const;
 	void setUpgradeStats();
 	static std::string towerPreview(int type){
 		std::string preview = "";
@@ -54,16 +54,17 @@ public:
 		default:{
 					preview += "Type: Normal Tower\n";
 					preview += "Level: 1\n";
+					preview += "Cost: 150\n";
+					preview += "Sell Value: 100\n";
 					preview += "Attack: 30\n";
 					preview += "Range: 3\n";
 					preview += "Fire Rate: 2\n";
-					preview += "Cost: 150\n";
-					preview += "Sell Value: 100\n";
 					preview += "Upgrade Cost: 45\n";
 		}break;
 		}
 		return preview;
 	}
+	void printTowerStats() const;
 	
 
 private:
