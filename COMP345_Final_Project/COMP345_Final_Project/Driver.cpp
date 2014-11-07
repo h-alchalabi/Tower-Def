@@ -17,8 +17,8 @@ using namespace std;
 //Stanley Naikang Luu - 6604706
 //Amanda Tom -
 //Awais Ali -
-//Haani Al-Chalabi -
-//Van Do - 
+//Haani Al-Chalabi - 9521577
+//Van Do - 6526276
 //Djamil Francis - 
 //
 //COMP345 - Final Project
