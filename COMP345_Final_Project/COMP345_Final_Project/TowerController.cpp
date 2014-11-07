@@ -15,7 +15,7 @@ void TowerController::addTower(int type, int posX, int posY, Map& map){
 	tower->setPostionX(posX);
 	tower->setPostionY(posY);
 	towerList.push_back(*tower); 
-	cout << "You purchased a " << tower->getType() << endl;
+	//cout << "You purchased a " << tower->getType() << endl;
 }
 
 void TowerController::removeTower(Tower* tower){

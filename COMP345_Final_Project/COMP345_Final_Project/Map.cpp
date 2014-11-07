@@ -226,7 +226,7 @@ void Map::insertCoord(int& coordX, int& coordY, GridType gridType, FileAction fi
 	system("cls");
 
 	//Adding the element on the map and then display the map
-	setCellType(coordY, coordX, gridType, fileAction);
+	setCellType(coordX, coordY, gridType, fileAction);
 	//cells[coordY][coordX].set(gridType);
 	printMap();
 }
