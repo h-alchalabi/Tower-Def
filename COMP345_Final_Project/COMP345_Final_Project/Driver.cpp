@@ -33,6 +33,8 @@ void startGame(Map& gameMap);
 void createMap(Map& gameMap);
 void loadMap(Map& gameMap);
 void placeTowers(Map& gameMap);
+void editMap(Map& gameMap);
+void traceMap(int pathCoordX, int pathCoordY, Map& gameMap);
 
 SharedSingleton* ss_ptr = SharedSingleton::getInstance();
 
@@ -94,7 +96,8 @@ void mapCreateOrEdit(Map& gameMap) {
 		createMap(gameMap);
 	}
 	else if (gameOption == 'x'){
-		cout << "Edit file options" << endl;
+		loadMap(gameMap);
+		editMap(gameMap);
 	}
 }
 void placeTowers(Map& gameMap){
@@ -242,7 +245,6 @@ void createMap(Map& gameMap){
 	string mapName;             //The name of the map to be loaded or to be stored
 	string mapFileName;         //Used to create the text file from the file name entered by user
 	bool validInput = false;
-	char pathDirection = 's';
 
 	//Prompting the user to enter the name of the map
 	do {
@@ -278,49 +280,7 @@ void createMap(Map& gameMap){
 	//Prompting the user to trace the path on the map
 	pathCoordX = coordX;
 	pathCoordY = coordY;
-	while (pathDirection != 'e') {
-		cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
-		cin >> pathDirection;
-		system("cls");
-		switch (pathDirection) {
-		case 'w':
-			//Going up
-			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY - 1);
-			break;
-		case 's':
-			//Going down
-			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY + 1);
-			break;
-		case 'a':
-			//Going left
-			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX - 1, pathCoordY);
-			break;
-		case 'd':
-			//Going right
-			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX + 1, pathCoordY);
-			break;
-		case 'e':
-			//End the path
-			if (!gameMap.validateEndPath(pathCoordX, pathCoordY)) {
-				pathDirection = 's';
-			}
-			else {
-				gameMap.setCellType(pathCoordX, pathCoordY, GridType::END, FileAction::STORE);
-			}
-			break;
-		default:
-			//Invalid input
-			cout << "What you entered was invalid. Try again" << endl;
-			break;
-		}
-
-		//Updating the map to the user with the path that was traced
-		gameMap.printMap();
-	}
-
-	gameMap.storeMapTxt();
-
-	cout << "\nYour map has been successfully created\n";
+	traceMap(pathCoordX, pathCoordY, gameMap);
 }
 
 void startGame(Map& gameMap) {
@@ -435,4 +395,137 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 
 	//Closing the file
 	mapFile.close();
+}
+
+void traceMap(int pathCoordX, int pathCoordY, Map& gameMap) {
+	char pathDirection = 's';
+
+	while (pathDirection != 'e') {
+		cout << "\nEnter the next path of your map ('w' for up, 's' for down, 'a' for left, 'd' for right, and 'e' to end your path): " << endl;
+		cin >> pathDirection;
+		system("cls");
+		switch (pathDirection) {
+		case 'w':
+			//Going up
+			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY - 1);
+			break;
+		case 's':
+			//Going down
+			pathCoordY = gameMap.tracePathY(pathCoordX, pathCoordY, pathCoordY + 1);
+			break;
+		case 'a':
+			//Going left
+			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX - 1, pathCoordY);
+			break;
+		case 'd':
+			//Going right
+			pathCoordX = gameMap.tracePathX(pathCoordX, pathCoordX + 1, pathCoordY);
+			break;
+		case 'e':
+			//End the path
+			if (!gameMap.validateEndPath(pathCoordX, pathCoordY)) {
+				pathDirection = 's';
+			}
+			else {
+				gameMap.setCellType(pathCoordX, pathCoordY, GridType::END, FileAction::STORE);
+			}
+			break;
+		default:
+			//Invalid input
+			cout << "What you entered was invalid. Try again" << endl;
+			break;
+		}
+
+		//Updating the map to the user with the path that was traced
+		gameMap.printMap();
+	}
+
+	gameMap.storeMapTxt();
+
+	cout << "\nYour map has been successfully created\n";
+}
+
+void editMap(Map& gameMap) {
+	char gameOption;            //Used to prompt user to select options throughout the game
+	bool validInput = false;    //Used during input validation
+
+	do {
+		//Prompting the user whether he/she wants to resize the map, or change the path
+		do {
+			cout << "Enter the following to select an option:" << endl
+				<< "r -> Resize the map (can only expand the map)" << endl
+				<< "c -> Change the path" << endl
+				<< "e -> Exit editor" << endl;
+			cin >> gameOption;
+
+			if (!(gameOption == 'c' || gameOption == 'r' || gameOption == 'e'))
+				cout << "What you entered is invalid. Please try again.\n\n";
+			else
+				validInput = true;
+
+		} while (!validInput);
+		system("cls");
+		gameMap.printMap();
+		if (gameOption == 'r') {
+			//Resizing the map
+			validInput = false;
+			int newMapWidth;
+			int newMapHeight;
+
+			//Prompting the user to enter the new dimension of the map
+			do {
+
+				cout << "Enter the new dimensions of the map (you can only expand the map)\n";
+				cout << "Width: ";
+				cin >> newMapWidth;
+				cout << "Height: ";
+				cin >> newMapHeight;
+
+				if (newMapWidth <= gameMap.getWidth() || newMapHeight <= gameMap.getHeight())
+					cout << "Either the width or the height that you've entered is not valid (same dimension or " <<
+					"smaller dimension than the actual map). Please try again\n\n";
+				else
+					validInput = true;
+			} while (!validInput);
+
+			//Print the map with the new dimensions
+			system("cls");
+			gameMap.resizeMap(newMapWidth, newMapHeight);
+			gameMap.printMap();
+			gameMap.storeMapTxt();
+		}
+		else if (gameOption == 'c') {
+			//Coordinates selected by user to start the new path
+			int xStartEditCoord;
+			int yStartEditCoord;
+			//Used to verify user input
+			validInput = false;
+
+			//Prompting the user to enter the coordinates where he/she wants to start the new path
+			do {
+				cout << "Enter the X and Y coordinates of where you want to start your new path\n";
+				cout << "x coordinate: ";
+				cin >> xStartEditCoord;
+				cout << "y coordinate: ";
+				cin >> yStartEditCoord;
+				if (!(xStartEditCoord > -1 && xStartEditCoord < gameMap.getWidth()) ||
+					!(yStartEditCoord > -1 && yStartEditCoord < gameMap.getHeight()))
+					cout << "These coordinates that you entered are out of the map";
+				else if (gameMap.getCell(xStartEditCoord, yStartEditCoord).getType() == GridType::START ||
+					gameMap.getCell(xStartEditCoord, yStartEditCoord).getType() == GridType::PATH ||
+					gameMap.getCell(xStartEditCoord, yStartEditCoord).getType() == GridType::END)
+					validInput = true;
+				else
+					cout << "The coordinates that you have selected is not a start point, path, or end point." <<
+					"Please try again";
+			} while (!validInput);
+			system("cls");
+
+			//Erase the path after the selected coordinates
+			gameMap.restartPaths(xStartEditCoord, yStartEditCoord);
+			gameMap.printMap();
+			//Trace the map from the selected coordinates
+			traceMap(xStartEditCoord, yStartEditCoord, gameMap);
+		}
+	} while (gameOption != 'e');
 }

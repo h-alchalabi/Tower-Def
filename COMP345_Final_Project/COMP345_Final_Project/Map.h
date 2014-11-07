@@ -1,8 +1,11 @@
 #pragma once
 #include "MapGrid.h"
-#include <vector>
+#include <queue>
 
+//Used to differenciate between loading and storing the path file
 enum FileAction { STORE, LOAD };
+//Used to check if the current file reader cursor is at the selected coordinates
+enum CoordListLocation { BEFORE_SELECTED, SELECTED, AFTER_SELECTED };
 
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
@@ -61,4 +64,10 @@ public:
 
 	//Storing the created map in a text file
 	void storeMapTxt();
+
+	//Used to resize the map
+	void resizeMap(int width, int height);
+
+	//Used to erase the path after the selected coordinate
+	void restartPaths(int xCoord, int yCoord);
 };

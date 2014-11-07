@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <sstream>
 using namespace std;
 ofstream file;
 
@@ -282,7 +283,8 @@ bool Map::isNeighbourStart(int coordX, int coordY) {
 }
 
 void Map::storeMapTxt() {
-	file.open("map/" + mapName.append("_map.txt"));
+	//file.open("map/" + mapName.append("_map.txt"));
+	file.open(fileMapName);
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			switch (cells[i][j].getType()) {
@@ -304,4 +306,70 @@ void Map::storeMapTxt() {
 	}
 
 	file.close();
+}
+
+void Map::resizeMap(int width, int height) {
+	//Update the width and height to the map object
+	setWidth(width);
+	setHeight(height);
+
+	//Resize the vector inside the map
+	cells.resize(height);
+	for (int i = 0; i < height; i++) {
+		cells[i].resize(width);
+	}
+}
+
+void Map::restartPaths(int coordX, int coordY) {
+	//Used to retrieve the x and y coordinates of the path stored in the path file
+	int x, y;
+	//Used to retrieve the next line in the file
+	string line;
+	//Used to retrieve the x and y coordinates of each line retrieved from the file
+	string token;
+	string delimiter = ",";
+	//Used to store the x and y coordinates that are not going to be removed
+	queue<int> coordinates;
+	//Used to read and overwrite the existent path file
+	fstream file(filePathName);
+	//Used to check if the current file reader cursor is at the selected coordinates
+	CoordListLocation coordListLocation = CoordListLocation::BEFORE_SELECTED;
+
+	while (!file.eof()) {
+		//Retrieve the x and y coordinates of the current line
+		file >> line;
+		token = line.substr(0, line.find(delimiter));
+		istringstream(token) >> x;
+		token = line.substr(line.find(delimiter) + 1);
+		istringstream(token) >> y;
+
+		//File reader cursor reads the coordinate selected by the user
+		if (x == coordX && y == coordY) {
+			coordListLocation = CoordListLocation::SELECTED;
+		}
+
+		if (coordListLocation == CoordListLocation::BEFORE_SELECTED) {
+			//Store the coordinates that are not going to be removed
+			coordinates.push(x);
+			coordinates.push(y);
+		}
+		else if (coordListLocation == CoordListLocation::SELECTED)
+			coordListLocation = CoordListLocation::AFTER_SELECTED;
+		else
+			//Remove the coordinates after the selected coordinates on the map
+			cells[y][x].setType(GridType::SCENERY);
+	}
+	file.close();
+
+	//Overwrite the existent path file with the new path that was kept
+	file.open(filePathName, ios::trunc);
+	string newCoordinates;
+	while (!coordinates.empty()) {
+		x = coordinates.front();
+		coordinates.pop();
+		y = coordinates.front();
+		coordinates.pop();
+		newCoordinates = x + "," + y;
+		file << newCoordinates << endl;
+	}
 }
