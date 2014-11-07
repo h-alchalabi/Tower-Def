@@ -1,10 +1,12 @@
 #include "SharedSingleton.h"
+#include "TowerController.h"
 
 SharedSingleton* SharedSingleton::ss_ptr = NULL;
+TowerController* SharedSingleton::tc_ptr = NULL;
 
 SharedSingleton::SharedSingleton(){
 	money = 4000;
-	//towerController = new TowerController();
+	tc_ptr = new TowerController();
 }
 SharedSingleton* SharedSingleton::getInstance(){
 	if (!ss_ptr){

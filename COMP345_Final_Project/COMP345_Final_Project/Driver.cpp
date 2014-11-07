@@ -34,6 +34,9 @@ void startGame(Map& gameMap);
 void createMap(Map& gameMap);
 void loadMap(Map& gameMap);
 void placeTowers(Map& gameMap);
+
+SharedSingleton* ss_ptr = SharedSingleton::getInstance();
+
 int main() {
 	Map gameMap;				//The map that will be created for the user
 	char gameOption;            //Used to prompt user to select options throughout the game
@@ -103,7 +106,7 @@ void placeTowers(Map& gameMap){
 	loadMap(gameMap);
 	char selection = '0';
 	while (true){
-		cout << "What would you like to do? (Money: " << "):" << endl
+		cout << "What would you like to do? (Money: " << ss_ptr->money <<  "):" << endl
 			<< "b -> Buy a Tower" << endl
 			<< "u -> Upgrade a Tower" << endl
 			<< "s -> Sell a Tower" << endl
@@ -118,7 +121,7 @@ void placeTowers(Map& gameMap){
 	case 'b':{
 				 system("cls");
 				 while (true){
-					 cout << "Which type of tower would you like to buy? (Money: " << "):" << endl
+					 cout << "Which type of tower would you like to buy? (Money: " << ss_ptr->money << "):" << endl
 						 << "1 -> Normal Tower" << endl
 						 << "2 -> Slowing Tower" << endl
 						 << "e -> Go back to previous menu" << endl;
@@ -150,7 +153,8 @@ void placeTowers(Map& gameMap){
 				 int coordX = 0, coordY = 0;
 				 if (selection == 'y'){
 					 int tempX = 0, tempY = 0;
-					 // mtc.addTower(type, tempX, tempY, gameMap, ss);
+					 ss_ptr->money -= 100;
+					 //mtc.addTower(type, tempX, tempY, gameMap);
 				 }
 
 	}break;

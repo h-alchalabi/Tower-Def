@@ -8,7 +8,7 @@
 class SharedSingleton{
 public:
 	int money;
-	//TowerController* towerController;
+	static TowerController *tc_ptr;
 	static SharedSingleton* getInstance();
 private:
 	SharedSingleton();
