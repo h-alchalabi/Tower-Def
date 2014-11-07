@@ -19,6 +19,7 @@ public:
 	int x, y;
 	string line, token;
 	vector<int> coordinates;
+	int getNumberOfDeployed();
 
 private:
 	int waveNumber;

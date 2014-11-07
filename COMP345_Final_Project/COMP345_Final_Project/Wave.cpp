@@ -58,39 +58,49 @@ void Wave::createCritters(int waveNumber, string mapPath){
 void Wave::readFile(string mapPath){
 	int path;
 	ifstream file(mapPath);
-	while (!file.eof()){
-			file >> line;
+	while (file.is_open()){
+		file >> line;
+		if (file.eof()){
+			break;
+		}
 			token = line.substr(0, line.find(delimiter));
 			istringstream(token) >> x;
 			coordinates.push_back(x);
 			token = line.substr(line.find(delimiter) + 1);
 			istringstream(token) >> y;
 			coordinates.push_back(y);
-			//cout << x << "," << y << endl;
 		}
 	file.close();
 	
 }
 
+int Wave::getNumberOfDeployed(){
+	return critterDeployed;
+}
 void Wave::deploy(){
-	
-	while (critterDeployed < numOfCritters*level){
+	if (critterDeployed < numOfCritters){
 		++critterDeployed;
-		
-		cout << "CD= " << critterDeployed << endl;
-		move();
-
 	}
-		
-
+		//cout << "CD= " << critterDeployed << endl;
+		move();
 }
 
 void Wave::move(){
-	for (int i=0; i<critterDeployed; ++i){
-		cout << "deploying critter: " << i << endl;
-		critterVec.at(i).move(coordinates);
-		//critterVec.at(i).setPositionX(coordinates.at(z));
-		//critterVec.at(i).setPositionY(coordinates.at(z + 1));
-		//critterVec.at(i).setSteps(z + 2);
+	if (critterDeployed == ((numOfCritters*level))){
+		for (int i = 0; i < numOfCritters*level; ++i){
+			critterVec.at(i).move(coordinates);
+		}
+		
+	}
+	else{
+		for (int i = 0; i < critterDeployed; ++i){
+			cout << "deploying critter: " << i << endl;
+			critterVec.at(i).move(coordinates);
+			//cout << "move was called for  " << i << "\n"; //for 0 only been called 4 times.
+
+			//critterVec.at(i).setPositionX(coordinates.at(z));
+			//critterVec.at(i).setPositionY(coordinates.at(z + 1));
+			//critterVec.at(i).setSteps(z + 2);
+		}
 	}
 }

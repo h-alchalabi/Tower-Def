@@ -40,6 +40,7 @@ public:
 	bool checkHealth();
 	void setSteps(int steps);
 	void move(vector <int> coordinates);
+	int* previousPos(vector<int> coordinates);
 	string getMapPath();
 	void setPositionX(int positionX);
 	void setPositionY(int positionY);

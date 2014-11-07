@@ -245,20 +245,32 @@ void startGame(Map& gameMap) {
 	string mapPath = "path/" + mapName + "_path.txt";
 	Wave* wave = new Wave();
 	wave->createCritters(1, gameMap.getFilePathName());
-
+	wave->readFile(gameMap.getFilePathName());
 	int size = wave->getCritterVec().size();
-	vector <Critter> temp = wave->getCritterVec();
+	//vector <Critter> *temp = &wave->getCritterVec();
 	int numOfCrit = wave->getNumOfCritters();
+	int x, y;
 	
 	while (true){
 		wave->deploy();
-		for (int i = 0; i < numOfCrit; ++i){
-			gameMap.setCellType(temp.at(i).getPositionX(), temp.at(i).getPositionY(), GridType::CRITTER, FileAction::STORE);
-			cout << temp.at(i).getPositionX() << "," << temp.at(i).getPositionY() << endl;
-			gameMap.printMap();
-			Sleep(3000);
+		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
+			Critter c = wave->getCritterVec().at(i);
+			x = c.getPositionX();
+			y = c.getPositionY();
+			if (gameMap.getCell(x, y).getType() == GridType::END){
+				//Delete critter if it reached end. 
+			}
+			else{
+			gameMap.setCellType(x,y, GridType::CRITTER, FileAction::STORE);
+			if (c.getSteps() - 2 < 0){
+				//int* a = c.previousPos();
+			} //reverting the old space.
+			cout << x << "," << y << endl;
+			//Sleep(3000);
+			}
 		}
-		cin >> size;
+			gameMap.printMap();
+		cin >> x;
 
 	}
 	
