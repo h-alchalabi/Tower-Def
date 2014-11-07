@@ -74,8 +74,8 @@ void mapCreateOrEdit(Map& gameMap) {
 
 	//Prompting the user whether he/she wants to create a map or use an existing map
 	do {
-		cout << "Enter the following to select an option:" << endl 
-			<< "c -> Create a map" << endl 
+		cout << "Enter the following to select an option:" << endl
+			<< "c -> Create a map" << endl
 			<< "x -> Edit an existent map" << endl
 			<< "t -> Add towers to an existing map" << endl
 			<< "e -> Return to Main Menu" << endl;
@@ -103,13 +103,13 @@ void placeTowers(Map& gameMap){
 	loadMap(gameMap);
 	char selection = '0';
 	while (true){
-		cout << "What would you like to do? (Money: "  << "):" << endl
+		cout << "What would you like to do? (Money: " << "):" << endl
 			<< "b -> Buy a Tower" << endl
 			<< "u -> Upgrade a Tower" << endl
 			<< "s -> Sell a Tower" << endl
 			<< "e -> Return to previous Menu" << endl;
 		cin >> selection;
-		if (selection == 'b'|'u'|'s'|'e'){
+		if (selection == 'b' | 'u' | 's' | 'e'){
 			//cout << "chyea - hella nuggets" << endl;
 			break;
 		}
@@ -118,7 +118,7 @@ void placeTowers(Map& gameMap){
 	case 'b':{
 				 system("cls");
 				 while (true){
-					 cout << "Which type of tower would you like to buy? (Money: "<<"):" << endl
+					 cout << "Which type of tower would you like to buy? (Money: " << "):" << endl
 						 << "1 -> Normal Tower" << endl
 						 << "2 -> Slowing Tower" << endl
 						 << "e -> Go back to previous menu" << endl;
@@ -138,11 +138,11 @@ void placeTowers(Map& gameMap){
 				 else{
 					 return;
 				 }
-					 Tower::towerPreview(type);
+				 Tower::towerPreview(type);
 				 while (true){
 					 cout << endl << "Would you like to purchase this tower? (y/n): ";
 					 cin >> selection;
-					 if (selection == 'y'|'n'){
+					 if (selection == 'y' | 'n'){
 						 break;
 					 }
 					 cout << "Invlaid Selection.";
@@ -150,7 +150,7 @@ void placeTowers(Map& gameMap){
 				 int coordX = 0, coordY = 0;
 				 if (selection == 'y'){
 					 int tempX = 0, tempY = 0;
-					// mtc.addTower(type, tempX, tempY, gameMap, ss);
+					 // mtc.addTower(type, tempX, tempY, gameMap, ss);
 				 }
 
 	}break;
@@ -293,7 +293,8 @@ void startGame(Map& gameMap) {
 	//vector <Critter> *temp = &wave->getCritterVec();
 	int numOfCrit = wave->getNumOfCritters();
 	int x, y;
-	
+	//Huge issue, Size of coordinates is 3154. Its repeating way too many times.
+	cout << wave->coordinates.size() << endl;
 	while (true){
 		wave->deploy();
 		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
@@ -303,23 +304,30 @@ void startGame(Map& gameMap) {
 			if (gameMap.getCell(x, y).getType() == GridType::END){
 				//Delete critter if it reached end. 
 			}
-			else{
-			gameMap.setCellType(x,y, GridType::CRITTER, FileAction::STORE);
-			if (c.getSteps() - 2 > 0){
-				int* a = new int[2];
-				a = c.previousPos(wave->coordinates);
-				//cout << "Critter[" << i << "]" << endl;
-				//cout << c.getSteps() << endl;
-				//cout << "a[0]" << a[0] << "," << a[1] << "," << x << ", " << y << endl;
-				gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::STORE);
-			} //reverting the old space.
+			else { //If the next tile is not empty, then move the critter to it and attempt to revert the old tile into a path tile.
+				cout << "Critter[" << i << "]" << c.getSteps() << endl;
+				gameMap.setCellType(x, y, GridType::CRITTER, FileAction::STORE);
+				if (c.getSteps() - 2 > 0){
+					int* a = new int[2];
+					a = c.previousPos(wave->coordinates);
+					gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::STORE);
+				} //reverting the old space.
 			}
+			
+			
+			/*Problems:
+			1. Path.txt for whatever file is being saved in an odd way, for some reason it is repeating the input an undetermined amount of times
+			2. In turn the coordinates is being stored in a vector of size exponentially larger than the size needed because of repeating sequence in the above.
+			3. Destructor of critter after it is reached the end. Alternatively, we have a boolean variable status which representes if the critter is active(true)
+			or inactive(false). Keep in mind this is just an idea and doesn't have to be implemented this way.
+			4. End Condition is necessary for the while loop, Do we want to keep going or stop after wave:1, level:1?
+			*/
 		}
-			gameMap.printMap();
+		gameMap.printMap();
 		cin >> x;
 
 	}
-	
+
 }
 
 void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
@@ -337,7 +345,8 @@ void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
 		if (ch == '\n') {
 			mapHeight++;
 			isMaxHeight = true;
-		} else if (!isMaxHeight && ch != ' ')
+		}
+		else if (!isMaxHeight && ch != ' ')
 			mapWidth++;
 	}
 	gameMap = Map(mapWidth, mapHeight, mapName);

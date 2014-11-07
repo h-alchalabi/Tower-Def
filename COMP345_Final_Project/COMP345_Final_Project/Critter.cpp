@@ -1,8 +1,6 @@
 #include "Critter.h"
 #include <fstream>
 
-
-
 Critter::Critter(){
 
 }
@@ -26,7 +24,6 @@ Critter::~Critter()
 {
 	// close file here.
 }
-
 string Critter::getMapPath(){
 	return mapPath;
 }
@@ -36,7 +33,6 @@ float Critter::getDeploymentTime(){
 int Critter::getLevel(){
 	return level;
 }
-
 void Critter::setLevel(int level){
 	this->level = level;
 }

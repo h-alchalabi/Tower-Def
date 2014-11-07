@@ -70,6 +70,8 @@ void Wave::readFile(string mapPath){
 			istringstream(token) >> y;
 			coordinates.push_back(y);
 		}
+	//coordinates giving error in size. Its making the array 3154 bigger.
+	//Problem isn't here it is in the path.txt
 	file.close();
 	
 }
