@@ -306,10 +306,9 @@ void startGame(Map& gameMap) {
 			else{
 			gameMap.setCellType(x,y, GridType::CRITTER, FileAction::STORE);
 			if (c.getSteps() - 2 < 0){
-				//int* a = c.previousPos();
+				int* a = c.previousPos(wave->coordinates);
+				gameMap.setCellType(a[0], a[1], GridType::PATH, FileAction::STORE);
 			} //reverting the old space.
-			//cout << x << "," << y << endl;
-			//Sleep(3000);
 			}
 		}
 			gameMap.printMap();
