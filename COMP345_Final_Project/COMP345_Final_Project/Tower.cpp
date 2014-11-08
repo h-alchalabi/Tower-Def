@@ -1,5 +1,6 @@
 #include "Tower.h"
 
+//Constructor for a tower. Currently set to the Average Tower
 Tower::Tower(){
 	type = 0;
 	lvl = 1;
@@ -16,7 +17,7 @@ Tower::Tower(){
 
 Tower::Tower(int type){
 
-	//Average Tower
+	//Constructor for Average Tower
 	if (type == 0)
 	{
 		this->type = type;
@@ -32,7 +33,7 @@ Tower::Tower(int type){
 		positionX = 0;
 	}
 
-	//Special Type of Tower
+	//Constructor for Special Type of Tower
 	if (type == 1)
 	{
 		this->type = type;
@@ -61,42 +62,36 @@ Tower::~Tower(){}
 int Tower::getLvl() const{
 	return lvl;
 }
-
 int Tower::getType() const{
 	return type;
 }
-
 int Tower::getBuyCost() const{
 	return buyingCost;
 }
-
 int Tower::getResellVal()const{
 	return resellVal;
 }
-
 float Tower::getRange() const{
 	return range;
 }
-
 int Tower::getAtk() const{
 	return atk;
 }
-
 float Tower::getRate() const{
 	return fireRate;
 }
-
 int Tower::getUpgradeCost() const{
 	return upgradeCost;
 }
 int Tower::getstatusEffect() const{
 	return status;
 }
+//Shows the status effects for the tower 
 string Tower::displayStatus(Effect status) const{
 	char* statusEffect[] = { "NONE", "SLOW" };
 	return statusEffect[status];
-
 }
+
 void Tower::setPostionY(int y){
 	positionY = y;
 }
@@ -112,6 +107,7 @@ int Tower::getPositionY() const{
 
 //void Tower::placeTower(){}
 
+//Update values for tower when calling upgrade
 void Tower::setUpgradeStats()
 {
 	++lvl;
@@ -119,8 +115,9 @@ void Tower::setUpgradeStats()
 	++range;
 	atk += 5;
 	++fireRate;
-
 }
+
+// Display all tower stats
 void Tower::printTowerStats() const{
 	cout << "\n Tower Stats" <<
 		"\n========================" <<

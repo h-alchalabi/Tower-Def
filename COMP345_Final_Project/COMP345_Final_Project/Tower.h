@@ -7,20 +7,21 @@
 
 class Tower: public Entity{
 public:
-	/*Have this constructor generate a normal type tower at lvl 1*/
 	Tower();
-	/* This constructor should adjust create a tower of some type,
-	and based on level, give it a fire rate, missle strength etc.*/
+
+	//Constructor for Tower
 	Tower(int type);
+	
 	/*This function should check if the critter is in range, if yes, then fire a missle.
 	Also if a missle is fired you must wait (fire rate) before firing another one.*/
 	
-	/*we'll handle collision right after the other things are completely done because the grading sheet 
+	/*We'll handle collision right after the other things are completely done because the grading sheet 
 	doesnt mention anything about attacking*/
 	void handleCollision(Entity& e);
+	
 	virtual ~Tower();
 
-	
+	/*Getters*/
 	int getLvl() const;
 	int getType() const;
 	int getBuyCost() const;
@@ -29,15 +30,26 @@ public:
 	int getAtk() const;
 	float getRate() const;
 	int getUpgradeCost() const;
-	enum Effect{ NONE, SLOW };
-	void setPostionX(int x);
-	void setPostionY(int y);
 	int getPositionX() const;
 	int getPositionY() const;
-	void placeTower();
-	string displayStatus(Effect status) const;
 	int getstatusEffect() const;
+
+	/* Status effect of the tower */
+	//enum type for status effect of tower
+	enum Effect{ NONE, SLOW };
+
+	/*Setters for Tower*/
+	void setPostionX(int x);
+	void setPostionY(int y);
 	void setUpgradeStats();
+
+	// Place the tower on the map
+	void placeTower();
+
+	// Print the enum status effect of the tower
+	string displayStatus(Effect status) const;
+	
+	// Print the tower stats before buying them
 	static std::string towerPreview(int type){
 		std::string preview = "";
 		switch (type){
@@ -66,6 +78,7 @@ public:
 		}
 		return preview;
 	}
+
 	void printTowerStats() const;
 	
 
