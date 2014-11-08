@@ -310,17 +310,17 @@ void startGame(Map& gameMap) {
 	int* previousIndex = new int[2];
 	int* startPos = new int[2];
 	startPos = wave->getStartPos();
-	int critterNoMore = 0;
+	int reachedEnd = 0;
 
-	while (critterNoMore <= numOfCrit + 2){
+	while (reachedEnd <= numOfCrit + 2){
 		wave->deploy();
 		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
 			Critter c = wave->getCritterVec().at(i);
 			x = c.getPositionX();
 			y = c.getPositionY();
 			if (gameMap.getCell(x, y).getType() == GridType::END){ //If the next position the critter attemps to move is the End index, then don't allow him to move
-				++critterNoMore;									//increment the number of critters that have passed.
-				if (critterNoMore >= numOfCrit){					//if all the critters have passed the revert the previous tile to a scenery tile.
+				++reachedEnd;									//increment the number of critters that have passed.
+				if (reachedEnd >= numOfCrit){					//if all the critters have passed the revert the previous tile to a scenery tile.
 					previousIndex = c.previousPos(wave->getCoordinateVec());
 					gameMap.setCellType(previousIndex[0], previousIndex[1], GridType::PATH, FileAction::LOAD);
 				}
