@@ -71,7 +71,7 @@ void Wave::readFile(string mapPath){
 			token = line.substr(line.find(delimiter) + 1);
 			istringstream(token) >> y;
 			coordinates.push_back(y);
-		}
+	}
 	file.close();
 	
 }

@@ -523,6 +523,9 @@ void editMap(Map& gameMap) {
 
 			//Erase the path after the selected coordinates
 			gameMap.restartPaths(xStartEditCoord, yStartEditCoord);
+			if (gameMap.getCell(xStartEditCoord, yStartEditCoord).getType() == GridType::END){
+				gameMap.setCellType(xStartEditCoord, yStartEditCoord, GridType::PATH, FileAction::STORE);
+			}
 			gameMap.printMap();
 			//Trace the map from the selected coordinates
 			traceMap(xStartEditCoord, yStartEditCoord, gameMap);

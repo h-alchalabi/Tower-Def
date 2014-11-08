@@ -362,14 +362,40 @@ void Map::restartPaths(int coordX, int coordY) {
 	file.close();
 
 	//Overwrite the existent path file with the new path that was kept
-	file.open(filePathName, ios::trunc);
-	string newCoordinates;
-	while (!coordinates.empty()) {
+	fstream file1(filePathName);
+	string newCoordinates, x_str, y_str;
+	bool doneTrunc = false;
+	while (!doneTrunc) {
+		/*
 		x = coordinates.front();
 		coordinates.pop();
 		y = coordinates.front();
 		coordinates.pop();
 		newCoordinates = x + "," + y;
 		file << newCoordinates << endl;
+		*/
+		file1 >> line;
+		if (file1.eof()){
+			break;
+		}
+		token = line.substr(0, line.find(delimiter));
+		istringstream(token) >> x;
+		istringstream(token) >> x_str;
+		//coordinates.push_back(x);
+		token = line.substr(line.find(delimiter) + 1);
+		istringstream(token) >> y;
+		istringstream(token) >> y_str;
+		//coordinates.push_back(y);
+		newCoordinates += (x_str + "," + y_str);
+		newCoordinates += "\n";
+		if (x == coordX && y == coordY){
+			doneTrunc == true;
+		}
+		
 	}
+	file1.close();
+	 
+	file1.open(filePathName, std::fstream::out|std::fstream::trunc);
+	file1 << newCoordinates;
+	file1.close();
 }
