@@ -110,7 +110,7 @@ void placeTowers(Map& gameMap){
 				<< "b -> Buy a Tower" << endl
 				<< "u -> Upgrade a Tower" << endl
 				<< "s -> Sell a Tower" << endl
-				<< "e -> Done" << endl;
+				<< "e -> Start Wave" << endl;
 			cin >> selection;
 			if (selection == 'b' || selection == 'u' || selection == 's' || selection == 'e'){
 				break;
