@@ -333,14 +333,16 @@ void startGame(Map& gameMap) {
 					gameMap.setCellType(previousIndex[0], previousIndex[1], GridType::PATH, FileAction::LOAD);
 				} //reverting the old space.
 			}
-
+			if (wave->getNumberOfDeployed() == numOfCrit){
+				gameMap.setCellType(startPos[0], startPos[1], GridType::START, FileAction::LOAD);
+			}
 		}
 		system("cls");
 		gameMap.printMap();
 		Sleep(500);
 
 	}
-	gameMap.setCellType(startPos[0], startPos[1], GridType::START, FileAction::LOAD);
+	
 	delete wave;
 
 }
