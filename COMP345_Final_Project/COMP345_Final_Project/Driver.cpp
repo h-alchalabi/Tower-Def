@@ -312,7 +312,7 @@ void startGame(Map& gameMap) {
 	startPos = wave->getStartPos();
 	int reachedEnd = 0;
 
-	while (reachedEnd <= numOfCrit + 2){
+	while (reachedEnd <= numOfCrit + 2){//Place holder as conditions are not set yet. This is just to show that all the critter's have passed the end.
 		wave->deploy();
 		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
 			Critter c = wave->getCritterVec().at(i);
