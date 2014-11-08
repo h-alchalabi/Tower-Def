@@ -307,7 +307,7 @@ void startGame(Map& gameMap) {
 	wave->readFile(gameMap.getFilePathName());
 	int size = wave->getCritterVec().size();
 	int numOfCrit = wave->getNumOfCritters();
-	int x, y;
+	int x, y, counter = 0, startX, startY;
 	int* previousIndex = new int[2];
 	int critterNoMore = 0;
 	while (critterNoMore <= numOfCrit + 2){
@@ -316,6 +316,11 @@ void startGame(Map& gameMap) {
 			Critter c = wave->getCritterVec().at(i);
 			x = c.getPositionX();
 			y = c.getPositionY();
+			if (counter == 0){
+				startX = x;
+				startY = y;
+				counter++;
+			}
 			if (gameMap.getCell(x, y).getType() == GridType::END){
 				++critterNoMore;
 				if (critterNoMore >= numOfCrit){
@@ -340,7 +345,7 @@ void startGame(Map& gameMap) {
 		Sleep(500);
 
 	}
-	gameMap.setCellType(0, 0, GridType::START, FileAction::LOAD);
+	gameMap.setCellType(startX, startY, GridType::START, FileAction::LOAD);
 	delete wave;
 }
 
