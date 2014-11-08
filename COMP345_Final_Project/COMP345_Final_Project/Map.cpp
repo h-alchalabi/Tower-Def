@@ -4,17 +4,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+
 using namespace std;
 ofstream file;
-
-/*******************************************************************************************************************/
-//Stanley Naikang Luu - 6604706
-//COMP345 - assignment 1
-//October 17, 2014
-//
-//This is the map class in order to create maps for the Tower defense game.
-//
-/*******************************************************************************************************************/
 
 Map::Map() {
 	width = 0;
@@ -364,8 +356,7 @@ void Map::restartPaths(int coordX, int coordY) {
 	//Overwrite the existent path file with the new path that was kept
 	fstream file1(filePathName);
 	string newCoordinates, x_str, y_str;
-	bool doneTrunc = false;
-	while (!doneTrunc) {
+	while (true) {
 		/*
 		x = coordinates.front();
 		coordinates.pop();
@@ -389,12 +380,12 @@ void Map::restartPaths(int coordX, int coordY) {
 		newCoordinates += (x_str + "," + y_str);
 		newCoordinates += "\n";
 		if (x == coordX && y == coordY){
-			doneTrunc == true;
+			break;
 		}
 		
 	}
 	file1.close();
-	 
+	//this is suppose to be clearing it.
 	file1.open(filePathName, std::fstream::out|std::fstream::trunc);
 	file1 << newCoordinates;
 	file1.close();
