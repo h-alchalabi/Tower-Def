@@ -80,7 +80,7 @@ void mapCreateOrEdit(Map& gameMap) {
 	do {
 		cout << "Enter the following to select an option:" << endl
 			<< "c -> Create a map" << endl
-			<< "x -> Edit an existent map" << endl
+			<< "x -> Edit an existing map" << endl
 			<< "e -> Return to Main Menu" << endl;
 		cin >> gameOption;
 
@@ -112,7 +112,7 @@ void placeTowers(Map& gameMap){
 				<< "s -> Sell a Tower" << endl
 				<< "e -> Done" << endl;
 			cin >> selection;
-			if (selection == 'b' | 'u' | 's' | 'e'){
+			if (selection == 'b' || selection == 'u' || selection == 's' || selection == 'e'){
 				break;
 			}
 		}
@@ -125,7 +125,7 @@ void placeTowers(Map& gameMap){
 							 << "2 -> Slowing Tower" << endl
 							 << "e -> Go back to previous menu" << endl;
 						 cin >> selection;
-						 if (selection == '1' | '2' | 'e'){
+						 if (selection == '1' || selection == '2' || selection == 'e'){
 							 break;
 						 }
 						 cout << "Invalid Selection." << endl;
@@ -144,7 +144,7 @@ void placeTowers(Map& gameMap){
 					 while (true){
 						 cout << endl << "Would you like to purchase this tower? (y/n): ";
 						 cin >> selection;
-						 if (selection == 'y' | 'n'){
+						 if (selection == 'y' || selection == 'n'){
 							 break;
 						 }
 						 cout << "Invalid Selection.";
@@ -174,10 +174,10 @@ void placeTowers(Map& gameMap){
 						 while (true){
 							 cout << endl << "Would you like to upgrade this tower? (y/n): ";
 							 cin >> selection;
-							 if (selection == 'y' | 'n'){
+							 if (selection == 'y' || selection == 'n'){
 								 break;
 							 }
-							 cout << "Invlaid Selection.";
+							 cout << "Invalid Selection.";
 						 }
 						 if (selection == 'y'){
 							 ss_ptr->tc_ptr->upgradeTower(input);
@@ -205,10 +205,10 @@ void placeTowers(Map& gameMap){
 						 while (true){
 							 cout << endl << "Would you like to sell this tower? (y/n): ";
 							 cin >> selection;
-							 if (selection == 'y' | 'n'){
+							 if (selection == 'y' || selection == 'n'){
 								 break;
 							 }
-							 cout << "Invlaid Selection.";
+							 cout << "Invalid Selection.";
 						 }
 						 if (selection == 'y'){
 							 ss_ptr->tc_ptr->removeTower(input, gameMap);
@@ -517,7 +517,7 @@ void editMap(Map& gameMap) {
 					validInput = true;
 				else
 					cout << "The coordinates that you have selected is not a start point, path, or end point." <<
-					"Please try again";
+					"\nPlease try again\n";
 			} while (!validInput);
 			system("cls");
 
