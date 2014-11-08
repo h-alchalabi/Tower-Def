@@ -20,7 +20,7 @@ public:
 	string line, token;
 	const vector <int> getCoordinateVec();
 	int getNumberOfDeployed();
-
+	int* getStartPos();
 private:
 	int waveNumber;
 	int level;

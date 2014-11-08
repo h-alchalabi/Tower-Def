@@ -84,10 +84,10 @@ void Critter::setSteps(int steps){
 }
 
 void Critter::move(vector<int> coordinates){
-	if (steps + 1 > coordinates.size()){
+	if (steps + 1 > coordinates.size()){//this if is to make sure that the critter does not attempt to go out of bounds.
 		return;
 	}
-	else{
+	else{//if it isn't out of bounds, it aquires the next step.
 		positionX = coordinates.at(steps);
 		positionY = coordinates.at(++steps);
 		++steps;
@@ -95,10 +95,10 @@ void Critter::move(vector<int> coordinates){
 
 }
 
-int* Critter::previousPos(vector <int> coordinates){
-	int* previousPos = new int[2];
-	previousPos[0] = coordinates.at(steps - 4);
-	previousPos[1] = coordinates.at(steps - 3);
+int* Critter::previousPos(vector <int> coordinates){//Getting the previous position of the critter to revert
+	int* previousPos = new int[2];//the reason it is 4 and 3 rather than 2 and 1, is because the increment occurs before the next step.
+	previousPos[0] = coordinates.at(steps - 4);//i.e., when a critter moves initially the step has become 2 after it moved twice is the first time it can revert
+	previousPos[1] = coordinates.at(steps - 3);//therefore we find the inital position.
 	return previousPos;
 }
 

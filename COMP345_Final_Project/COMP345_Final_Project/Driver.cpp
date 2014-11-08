@@ -303,33 +303,28 @@ void startGame(Map& gameMap) {
 	placeTowers(gameMap);
 
 	Wave* wave = new Wave();
-	wave->createCritters(1, gameMap.getFilePathName());
-	wave->readFile(gameMap.getFilePathName());
-	int size = wave->getCritterVec().size();
+	wave->createCritters(1, gameMap.getFilePathName()); //Creating the critters and giving them a path to follow.
+	wave->readFile(gameMap.getFilePathName()); //Reading that file and storing it into a vector for the critters to follow.
 	int numOfCrit = wave->getNumOfCritters();
-	int x, y, counter = 0, startX, startY;
+	int x, y;
 	int* previousIndex = new int[2];
+	int* startPos = new int[2];
+	startPos = wave->getStartPos();
 	int critterNoMore = 0;
+
 	while (critterNoMore <= numOfCrit + 2){
 		wave->deploy();
 		for (int i = 0; i < wave->getNumberOfDeployed(); ++i){
 			Critter c = wave->getCritterVec().at(i);
 			x = c.getPositionX();
 			y = c.getPositionY();
-			if (counter == 0){
-				startX = x;
-				startY = y;
-				counter++;
-			}
-			if (gameMap.getCell(x, y).getType() == GridType::END){
-				++critterNoMore;
-				if (critterNoMore >= numOfCrit){
+			if (gameMap.getCell(x, y).getType() == GridType::END){ //If the next position the critter attemps to move is the End index, then don't allow him to move
+				++critterNoMore;									//increment the number of critters that have passed.
+				if (critterNoMore >= numOfCrit){					//if all the critters have passed the revert the previous tile to a scenery tile.
 					previousIndex = c.previousPos(wave->getCoordinateVec());
 					gameMap.setCellType(previousIndex[0], previousIndex[1], GridType::PATH, FileAction::LOAD);
-
 				}
-				//Delete critter if it reached end. 
-			}
+			}//If it is not the end tile
 			else {
 				//If the next tile is not empty, then move the critter to it and attempt to revert the old tile into a path tile.
 				gameMap.setCellType(x, y, GridType::CRITTER, FileAction::LOAD);
@@ -345,8 +340,9 @@ void startGame(Map& gameMap) {
 		Sleep(500);
 
 	}
-	gameMap.setCellType(startX, startY, GridType::START, FileAction::LOAD);
+	gameMap.setCellType(startPos[0], startPos[1], GridType::START, FileAction::LOAD);
 	delete wave;
+
 }
 
 void openMapTxt(string mapName, string mapFileName, Map& gameMap) {
