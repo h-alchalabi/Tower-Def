@@ -284,6 +284,7 @@ void createMap(Map& gameMap){
 }
 
 void startGame(Map& gameMap) {
+	ss_ptr->money = 4000;
 	bool validInput = false;
 	string mapName;
 	string mapFileName;
