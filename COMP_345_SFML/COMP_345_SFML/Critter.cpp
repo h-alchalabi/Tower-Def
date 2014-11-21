@@ -9,9 +9,15 @@ Critter::Critter() : Entity(GameConstants::CRITTER_IMAGE_NAME){
 	this->step = 0;
 }
 
-void Critter::move(){
+void Critter::move() {
 	++step;
 }
 int Critter::getStep(){
 	return step;
+}
+
+void Critter::tick() {
+	if (critterClock.getElapsedTime().asMilliseconds() >= statusTime) {
+		critterStatus = CritterStatus::NORMAL;
+	}
 }

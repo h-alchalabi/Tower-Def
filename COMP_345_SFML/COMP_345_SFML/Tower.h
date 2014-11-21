@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include "Entity.h"
+#include "NormalCritter.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
 	void setSellPrice(int sellPrice);
 	void setUpgradedPrice(int upgradedPrice);
 	string to_string();
+	virtual void shoot(NormalCritter targettedCritter);
 private:
 	int x;
 	int y;

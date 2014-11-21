@@ -104,3 +104,7 @@ string Tower::to_string() {
 	string str = ss.str();
 	return str;
 }
+
+void Tower::shoot(NormalCritter targettedCritter) {
+	targettedCritter.setHP(targettedCritter.getHP() - getDamage());
+}
