@@ -16,10 +16,10 @@ string Entity::getImageName(){
 	return this->image_name;
 }
 sf::Texture Entity::getTexture(){
-	return image_texture;
+	return this->image_texture;
 }
 sf::Sprite Entity::getSprite(){
-	return image_sprite;
+	return this->image_sprite;
 }
 void Entity::setPosition(int x, int y){
 	this->image_sprite.setPosition(x, y);

@@ -5,7 +5,7 @@
 
 Wave::Wave(){
 	this->level = 1;
-	this->numOfCritters = 4;
+	this->numOfCritters = 10;
 	this->deployClock = new sf::Clock();
 	this->paused = false;
 	this->critterDeployed = 0;

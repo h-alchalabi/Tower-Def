@@ -6,6 +6,7 @@
 #include "Tower.h"
 #include "Wave.h"
 #include "dirent.h"
+#include <sstream>
 
 using namespace std;
 
@@ -327,17 +328,16 @@ void startGame(){ //TODO
 	sf::Text pausedText("PAUSED", outFont);
 	pausedText.setColor(sf::Color::White);
 	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
-	pausedText.setPosition(0, map->getHeight() * 32);
+	pausedText.setPosition(0, 0);
 	sf::Sprite towerIcon;
-	towerIcon.setPosition(map->getWidth() * 32 + 32, 32);
-	sf::Text towerInfoText;
+	sf::Text towerInfoText("", outFont);
 	towerInfoText.setColor(sf::Color::White);
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
-	towerInfoText.setPosition(map->getWidth() * 32, 96);
+	towerInfoText.setPosition(map->getWidth() * 32, 64);
 		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 128, map->getHeight() * 32 + 96), "Starting Game");
 		window.setKeyRepeatEnabled(false);
 		bool doneGame = false;
-		map->printMap(window);
+		map->printMap(window); 
 			while (window.isOpen() && !doneGame)
 			{
 				sf::Event sf_event;
@@ -368,6 +368,7 @@ void startGame(){ //TODO
 												   }
 					} break;
 					case sf::Event::MouseButtonPressed:{
+														   cout << "here - click: " << sf_event.mouseButton.button << " - " << sf::Mouse::Button::Left << endl;
 														   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
 															   towerClick(sf_event, map, wave->doneWave(), towerInfoText, towerIcon);
 														   }
@@ -448,19 +449,23 @@ string getMapList(){
 	return fileList;
 }
 void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
+		
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
-	int block_x = (x - (x % 32));
-	int block_y = (y - (y % 32));
+	int block_x = (x - (x % 32))/32;
+	int block_y = (y - (y % 32))/32;
+	cout << "\nx: " << x << "\ny" << y << "\nblock_x: " << block_x << "\nblock_y" << block_y <<endl;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
+		cout << "out of bounds" << endl;
 		return;
 	}
 	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower)){
 		towerIcon = map->getEntity(block_x, block_y)->getSprite();
-		string temp = "#" + towerInfoText.getString();
+		towerIcon.setPosition(map->getWidth() * 32 + 48, 16);
+		string temp;
 		towerInfoText.setString(temp);
 	}
-	else {
+	else if(canPlace){
 		map->addEntity(block_x, block_y, new Tower());
 	}
 }
