@@ -10,26 +10,37 @@
 
 using namespace std;
 
-class Tower: public Entity{
+class Tower : public Entity{
 public:
 	Tower();
-	virtual int getX() = 0;
-	virtual int getY() = 0;
-	virtual int getLevel() = 0;
-	virtual int getDamage() = 0;
-	virtual int getRange() = 0; // Radius
-	virtual int getFireRate() = 0;
-	virtual int getBasePrice() = 0;
-	virtual int getSellPrice() = 0;
-	virtual int getUpgradePrice() = 0;
-	virtual void setX(int x) = 0;
-	virtual void setY(int y) = 0;
-	virtual void setLevel(int level) = 0;
-	virtual void setDamage(int damage) = 0;
-	virtual void setRange(int range) = 0;
-	virtual void setFireRate(int fireRate) = 0;
-	virtual void setBasePrice(int basePrice) = 0;
-	virtual void setSellPrice(int sellPrice) = 0;
-	virtual void setUpgradedPrice(int upgradedPrice) = 0;
+	Tower(int x, int y, int level, int damage, int range, int fireRate, int basePrice, int sellPrice, int upgradedPrice);
+	int getX();
+	int getY();
+	int getLevel();
+	int getDamage();
+	int getRange(); // Radius
+	int getFireRate();
+	int getBasePrice();
+	int getSellPrice();
+	int getUpgradePrice();
+	void setX(int x);
+	void setY(int y);
+	void setLevel(int level);
+	void setDamage(int damage);
+	void setRange(int range);
+	void setFireRate(int fireRate);
+	void setBasePrice(int basePrice);
+	void setSellPrice(int sellPrice);
+	void setUpgradedPrice(int upgradedPrice);
 	string to_string();
+private:
+	int x;
+	int y;
+	int level;
+	int damage;
+	int range;
+	int fireRate;
+	int basePrice;
+	int sellPrice;
+	int upgradedPrice;
 };
