@@ -4,6 +4,8 @@
 
 using namespace std;
 
+Tower::Tower() : Entity(GameConstants::TOWER_IMAGE_NAME){}
+
 Tower::Tower(int x, int y, int level, int damage, int range, int fireRate, int basePrice, int sellPrice,
 	int upgradedPrice) : Entity(GameConstants::TOWER_IMAGE_NAME) {
 	this->x = x;
