@@ -90,11 +90,13 @@
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="NearestCritterTowerStrategy.cpp" />
     <ClCompile Include="NormalCritter.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Scenery.cpp" />
     <ClCompile Include="SlowCritter.cpp" />
+    <ClCompile Include="Target.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
@@ -105,12 +107,15 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FastCritter.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="NearestCritterTowerStrategy.h" />
     <ClInclude Include="NormalCritter.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Scenery.h" />
     <ClInclude Include="SlowCritter.h" />
+    <ClInclude Include="Strategy.h" />
+    <ClInclude Include="Target.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Wave.h" />
