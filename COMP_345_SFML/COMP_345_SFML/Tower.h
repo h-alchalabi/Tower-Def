@@ -14,7 +14,7 @@ public:
 	virtual int getY() = 0;
 	virtual int getLevel() = 0;
 	virtual int getDamage() = 0;
-	virtual int getRange() = 0;
+	virtual int getRange() = 0; // Radius
 	virtual int getFireRate() = 0;
 	virtual int getBasePrice() = 0;
 	virtual int getSellPrice() = 0;

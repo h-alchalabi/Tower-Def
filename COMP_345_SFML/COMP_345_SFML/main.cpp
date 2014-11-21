@@ -81,20 +81,6 @@ int main(){
 	return 0;
 }
 
-void dropTower(sf::RenderWindow& window, sf::Event sf_event, Map* map){
-	if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-		int x = sf_event.mouseButton.x - (sf_event.mouseButton.x % 32);
-		int y = sf_event.mouseButton.y - (sf_event.mouseButton.y % 32);
-
-		int block_x = x / 32;
-		int block_y = y / 32;
-		cout << "click: " << block_x << ", " << block_y << endl;
-		map->addEntity(block_x, block_y, new Tower());
-	}
-	else {
-		cout << "that wasn't a left click." << endl;
-	}
-}
 void createMap(){
 	int width, height;
 	string errMsg = "";
@@ -341,7 +327,13 @@ void startGame(){ //TODO
 	outText.setColor(sf::Color::White);
 	outText.setCharacterSize(GameConstants::FONT_SIZE);
 	outText.setPosition(0, map->getHeight() * 32);
-		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32, map->getHeight() * 32 + 16), "Starting Game");
+	sf::Sprite towerIcon;
+	string towerInfo;
+	sf::Text towerInfoText;
+	outText.setColor(sf::Color::White);
+	outText.setCharacterSize(GameConstants::FONT_SIZE);
+	outText.setPosition(0, map->getHeight() * 32);
+		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 128, map->getHeight() * 32 + 96), "Starting Game");
 		window.setKeyRepeatEnabled(false);
 		bool doneGame = false;
 		map->printMap(window);
@@ -373,6 +365,11 @@ void startGame(){ //TODO
 																				}
 												   }break;
 												   }
+					} break;
+					case sf::Event::MouseButtonPressed:{
+														   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
+															  // towerClick(map, wave->doneWave, towerIcon);
+														   }
 					} break;
 					}
 

@@ -1,5 +1,6 @@
 #include "NearestCritterTowerStrategy.h"
 #include <limits>
+#include <math.h>
 
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
@@ -15,19 +16,18 @@ void NearestCritterTowerStrategy::execute(vector<Critter*> critters, Tower* towe
 	int closestCritterTowerIndex = 0;                   //The index of the critter that is the closest to the tower
 
 	//Determining the closest critter to the tower in the tower's range
+	int towerX = tower->getSprite().getPosition().x + tower->getSprite().getLocalBounds().width / 2;
+	int towerY = tower->getSprite().getPosition().y + tower->getSprite().getLocalBounds().height / 2;
 	for (int i = 0; i < critters.size(); i++) {
-		if (critters[i]->getPosition() >= tower->getRangeLeft() && critters[i]->getPosition() <= tower->getRangeRight()) {
-			//The critter is in the tower's range
+		int critterX = critters[i]->getSprite().getPosition().x + critters[i]->getSprite().getLocalBounds().width / 2;
+		int critterY = critters[i]->getSprite().getPosition().y + critters[i]->getSprite().getLocalBounds().height / 2;
 
-			//Calculating distance between a critter and the tower
-			int distCritterTower;
-			distCritterTower = critters[i]->getPosition() > tower->getPosition() ?
-				critters[i]->getPosition() - tower->getPosition() :
-				tower->getPosition() - critters[i]->getPosition();
+		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + (critterY - towerY, 2)));
+		if (distanceFromTower <= tower->getRange()) {
 
-			if (closestDistTower > distCritterTower) {
+			if (closestDistTower > distanceFromTower) {
 				//Updating the closest critter to the tower in the tower's range
-				closestDistTower = distCritterTower;
+				closestDistTower = distanceFromTower;
 				closestCritterTowerIndex = i;
 			}
 		}
