@@ -16,6 +16,7 @@ bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map);
 string getMapList();
 void editMap();
 bool openMapPrompt(Map* map);
+void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon);
 
 int main(){
 	string errMsg;
@@ -323,16 +324,16 @@ void startGame(){ //TODO
 	sf::Font outFont;
 	outFont.loadFromFile(GameConstants::FONT_FILE_PATH);
 
-	sf::Text outText("PAUSED", outFont);
-	outText.setColor(sf::Color::White);
-	outText.setCharacterSize(GameConstants::FONT_SIZE);
-	outText.setPosition(0, map->getHeight() * 32);
+	sf::Text pausedText("PAUSED", outFont);
+	pausedText.setColor(sf::Color::White);
+	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
+	pausedText.setPosition(0, map->getHeight() * 32);
 	sf::Sprite towerIcon;
-	string towerInfo;
+	towerIcon.setPosition(map->getWidth() * 32 + 32, 32);
 	sf::Text towerInfoText;
-	outText.setColor(sf::Color::White);
-	outText.setCharacterSize(GameConstants::FONT_SIZE);
-	outText.setPosition(0, map->getHeight() * 32);
+	towerInfoText.setColor(sf::Color::White);
+	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
+	towerInfoText.setPosition(map->getWidth() * 32, 96);
 		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 128, map->getHeight() * 32 + 96), "Starting Game");
 		window.setKeyRepeatEnabled(false);
 		bool doneGame = false;
@@ -368,7 +369,7 @@ void startGame(){ //TODO
 					} break;
 					case sf::Event::MouseButtonPressed:{
 														   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-															  // towerClick(map, wave->doneWave, towerIcon);
+															   towerClick(sf_event, map, wave->doneWave(), towerInfoText, towerIcon);
 														   }
 					} break;
 					}
@@ -380,8 +381,10 @@ void startGame(){ //TODO
 					wave->deploy(map);
 				}
 				map->printMap(window);
+				window.draw(towerIcon);
+				window.draw(towerInfoText);
 				if (wave->isPaused()){
-					window.draw(outText);
+					window.draw(pausedText);
 				}
 				window.display();
 			}
@@ -443,4 +446,21 @@ string getMapList(){
 		system("exit");
 	}
 	return fileList;
+}
+void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
+	int x = sf_event.mouseButton.x;
+	int y = sf_event.mouseButton.y;
+	int block_x = (x - (x % 32));
+	int block_y = (y - (y % 32));
+	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
+		return;
+	}
+	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower)){
+		towerIcon = map->getEntity(block_x, block_y)->getSprite();
+		string temp = "#" + towerInfoText.getString();
+		towerInfoText.setString(temp);
+	}
+	else {
+		map->addEntity(block_x, block_y, new Tower());
+	}
 }
