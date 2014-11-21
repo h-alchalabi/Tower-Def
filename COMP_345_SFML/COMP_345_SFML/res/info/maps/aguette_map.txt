@@ -1,0 +1,12 @@
+------------PPP
+--SP--------P-P
+---P--------P-P
+--PP--------P-P
+--P---------P-P
+--P---------P-P
+--PPPPPPPPP-P-P
+----------P-P-P
+-PPPPPPPPPP-P-P
+-P----------P-P
+-P----------P-P
+-PPPPPPPPPPPP-E
