@@ -172,5 +172,8 @@
     <Image Include="res\img\start_sample.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\img\critter_sample.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -4,6 +4,8 @@
 #include "GameConstants.h"
 #include "Map.h"
 #include "Tower.h"
+#include "FireTower.h"
+#include "IceTower.h"
 #include "Wave.h"
 #include "dirent.h"
 #include <sstream>
@@ -334,7 +336,7 @@ void startGame(){ //TODO
 	towerInfoText.setColor(sf::Color::White);
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
 	towerInfoText.setPosition(map->getWidth() * 32, 64);
-		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 128, map->getHeight() * 32 + 96), "Starting Game");
+		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 		window.setKeyRepeatEnabled(false);
 		bool doneGame = false;
 		map->printMap(window); 
@@ -449,7 +451,7 @@ string getMapList(){
 	return fileList;
 }
 void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
-		
+
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
 	int block_x = (x - (x % 32))/32;
@@ -460,10 +462,27 @@ void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfo
 		return;
 	}
 	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower)){
-		towerIcon = map->getEntity(block_x, block_y)->getSprite();
+		Tower* selectedTower = (Tower*)map->getEntity(block_x, block_y);
+		towerIcon = selectedTower->getSprite();
 		towerIcon.setPosition(map->getWidth() * 32 + 48, 16);
+		string type = "NORMAL";
+		if (typeid(*selectedTower) == typeid(FireTower)){
+			type = "FIRE";
+		} 
+		else if (typeid(*selectedTower) == typeid(IceTower)){
+			type = "ICE";
+		}
+		stringstream ss;
+		ss << "Level:         " << selectedTower->getLevel() << endl;
+		ss << "Type:          " << type << endl;
+		ss << "Base Price:    " << selectedTower->getBasePrice() << endl;
+		ss << "Upgrade Price: " << selectedTower->getUpgradePrice() << endl;
+		ss << "Sell Price:    " << selectedTower->getSellPrice() << endl;
+		ss << "Damage:        " << selectedTower->getDamage() << endl;
+		ss << "Range:         " << selectedTower->getLevel() << endl;
+		ss << "Fire Rate      " << selectedTower->getFireRate() << endl;
 		string temp;
-		towerInfoText.setString(temp);
+		towerInfoText.setString(ss.str());
 	}
 	else if(canPlace){
 		map->addEntity(block_x, block_y, new Tower());

@@ -125,6 +125,7 @@
     <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\img\critter_sample.png" />
     <Image Include="res\img\end_sample.png" />
     <Image Include="res\img\path_sample.png" />
     <Image Include="res\img\scenery_sample.png" />
