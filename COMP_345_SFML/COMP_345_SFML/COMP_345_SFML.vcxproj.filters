@@ -13,108 +13,150 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Tower">
+      <UniqueIdentifier>{71cc13d4-248a-4521-8fd6-f6046580c270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tower">
+      <UniqueIdentifier>{5dc70b70-e69f-4931-90cb-829b507afd02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Critter">
+      <UniqueIdentifier>{37517fc9-8a00-4a26-9829-c6223daf9e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Critter">
+      <UniqueIdentifier>{2325c52e-9281-4cb4-b40e-5a481ea47b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{07ba5519-ea7a-4ccd-a3d8-9f8882893054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Other">
+      <UniqueIdentifier>{b1e551f8-9025-4b6d-8dc2-6af51f846a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{84dacb51-b4a5-4e36-8371-bf574cbd16dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{29509b7b-ed03-4c31-a819-a2a141272f62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other">
+      <UniqueIdentifier>{804aa4df-b329-4535-96c7-460abe7b7ba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{0ca94d4c-ad4b-4c33-8a5d-126a0c99f856}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Observable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tower.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
-    <ClCompile Include="Critter.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="IceTower.cpp">
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
-    <ClCompile Include="GameConstants.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FireTower.cpp">
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
     <ClCompile Include="FastCritter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Critter</Filter>
+    </ClCompile>
+    <ClCompile Include="Critter.cpp">
+      <Filter>Source Files\Critter</Filter>
     </ClCompile>
     <ClCompile Include="NormalCritter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Critter</Filter>
     </ClCompile>
     <ClCompile Include="SlowCritter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Critter</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConstants.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Observable.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenery.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
     <ClCompile Include="Wave.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
     <ClCompile Include="NearestCritterTowerStrategy.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
     <ClCompile Include="Target.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tower</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FireTower.h">
+      <Filter>Header Files\Tower</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="IceTower.h">
+      <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="Tower.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="Critter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameConstants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dirent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Critter</Filter>
     </ClInclude>
     <ClInclude Include="CritterFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FastCritter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NormalCritter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Critter</Filter>
     </ClInclude>
     <ClInclude Include="SlowCritter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Critter</Filter>
+    </ClInclude>
+    <ClInclude Include="FastCritter.h">
+      <Filter>Header Files\Critter</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalCritter.h">
+      <Filter>Header Files\Critter</Filter>
+    </ClInclude>
+    <ClInclude Include="dirent.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Observable.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConstants.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenery.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="Wave.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Strategy.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Critter</Filter>
     </ClInclude>
     <ClInclude Include="NearestCritterTowerStrategy.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategy.h">
+      <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="Target.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tower</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

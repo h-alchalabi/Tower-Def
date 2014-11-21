@@ -87,7 +87,9 @@
     <ClCompile Include="Critter.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FastCritter.cpp" />
+    <ClCompile Include="FireTower.cpp" />
     <ClCompile Include="GameConstants.cpp" />
+    <ClCompile Include="IceTower.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="NearestCritterTowerStrategy.cpp" />
@@ -106,7 +108,9 @@
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FastCritter.h" />
+    <ClInclude Include="FireTower.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="IceTower.h" />
     <ClInclude Include="NearestCritterTowerStrategy.h" />
     <ClInclude Include="NormalCritter.h" />
     <ClInclude Include="Observable.h" />
