@@ -56,7 +56,6 @@ void Wave::createCritters(int waveNumber, string mapPath){//Creating a critter a
 }
 
 void Wave::readFile(string mapPath){//Reading from the path txt file of the map.
-	int path;
 	ifstream file(mapPath);
 	while (file.is_open()){
 		file >> line;
