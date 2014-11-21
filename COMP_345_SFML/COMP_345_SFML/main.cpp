@@ -173,7 +173,8 @@ void createMap(){
 	createPrompt = "------------------------------------\n";
 	createPrompt += "\tCreating a Map\n";
 	createPrompt += "-----------------------------------\n\n";
-	createPrompt += "Use Arrow Keys to move.";
+	createPrompt += "Use Arrow Keys to move.\n";
+	createPrompt += "Press E ot end the path.";
 
 	outText.setString(startPrompt);
 
