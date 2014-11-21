@@ -96,7 +96,7 @@ void Wave::move(){//moving all critters
 			critterVec.at(i).move(coordinates);
 		}
 	}
-}
+} 
 
 const vector<int> Wave::getCoordinateVec(){
 	return coordinates;
