@@ -6,4 +6,7 @@ FireTower::FireTower(int x, int y, int level, int damage, int range, int fireRat
 	this->burnDamage = burnDamage;
 }
 
-void FireTower::burnCritter() {}
+void FireTower::shoot(NormalCritter targettedCritter) {
+	targettedCritter.setHP(targettedCritter.getHP() - getDamage());
+	targettedCritter.setCritterStatus(CritterStatus::BURN, 3000);
+}

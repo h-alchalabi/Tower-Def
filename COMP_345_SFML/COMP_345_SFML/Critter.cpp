@@ -19,5 +19,14 @@ int Critter::getStep(){
 void Critter::tick() {
 	if (critterClock.getElapsedTime().asMilliseconds() >= statusTime) {
 		critterStatus = CritterStatus::NORMAL;
+	} else {
+		switch (critterStatus) {
+			case CritterStatus::BURN:
+				setHP(HP - 5);
+				break;
+			case CritterStatus::FREEZE:
+				setSpeed(speed - 1);
+				break;
+		}
 	}
 }
