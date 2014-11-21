@@ -1,4 +1,5 @@
 #include "NormalCritter.h"
+
 NormalCritter::NormalCritter(int level){
 	this->level = level;
 	this->HP = 5*level;
@@ -28,4 +29,19 @@ void NormalCritter::setReward(int reward){
 
 int NormalCritter::getSpeed(){
 	return speed;
+}
+
+void NormalCritter::setSpeed(int speed) {
+	this->speed = speed;
+}
+
+CritterStatus NormalCritter::getCritterStatus() {
+	return critterStatus;
+}
+
+void NormalCritter::setCritterStatus(CritterStatus critterStatus, float statusDuration) {
+	critterClock.restart();
+	statusTime = statusDuration;
+	this->critterStatus = critterStatus;
+
 }
