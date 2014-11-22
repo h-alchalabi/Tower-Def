@@ -19,9 +19,23 @@ bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map);
 string getMapList();
 void editMap();
 bool openMapPrompt(Map* map);
-void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon);
+void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon);
+void init();
+
+namespace TowerSelection{
+	enum TowerType { NORMAL, FIRE, ICE };
+}
+
+static TowerSelection::TowerType towerType = TowerSelection::NORMAL;
+
+static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton;
+static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
+static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
 
 int main(){
+
+	init();
+
 	string errMsg;
 	bool running = true;
 
@@ -83,6 +97,18 @@ int main(){
 		window.display();
 	}*/
 	return 0;
+}
+
+void init(){
+	normalTowerTexture.loadFromFile("res/img/" + GameConstants::NORMAL_TOWER_IMAGE_NAME + ".png");
+	fireTowerTexture.loadFromFile("res/img/" + GameConstants::FIRE_TOWER_IMAGE_NAME + ".png");
+	iceTowerTexture.loadFromFile("res/img/" + GameConstants::ICE_TOWER_IMAGE_NAME + ".png");
+
+	normalTowerButton.setTexture(normalTowerTexture);
+	fireTowerButton.setTexture(fireTowerTexture);
+	iceTowerButton.setTexture(iceTowerTexture);
+
+	towerSelectionRect.setFillColor(sf::Color::Yellow);
 }
 
 void createMap(){
@@ -327,71 +353,82 @@ void startGame(){ //TODO
 	sf::Font outFont;
 	outFont.loadFromFile(GameConstants::FONT_FILE_PATH);
 
+	towerType = TowerSelection::NORMAL;
+
+	normalTowerButton.setPosition(16, map->getHeight() * 32 + 16);
+	fireTowerButton.setPosition(64, map->getHeight() * 32 + 16);
+	iceTowerButton.setPosition(112, map->getHeight() * 32 + 16);
+
+	towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
+
 	sf::Text pausedText("PAUSED", outFont);
 	pausedText.setColor(sf::Color::White);
 	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
 	pausedText.setPosition(0, 0);
+
 	sf::Sprite towerIcon;
 	sf::Text towerInfoText("", outFont);
 	towerInfoText.setColor(sf::Color::White);
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
 	towerInfoText.setPosition(map->getWidth() * 32, 64);
-		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
-		window.setKeyRepeatEnabled(false);
-		bool doneGame = false;
-		map->printMap(window); 
-			while (window.isOpen() && !doneGame)
+
+	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
+	window.setKeyRepeatEnabled(false);
+	bool doneGame = false;
+	map->printMap(window); 
+		while (window.isOpen() && !doneGame)
+		{
+			sf::Event sf_event;
+			while (window.pollEvent(sf_event))
 			{
-				sf::Event sf_event;
-				while (window.pollEvent(sf_event))
-				{
-					switch (sf_event.type){
-					case sf::Event::Closed:{
-											   window.close();
-					} break;
-					case sf::Event::KeyPressed:{
-												   switch (sf_event.key.code){
-												   case sf::Keyboard::P:{
-																			if (wave->isPaused()){
-																				wave->resumeWave();
+				switch (sf_event.type){
+				case sf::Event::Closed:{
+										   window.close();
+				} break;
+				case sf::Event::KeyPressed:{
+											   switch (sf_event.key.code){
+											   case sf::Keyboard::P:{
+																		if (wave->isPaused()){
+																			wave->resumeWave();
+																		}
+																		else{
+																			wave->pauseWave();
+																		}
+											   }break;
+											   case sf::Keyboard::Space:{
+																			if (waveNumber >= GameConstants::NUMBER_OF_WAVES){
+																				doneGame = true;
 																			}
-																			else{
-																				wave->pauseWave();
+																			else if (wave->doneWave()){
+																				wave->createWave(waveNumber++);
 																			}
-												   }break;
-												   case sf::Keyboard::Space:{
-																				if (waveNumber >= GameConstants::NUMBER_OF_WAVES){
-																					doneGame = true;
-																				}
-																				else if (wave->doneWave()){
-																					wave->createWave(waveNumber++);
-																				}
-												   }break;
-												   }
-					} break;
-					case sf::Event::MouseButtonPressed:{
-														   cout << "here - click: " << sf_event.mouseButton.button << " - " << sf::Mouse::Button::Left << endl;
-														   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-															   towerClick(sf_event, map, wave->doneWave(), towerInfoText, towerIcon);
-														   }
-					} break;
-					}
-
+											   }break;
+											   }
+				} break;
+				case sf::Event::MouseButtonPressed:{
+													   cout << "here - click: " << sf_event.mouseButton.button << " - " << sf::Mouse::Button::Left << endl;
+													   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
+														   handleClick(sf_event, map, wave->doneWave(), towerInfoText, towerIcon);
+													   }
+				} break;
 				}
-
-				window.clear();
-				if (!wave->doneWave()){
-					wave->deploy(map);
-				}
-				map->printMap(window);
-				window.draw(towerIcon);
-				window.draw(towerInfoText);
-				if (wave->isPaused()){
-					window.draw(pausedText);
-				}
-				window.display();
+								}
+							window.clear();
+			if (!wave->doneWave()){
+				wave->deploy(map);
 			}
-		
+			map->printMap(window);
+			window.draw(towerIcon);
+			window.draw(towerInfoText);
+			window.draw(towerSelectionRect);
+			window.draw(normalTowerButton);
+			window.draw(fireTowerButton);
+			window.draw(iceTowerButton);
+			if (wave->isPaused()){
+				window.draw(pausedText);
+			}
+			window.display();
+		}
 }
 bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map){
 	if (!map->inBounds(new_x, new_y) || (current_x == new_x && current_y == new_y)){
@@ -450,7 +487,7 @@ string getMapList(){
 	}
 	return fileList;
 }
-void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
+void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
 
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
@@ -458,10 +495,24 @@ void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfo
 	int block_y = (y - (y % 32))/32;
 	cout << "\nx: " << x << "\ny" << y << "\nblock_x: " << block_x << "\nblock_y" << block_y <<endl;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
-		cout << "out of bounds" << endl;
+		if (normalTowerButton.getGlobalBounds().contains(x, y)){
+			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
+			towerType = TowerSelection::NORMAL;
+		}
+		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
+			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
+			towerType = TowerSelection::FIRE;
+		}
+		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
+			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
+			towerType = TowerSelection::ICE;
+		}
 		return;
 	}
-	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower)){
+	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower) ||
+		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
+		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
+		){
 		Tower* selectedTower = (Tower*)map->getEntity(block_x, block_y);
 		towerIcon = selectedTower->getSprite();
 		towerIcon.setPosition(map->getWidth() * 32 + 48, 16);
@@ -484,7 +535,17 @@ void towerClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfo
 		string temp;
 		towerInfoText.setString(ss.str());
 	}
-	else if(canPlace){
-		map->addEntity(block_x, block_y, new Tower());
+	else if (canPlace){
+		switch (towerType){
+		case TowerSelection::NORMAL:{
+										map->addEntity(block_x, block_y, new Tower());
+		} break;
+		case TowerSelection::FIRE:{
+									  map->addEntity(block_x, block_y, new FireTower());
+		} break;
+		case TowerSelection::ICE:{
+									 map->addEntity(block_x, block_y, new IceTower());
+		}break;
+		}
 	}
 }

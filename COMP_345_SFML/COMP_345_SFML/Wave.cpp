@@ -70,8 +70,10 @@ void Wave::move(Map* map){//moving all critters
 			critVec.at(i)->move();
 		}
 		else{
+			// Remove Money/HP from player.
 			critVec.erase(critVec.begin() + i);
 			critVec.shrink_to_fit();
+			--critterDeployed;
 			--i;
 		}
 		

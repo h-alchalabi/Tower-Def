@@ -17,7 +17,7 @@ Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){
 }
 
 Tower::Tower(int damage, int range, int fireRate, int basePrice, int sellPrice,
-	int upgradedPrice, string towerImageName = GameConstants::NORMAL_TOWER_IMAGE_NAME ) : Entity(towerImageName) {
+	int upgradedPrice, string towerImageName) : Entity(towerImageName) {
 	this->x = 0;
 	this->y = 0;
 	this->level = 1;
