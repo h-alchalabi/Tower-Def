@@ -4,13 +4,23 @@
 
 using namespace std;
 
-Tower::Tower() : Entity(GameConstants::TOWER_IMAGE_NAME){}
+Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){
+	this->x = 0;
+	this->y = 0;
+	this->level = 1;
+	this->damage = 8;
+	this->range = 100;
+	this->fireRate = 1;
+	this->basePrice = 125;
+	this->sellPrice = 75;
+	this->upgradedPrice = 100;
+}
 
-Tower::Tower(int x, int y, int level, int damage, int range, int fireRate, int basePrice, int sellPrice,
-	int upgradedPrice) : Entity(GameConstants::TOWER_IMAGE_NAME) {
-	this->x = x;
-	this->y = y;
-	this->level = level;
+Tower::Tower(int damage, int range, int fireRate, int basePrice, int sellPrice,
+	int upgradedPrice, string towerImageName = GameConstants::NORMAL_TOWER_IMAGE_NAME ) : Entity(towerImageName) {
+	this->x = 0;
+	this->y = 0;
+	this->level = 1;
 	this->damage = damage;
 	this->range = range;
 	this->fireRate = fireRate;

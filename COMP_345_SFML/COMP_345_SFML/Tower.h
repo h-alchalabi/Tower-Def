@@ -14,7 +14,7 @@ using namespace std;
 class Tower : public Entity{
 public:
 	Tower();
-	Tower(int x, int y, int level, int damage, int range, int fireRate, int basePrice, int sellPrice, int upgradedPrice);
+	Tower(int damage, int range, int fireRate, int basePrice, int sellPrice, int upgradedPrice, string towerImageName);
 	int getX();
 	int getY();
 	int getLevel();

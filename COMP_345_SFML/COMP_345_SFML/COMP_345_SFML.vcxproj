@@ -127,6 +127,9 @@
   <ItemGroup>
     <Image Include="res\img\critter_sample.png" />
     <Image Include="res\img\end_sample.png" />
+    <Image Include="res\img\fire_tower.png" />
+    <Image Include="res\img\ice_tower.png" />
+    <Image Include="res\img\normal_tower.png" />
     <Image Include="res\img\path_sample.png" />
     <Image Include="res\img\scenery_sample.png" />
     <Image Include="res\img\start_sample.png" />

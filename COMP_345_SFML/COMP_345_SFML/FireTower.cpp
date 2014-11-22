@@ -1,8 +1,13 @@
 #include "FireTower.h"
+#include "GameConstants.h"
 
-FireTower::FireTower(int x, int y, int level, int damage, int range, int fireRate, int basePrice, int sellPrice,
+FireTower::FireTower() : Tower(10, 100, 1, 200, 150, 200, GameConstants::FIRE_TOWER_IMAGE_NAME){
+	this->burnDamage = 2;
+}
+
+FireTower::FireTower(int damage, int range, int fireRate, int basePrice, int sellPrice,
 	int upgradedPrice, int burnDamage) :  
-	Tower(x, y, level, damage, range, fireRate, basePrice, sellPrice, upgradedPrice) {
+	Tower(damage, range, fireRate, basePrice, sellPrice, upgradedPrice, GameConstants::FIRE_TOWER_IMAGE_NAME) {
 	this->burnDamage = burnDamage;
 }
 
