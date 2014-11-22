@@ -23,6 +23,12 @@ public:
 	static const sf::Int32 SLOW_CRITTER_DEPLOY_TIME;
 	static const int NUMBER_OF_WAVES;
 	static const float FONT_SIZE;
+	static int getMoney();
+	static bool spendMoney(int amount);
+	static bool collectMoney(int amount);
+	static void resetMoney();
+	static std::string getMoneyString();
 private:
+	static int money;
 	GameConstants();
 };

@@ -373,6 +373,11 @@ void startGame(){ //TODO
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
 	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
 
+	sf::Text playerMoneyText(GameConstants::getMoneyString(), outFont);
+	playerMoneyText.setColor(sf::Color::White);
+	playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
+	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 16);
+
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
 	bool doneGame = false;
@@ -429,6 +434,8 @@ void startGame(){ //TODO
 			window.draw(normalTowerButton);
 			window.draw(fireTowerButton);
 			window.draw(iceTowerButton);
+			playerMoneyText.setString(GameConstants::getMoneyString());
+			window.draw(playerMoneyText);
 			if (wave->isPaused()){
 				window.draw(pausedText);
 			}
@@ -530,13 +537,22 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 	else if (canPlace){
 		switch (towerType){
 		case TowerSelection::NORMAL:{
-										map->addEntity(block_x, block_y, new Tower());
+										Tower* toAdd = new Tower();
+										if (GameConstants::spendMoney(toAdd->getBasePrice())){
+											map->addEntity(block_x, block_y, toAdd);
+										}
 		} break;
 		case TowerSelection::FIRE:{
-									  map->addEntity(block_x, block_y, new FireTower());
+									  Tower* toAdd = new FireTower();
+									  if (GameConstants::spendMoney(toAdd->getBasePrice())){
+											map->addEntity(block_x, block_y, toAdd);
+									  }
 		} break;
 		case TowerSelection::ICE:{
-									 map->addEntity(block_x, block_y, new IceTower());
+									 Tower* toAdd = new IceTower();
+									 if (GameConstants::spendMoney(toAdd->getBasePrice())){
+										 map->addEntity(block_x, block_y, toAdd);
+									 }
 		}break;
 		}
 	}
