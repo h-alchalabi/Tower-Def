@@ -23,10 +23,10 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 void init();
 
 namespace TowerSelection{
-	enum TowerType { NORMAL, FIRE, ICE };
+	enum TowerType { NA, NORMAL, FIRE, ICE };
 }
 
-static TowerSelection::TowerType towerType = TowerSelection::NORMAL;
+static TowerSelection::TowerType towerType;
 
 static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton;
 static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
@@ -107,6 +107,8 @@ void init(){
 	normalTowerButton.setTexture(normalTowerTexture);
 	fireTowerButton.setTexture(fireTowerTexture);
 	iceTowerButton.setTexture(iceTowerTexture);
+
+	towerType = TowerSelection::NA;
 
 	towerSelectionRect.setFillColor(sf::Color::Yellow);
 }
@@ -353,13 +355,11 @@ void startGame(){ //TODO
 	sf::Font outFont;
 	outFont.loadFromFile(GameConstants::FONT_FILE_PATH);
 
-	towerType = TowerSelection::NORMAL;
+	towerType = TowerSelection::NA;
 
 	normalTowerButton.setPosition(16, map->getHeight() * 32 + 16);
 	fireTowerButton.setPosition(64, map->getHeight() * 32 + 16);
 	iceTowerButton.setPosition(112, map->getHeight() * 32 + 16);
-
-	towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 
 	sf::Text pausedText("PAUSED", outFont);
 	pausedText.setColor(sf::Color::White);
@@ -370,7 +370,7 @@ void startGame(){ //TODO
 	sf::Text towerInfoText("", outFont);
 	towerInfoText.setColor(sf::Color::White);
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
-	towerInfoText.setPosition(map->getWidth() * 32, 64);
+	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
 
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
@@ -388,11 +388,13 @@ void startGame(){ //TODO
 				case sf::Event::KeyPressed:{
 											   switch (sf_event.key.code){
 											   case sf::Keyboard::P:{
-																		if (wave->isPaused()){
-																			wave->resumeWave();
-																		}
-																		else{
-																			wave->pauseWave();
+																		if (!wave->doneWave()){
+																			if (wave->isPaused()){
+																				wave->resumeWave();
+																			}
+																			else{
+																				wave->pauseWave();
+																			}
 																		}
 											   }break;
 											   case sf::Keyboard::Space:{
@@ -420,7 +422,9 @@ void startGame(){ //TODO
 			map->printMap(window);
 			window.draw(towerIcon);
 			window.draw(towerInfoText);
-			window.draw(towerSelectionRect);
+			if (towerType != TowerSelection::NA){
+				window.draw(towerSelectionRect);
+			}
 			window.draw(normalTowerButton);
 			window.draw(fireTowerButton);
 			window.draw(iceTowerButton);
@@ -506,6 +510,10 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::ICE;
+		}
+		else {
+			towerSelectionRect.setPosition(-40, -40);
+			towerType = TowerSelection::NA;
 		}
 		return;
 	}
