@@ -21,6 +21,7 @@ void editMap();
 bool openMapPrompt(Map* map);
 void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon);
 void init();
+void setTowerInfo(Tower* selectedTower, sf::Text& towerInfoText, sf::Sprite& towerIcon, int mapWidthPixels);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -502,14 +503,17 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::NORMAL;
+			setTowerInfo(new Tower(), towerInfoText, towerIcon, map->getWidth() * 32);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::FIRE;
+			setTowerInfo(new FireTower(), towerInfoText, towerIcon, map->getWidth() * 32);
 		}
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::ICE;
+			setTowerInfo(new IceTower(), towerInfoText, towerIcon, map->getWidth() * 32);
 		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
@@ -521,27 +525,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
 		){
-		Tower* selectedTower = (Tower*)map->getEntity(block_x, block_y);
-		towerIcon = selectedTower->getSprite();
-		towerIcon.setPosition(map->getWidth() * 32 + 48, 16);
-		string type = "NORMAL";
-		if (typeid(*selectedTower) == typeid(FireTower)){
-			type = "FIRE";
-		} 
-		else if (typeid(*selectedTower) == typeid(IceTower)){
-			type = "ICE";
-		}
-		stringstream ss;
-		ss << "Level:         " << selectedTower->getLevel() << endl;
-		ss << "Type:          " << type << endl;
-		ss << "Base Price:    " << selectedTower->getBasePrice() << endl;
-		ss << "Upgrade Price: " << selectedTower->getUpgradePrice() << endl;
-		ss << "Sell Price:    " << selectedTower->getSellPrice() << endl;
-		ss << "Damage:        " << selectedTower->getDamage() << endl;
-		ss << "Range:         " << selectedTower->getLevel() << endl;
-		ss << "Fire Rate      " << selectedTower->getFireRate() << endl;
-		string temp;
-		towerInfoText.setString(ss.str());
+		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), towerInfoText, towerIcon, map->getWidth() * 32);
 	}
 	else if (canPlace){
 		switch (towerType){
@@ -556,4 +540,26 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		}break;
 		}
 	}
+}
+void setTowerInfo(Tower* selectedTower, sf::Text& towerInfoText, sf::Sprite& towerIcon, int mapWidthPixels){
+	towerIcon = selectedTower->getSprite();
+	towerIcon.setPosition(mapWidthPixels + 48, 16);
+	string type = "NORMAL";
+	if (typeid(*selectedTower) == typeid(FireTower)){
+		type = "FIRE";
+	}
+	else if (typeid(*selectedTower) == typeid(IceTower)){
+		type = "ICE";
+	}
+	stringstream ss;
+	ss << "Level:         " << selectedTower->getLevel() << endl;
+	ss << "Type:          " << type << endl;
+	ss << "Base Price:    " << selectedTower->getBasePrice() << endl;
+	ss << "Upgrade Price: " << selectedTower->getUpgradePrice() << endl;
+	ss << "Sell Price:    " << selectedTower->getSellPrice() << endl;
+	ss << "Damage:        " << selectedTower->getDamage() << endl;
+	ss << "Range:         " << selectedTower->getLevel() << endl;
+	ss << "Fire Rate      " << selectedTower->getFireRate() << endl;
+	string temp;
+	towerInfoText.setString(ss.str());
 }
