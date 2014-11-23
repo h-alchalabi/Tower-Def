@@ -557,9 +557,23 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 			cout << ">>>>>>>UPGRADE" << endl;
 		}
 		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
-			cout << ">>>>>>>SELL" << endl;
+			map->removeEntity(currentTower);
+			GameConstants::collectMoney(currentTower->getSellPrice());
+			towerIcon.setPosition(-100, -100);
+			towerInfoText.setString("");
+
+			upgradeButton.setPosition(-100, -100);
+			sellButton.setPosition(-100, -100);
+
+			upgradeButtonText.setPosition(-100, -100);
+			sellButtonText.setPosition(-100, -100);
+
+			towerSelectionRect.setPosition(-100, -100);
+			towerType = TowerSelection::NA;
+
+			currentTower = NULL;
 		}
-		if (normalTowerButton.getGlobalBounds().contains(x, y)){
+		else if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::NORMAL;
 			setTowerInfo(new Tower(), map->getWidth() * 32, false);
