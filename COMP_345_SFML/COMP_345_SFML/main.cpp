@@ -34,10 +34,9 @@ static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
 static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 20));
 static sf::RectangleShape sellButton(sf::Vector2<float>(64, 20));
-static sf::Text upgradeButtonText, sellButtonText;
+static sf::Text upgradeButtonText, sellButtonText, towerInfoText, startGameText;
 static sf::Font mainFont;
 static sf::Sprite towerIcon;
-static sf::Text towerInfoText;
 static Tower* currentTower;
 
 int main(){
@@ -143,6 +142,11 @@ void init(){
 	sellButtonText.setString("SELL");
 	sellButtonText.setCharacterSize(GameConstants::FONT_SIZE);
 	sellButtonText.setColor(sf::Color::White);
+
+	startGameText.setFont(mainFont);
+	startGameText.setString("SPACE - Start a Critter Wave\nP - Pause/Resume Game");
+	startGameText.setCharacterSize(GameConstants::FONT_SIZE);
+	startGameText.setColor(sf::Color::White);
 }
 
 
@@ -392,6 +396,8 @@ void startGame(){ //TODO
 	upgradeButtonText.setPosition(-100, -100);
 	sellButtonText.setPosition(-100, -100);
 
+	startGameText.setPosition(4, map->getHeight() * 32 + 16);
+
 	normalTowerButton.setPosition(16, map->getHeight() * 32 + 48);
 	fireTowerButton.setPosition(64, map->getHeight() * 32 + 48);
 	iceTowerButton.setPosition(112, map->getHeight() * 32 + 48);
@@ -471,6 +477,7 @@ void startGame(){ //TODO
 			if (towerType != TowerSelection::NA){
 				window.draw(towerSelectionRect);
 			}
+			window.draw(startGameText);
 			window.draw(normalTowerButton);
 			window.draw(fireTowerButton);
 			window.draw(iceTowerButton);
