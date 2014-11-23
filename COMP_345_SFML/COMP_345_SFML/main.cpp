@@ -373,10 +373,18 @@ void startGame(){ //TODO
 	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
 	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
 
+	GameConstants::resetMoney();
+	GameConstants::resetHP();
+
 	sf::Text playerMoneyText(GameConstants::getMoneyString(), outFont);
 	playerMoneyText.setColor(sf::Color::White);
 	playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
 	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 16);
+
+	sf::Text playerHPText(GameConstants::getHPString(), outFont);
+	playerHPText.setColor(sf::Color::White);
+	playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
+	playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 32);
 
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
@@ -436,6 +444,8 @@ void startGame(){ //TODO
 			window.draw(iceTowerButton);
 			playerMoneyText.setString(GameConstants::getMoneyString());
 			window.draw(playerMoneyText);
+			playerHPText.setString(GameConstants::getHPString());
+			window.draw(playerHPText);
 			if (wave->isPaused()){
 				window.draw(pausedText);
 			}

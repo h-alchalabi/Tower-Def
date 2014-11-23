@@ -47,4 +47,24 @@ std::string GameConstants::getMoneyString(){
 	ss << "Money:\t" << money;
 	return ss.str();
 }
+int GameConstants::getHp(){
+	return playerHP;
+}
+void GameConstants::resetHP(){
+	playerHP = 20;
+}
+std::string GameConstants::getHPString(){
+	stringstream ss;
+	ss << "HP:\t\t" << playerHP;
+	return ss.str();
+}
+bool GameConstants::decrementHP(){
+	if (playerHP <= 0){
+		playerHP = 0;
+		return false;
+	}
+	--playerHP;
+	return true;
+}
 int GameConstants::money = 400;
+int GameConstants::playerHP = 20;

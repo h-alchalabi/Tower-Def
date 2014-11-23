@@ -6,6 +6,7 @@ using namespace std;
 
 class GameConstants{
 public:
+	// Constants
 	static const string START_IMAGE_NAME;
 	static const string END_IMAGE_NAME;
 	static const string PATH_IMAGE_NAME;
@@ -23,12 +24,19 @@ public:
 	static const sf::Int32 SLOW_CRITTER_DEPLOY_TIME;
 	static const int NUMBER_OF_WAVES;
 	static const float FONT_SIZE;
+
+	// Shared Variables.
 	static int getMoney();
 	static bool spendMoney(int amount);
 	static bool collectMoney(int amount);
 	static void resetMoney();
 	static std::string getMoneyString();
+	static int getHp();
+	static void resetHP();
+	static std::string getHPString();
+	static bool decrementHP();
 private:
+	static int playerHP;
 	static int money;
 	GameConstants();
 };
