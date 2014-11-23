@@ -44,7 +44,7 @@ void GameConstants::resetMoney(){
 }
 std::string GameConstants::getMoneyString(){
 	stringstream ss;
-	ss << "Money:\t" << money;
+	ss << "Money:\t\t" << money;
 	return ss.str();
 }
 int GameConstants::getHp(){
@@ -55,7 +55,7 @@ void GameConstants::resetHP(){
 }
 std::string GameConstants::getHPString(){
 	stringstream ss;
-	ss << "HP:\t\t" << playerHP;
+	ss << "HP:   \t\t" << playerHP;
 	return ss.str();
 }
 bool GameConstants::decrementHP(){

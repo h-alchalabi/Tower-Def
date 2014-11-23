@@ -386,8 +386,6 @@ void startGame(){ //TODO
 	}
 	Wave* wave = new Wave();
 	int waveNumber = 1;
-	sf::Font outFont;
-	outFont.loadFromFile(GameConstants::FONT_FILE_PATH);
 
 	towerType = TowerSelection::NA;
 
@@ -406,7 +404,7 @@ void startGame(){ //TODO
 	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
 	towerInfoText.setString("");
 
-	sf::Text pausedText("PAUSED", outFont);
+	sf::Text pausedText("PAUSED", mainFont);
 	pausedText.setColor(sf::Color::White);
 	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
 	pausedText.setPosition(0, 0);
@@ -414,15 +412,22 @@ void startGame(){ //TODO
 	GameConstants::resetMoney();
 	GameConstants::resetHP();
 
-	sf::Text playerMoneyText(GameConstants::getMoneyString(), outFont);
+	sf::Text playerMoneyText(GameConstants::getMoneyString(), mainFont);
 	playerMoneyText.setColor(sf::Color::White);
 	playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
 	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 48);
 
-	sf::Text playerHPText(GameConstants::getHPString(), outFont);
+	sf::Text playerHPText(GameConstants::getHPString(), mainFont);
 	playerHPText.setColor(sf::Color::White);
 	playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
 	playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
+
+	sf::Text waveNumberText("Next Wave:\t1", mainFont);
+	waveNumberText.setColor(sf::Color::White);
+	waveNumberText.setCharacterSize(GameConstants::FONT_SIZE);
+	waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
+
+
 
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
@@ -455,6 +460,9 @@ void startGame(){ //TODO
 																			}
 																			else if (wave->doneWave()){
 																				wave->createWave(waveNumber++);
+																				stringstream ss;
+																				ss << "Next Wave:\t" << waveNumber;
+																				waveNumberText.setString(ss.str());
 																			}
 											   }break;
 											   }
@@ -489,6 +497,7 @@ void startGame(){ //TODO
 			window.draw(sellButton);
 			window.draw(upgradeButtonText);
 			window.draw(sellButtonText);
+			window.draw(waveNumberText);
 			if (wave->isPaused()){
 				window.draw(pausedText);
 			}
