@@ -21,7 +21,7 @@ void editMap();
 bool openMapPrompt(Map* map);
 void handleClick(sf::Event sf_event, Map* map, bool canPlace);
 void init();
-void setTowerInfo(Tower* selectedTower, int mapWidthPixels);
+void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -32,12 +32,13 @@ static TowerSelection::TowerType towerType;
 static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton;
 static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
-static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 32));
-static sf::RectangleShape sellButton(sf::Vector2<float>(64, 32));
+static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 20));
+static sf::RectangleShape sellButton(sf::Vector2<float>(64, 20));
 static sf::Text upgradeButtonText, sellButtonText;
 static sf::Font mainFont;
 static sf::Sprite towerIcon;
 static sf::Text towerInfoText;
+static Tower* currentTower;
 
 int main(){
 
@@ -134,10 +135,12 @@ void init(){
 	sellButton.setPosition(-100, -100);
 
 	upgradeButtonText.setFont(mainFont);
+	upgradeButtonText.setString("UPGRADE");
 	upgradeButtonText.setCharacterSize(GameConstants::FONT_SIZE);
 	upgradeButtonText.setColor(sf::Color::White);
 
 	sellButtonText.setFont(mainFont);
+	sellButtonText.setString("SELL");
 	sellButtonText.setCharacterSize(GameConstants::FONT_SIZE);
 	sellButtonText.setColor(sf::Color::White);
 }
@@ -384,9 +387,14 @@ void startGame(){ //TODO
 
 	towerType = TowerSelection::NA;
 
-	normalTowerButton.setPosition(16, map->getHeight() * 32 + 16);
-	fireTowerButton.setPosition(64, map->getHeight() * 32 + 16);
-	iceTowerButton.setPosition(112, map->getHeight() * 32 + 16);
+	upgradeButton.setPosition(-100, -100);
+	sellButton.setPosition(-100, -100);
+	upgradeButtonText.setPosition(-100, -100);
+	sellButtonText.setPosition(-100, -100);
+
+	normalTowerButton.setPosition(16, map->getHeight() * 32 + 48);
+	fireTowerButton.setPosition(64, map->getHeight() * 32 + 48);
+	iceTowerButton.setPosition(112, map->getHeight() * 32 + 48);
 
 	towerIcon.setPosition(-100, -100);
 	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
@@ -403,12 +411,12 @@ void startGame(){ //TODO
 	sf::Text playerMoneyText(GameConstants::getMoneyString(), outFont);
 	playerMoneyText.setColor(sf::Color::White);
 	playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
-	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 16);
+	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 48);
 
 	sf::Text playerHPText(GameConstants::getHPString(), outFont);
 	playerHPText.setColor(sf::Color::White);
 	playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
-	playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 32);
+	playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
 
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
@@ -470,6 +478,10 @@ void startGame(){ //TODO
 			window.draw(playerMoneyText);
 			playerHPText.setString(GameConstants::getHPString());
 			window.draw(playerHPText);
+			window.draw(upgradeButton);
+			window.draw(sellButton);
+			window.draw(upgradeButtonText);
+			window.draw(sellButtonText);
 			if (wave->isPaused()){
 				window.draw(pausedText);
 			}
@@ -541,20 +553,26 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 	int block_y = (y - (y % 32))/32;
 	cout << "\nx: " << x << "\ny" << y << "\nblock_x: " << block_x << "\nblock_y" << block_y <<endl;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
+		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
+			cout << ">>>>>>>UPGRADE" << endl;
+		}
+		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
+			cout << ">>>>>>>SELL" << endl;
+		}
 		if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::NORMAL;
-			setTowerInfo(new Tower(), map->getWidth() * 32);
+			setTowerInfo(new Tower(), map->getWidth() * 32, false);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::FIRE;
-			setTowerInfo(new FireTower(), map->getWidth() * 32);
+			setTowerInfo(new FireTower(), map->getWidth() * 32, false);
 		}
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::ICE;
-			setTowerInfo(new IceTower(), map->getWidth() * 32);
+			setTowerInfo(new IceTower(), map->getWidth() * 32, false);
 		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
@@ -566,7 +584,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
 		){
-		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), map->getWidth() * 32);
+		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), map->getWidth() * 32, true);
 	}
 	else if (canPlace){
 		switch (towerType){
@@ -591,7 +609,8 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		}
 	}
 }
-void setTowerInfo(Tower* selectedTower, int mapWidthPixels){
+void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
+	currentTower = selectedTower;
 	towerIcon = selectedTower->getSprite();
 	towerIcon.setPosition(mapWidthPixels + 48, 16);
 	string type = "NORMAL";
@@ -612,4 +631,17 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels){
 	ss << "Fire Rate      " << selectedTower->getFireRate() << endl;
 	string temp;
 	towerInfoText.setString(ss.str());
+
+	if (showButtons){
+		upgradeButton.setPosition(mapWidthPixels + 4, 148);
+		sellButton.setPosition(mapWidthPixels + 84, 148);
+		upgradeButtonText.setPosition(upgradeButton.getPosition().x + 4, upgradeButton.getPosition().y + 6);
+		sellButtonText.setPosition(sellButton.getPosition().x + 16, sellButton.getPosition().y + 6);
+	}
+	else {
+		upgradeButton.setPosition(-100, -100);
+		sellButton.setPosition(-100, -100);
+		upgradeButtonText.setPosition(-100, -100);
+		sellButtonText.setPosition(-100, -100);
+	}
 }
