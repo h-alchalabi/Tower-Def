@@ -19,9 +19,9 @@ bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map);
 string getMapList();
 void editMap();
 bool openMapPrompt(Map* map);
-void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon);
+void handleClick(sf::Event sf_event, Map* map, bool canPlace);
 void init();
-void setTowerInfo(Tower* selectedTower, sf::Text& towerInfoText, sf::Sprite& towerIcon, int mapWidthPixels);
+void setTowerInfo(Tower* selectedTower, int mapWidthPixels);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -32,6 +32,12 @@ static TowerSelection::TowerType towerType;
 static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton;
 static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
+static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 32));
+static sf::RectangleShape sellButton(sf::Vector2<float>(64, 32));
+static sf::Text upgradeButtonText, sellButtonText;
+static sf::Font mainFont;
+static sf::Sprite towerIcon;
+static sf::Text towerInfoText;
 
 int main(){
 
@@ -111,8 +117,31 @@ void init(){
 
 	towerType = TowerSelection::NA;
 
+
+	mainFont.loadFromFile(GameConstants::FONT_FILE_PATH);
+
+	towerInfoText.setFont(mainFont);
+	towerInfoText.setColor(sf::Color::White);
+	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
+
 	towerSelectionRect.setFillColor(sf::Color::Yellow);
+	towerSelectionRect.setPosition(-100, -100);
+
+	upgradeButton.setFillColor(sf::Color::Green);
+	upgradeButton.setPosition(-100, -100);
+
+	sellButton.setFillColor(sf::Color::Red);
+	sellButton.setPosition(-100, -100);
+
+	upgradeButtonText.setFont(mainFont);
+	upgradeButtonText.setCharacterSize(GameConstants::FONT_SIZE);
+	upgradeButtonText.setColor(sf::Color::White);
+
+	sellButtonText.setFont(mainFont);
+	sellButtonText.setCharacterSize(GameConstants::FONT_SIZE);
+	sellButtonText.setColor(sf::Color::White);
 }
+
 
 void createMap(){
 	int width, height;
@@ -166,10 +195,7 @@ void createMap(){
 
 	Map* map = new Map(width, height);
 
-	sf::Font outFont;
-	outFont.loadFromFile(GameConstants::FONT_FILE_PATH);
-
-	sf::Text outText("", outFont);
+	sf::Text outText("", mainFont);
 	outText.setColor(sf::Color::White);
 	outText.setCharacterSize(GameConstants::FONT_SIZE);
 	outText.setPosition(0, map->getHeight() * 32);
@@ -362,16 +388,14 @@ void startGame(){ //TODO
 	fireTowerButton.setPosition(64, map->getHeight() * 32 + 16);
 	iceTowerButton.setPosition(112, map->getHeight() * 32 + 16);
 
+	towerIcon.setPosition(-100, -100);
+	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
+	towerInfoText.setString("");
+
 	sf::Text pausedText("PAUSED", outFont);
 	pausedText.setColor(sf::Color::White);
 	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
 	pausedText.setPosition(0, 0);
-
-	sf::Sprite towerIcon;
-	sf::Text towerInfoText("", outFont);
-	towerInfoText.setColor(sf::Color::White);
-	towerInfoText.setCharacterSize(GameConstants::FONT_SIZE);
-	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
 
 	GameConstants::resetMoney();
 	GameConstants::resetHP();
@@ -424,7 +448,7 @@ void startGame(){ //TODO
 				case sf::Event::MouseButtonPressed:{
 													   cout << "here - click: " << sf_event.mouseButton.button << " - " << sf::Mouse::Button::Left << endl;
 													   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-														   handleClick(sf_event, map, wave->doneWave(), towerInfoText, towerIcon);
+														   handleClick(sf_event, map, wave->doneWave());
 													   }
 				} break;
 				}
@@ -509,7 +533,7 @@ string getMapList(){
 	}
 	return fileList;
 }
-void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInfoText, sf::Sprite& towerIcon){
+void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
@@ -520,17 +544,17 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::NORMAL;
-			setTowerInfo(new Tower(), towerInfoText, towerIcon, map->getWidth() * 32);
+			setTowerInfo(new Tower(), map->getWidth() * 32);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::FIRE;
-			setTowerInfo(new FireTower(), towerInfoText, towerIcon, map->getWidth() * 32);
+			setTowerInfo(new FireTower(), map->getWidth() * 32);
 		}
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::ICE;
-			setTowerInfo(new IceTower(), towerInfoText, towerIcon, map->getWidth() * 32);
+			setTowerInfo(new IceTower(), map->getWidth() * 32);
 		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
@@ -542,7 +566,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
 		){
-		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), towerInfoText, towerIcon, map->getWidth() * 32);
+		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), map->getWidth() * 32);
 	}
 	else if (canPlace){
 		switch (towerType){
@@ -567,7 +591,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, sf::Text& towerInf
 		}
 	}
 }
-void setTowerInfo(Tower* selectedTower, sf::Text& towerInfoText, sf::Sprite& towerIcon, int mapWidthPixels){
+void setTowerInfo(Tower* selectedTower, int mapWidthPixels){
 	towerIcon = selectedTower->getSprite();
 	towerIcon.setPosition(mapWidthPixels + 48, 16);
 	string type = "NORMAL";
