@@ -335,9 +335,15 @@ void editMap(){
 	if (!openMapPrompt(map)){
 		return;
 	}
-	
-	bool resizing = false; 
-	bool changingPath = false;
+	string mapName = map->getMapName();
+	bool onMenu = true;
+	bool changePath = false;
+	bool resizeMap = false;
+	bool makingPath = false;
+	bool newPath = false;
+	bool canEnd = false;
+
+	int current_x = 0, current_y = 0, start_x = 0, start_y = 0;
 
 	string mainEditString = "R - Resize Map\nC - Change Path\nQ - Quit";
 	string resizingString = "Up - Add Row Above\nDown - Add Row Below\nLeft - Add Column To Left\nRight - Add Column To Right";
@@ -346,7 +352,7 @@ void editMap(){
 	sf::Text instructionText(mainEditString, mainFont);
 	instructionText.setCharacterSize(GameConstants::FONT_SIZE);
 	instructionText.setColor(sf::Color::White);
-	instructionText.setPosition(4, map->getHeight() * 32 + 4);
+	instructionText.setPosition(4, GameConstants::MAX_HEIGHT * 32 + 4);
 
 	sf::RenderWindow window(sf::VideoMode(GameConstants::MAX_WIDTH * 32, GameConstants::MAX_HEIGHT * 32 + 96), "Edit a Map");
 	window.setKeyRepeatEnabled(false);
@@ -360,54 +366,124 @@ void editMap(){
 			case sf::Event::KeyPressed:{
 										   switch (sf_event.key.code){
 										   case sf::Keyboard::R:{
-																	if (changingPath){
-																		// restartMap
+																	if (changePath){
+																		map = new Map(map->getWidth(), map->getHeight());
+																		map->setMapName(mapName);
+																		changePath = false;
+																		newPath = true;
 																	}
-																	else{
-																		resizing = true;
+																	else if(onMenu){
+																		onMenu = false;
+																		resizeMap = true;
 																	}
 										   } break;
 										   case sf::Keyboard::C:{
-																	changingPath = true;
+																	if (onMenu){
+																		onMenu = false;
+																		changePath = true;
+																	}
 										   } break;
 										   case sf::Keyboard::Q:{
-																	window.close();
+																	if (resizeMap){
+																		resizeMap = false;
+																		onMenu = true;
+																	}
+																	else if(onMenu){
+																		window.close();
+																	}
+										   } break;
+										   case sf::Keyboard::E:{
+																	if (makingPath && canEnd){
+																		makingPath = false;
+																		canEnd = false;
+																		onMenu = true;
+																		map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
+																	}
 										   } break;
 										   case sf::Keyboard::Up:{
-																	 if (resizing && map->getHeight() < GameConstants::MAX_HEIGHT){
+																	 if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT){
 																		 map->resize(map->getWidth(), map->getHeight() + 1, false, true);
+																	 }
+																	 else if(makingPath){
+																		 if (canMove(current_x, current_y, current_x, current_y - 1, map)){
+																			 --current_y;
+																			 map->addEntity(current_x, current_y, new Path());
+																			 canEnd = true;
+																		 }
 																	 }
 										   } break;
 										   case sf::Keyboard::Down:{
-																	   if (resizing && map->getHeight() < GameConstants::MAX_HEIGHT){
+																	   if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT){
 																		   map->resize(map->getWidth(), map->getHeight() + 1, false, false);
+																	   }
+																	   else if (makingPath){
+																		   if (canMove(current_x, current_y, current_x, current_y + 1, map)){
+																			   ++current_y;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canEnd = true;
+																		   }
 																	   }
 										   } break;
 										   case sf::Keyboard::Left:{
-																	   if (resizing && map->getWidth() < GameConstants::MAX_WIDTH){
+																	   if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH){
 																		   map->resize(map->getWidth() + 1, map->getHeight(), true, false);
-																		   
+																	   }
+																	   else if (makingPath){
+																		   if (canMove(current_x, current_y, current_x - 1, current_y, map)){
+																			   --current_x;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canEnd = true;
+																		   }
 																	   }
 										   } break;
 										   case sf::Keyboard::Right:{
-																		if (resizing && map->getWidth() < GameConstants::MAX_WIDTH){
+																		if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH){
 																			map->resize(map->getWidth() + 1, map->getHeight(), false, false);
+																		}
+																		else if (makingPath){
+																			if (canMove(current_x, current_y, current_x + 1, current_y, map)){
+																				++current_x;
+																				map->addEntity(current_x, current_y, new Path());
+																				canEnd = true;
+																			}
 																		}
 										   } break;
 										   }
+			} break;
+			case sf::Event::MouseButtonPressed:{
+												   if (sf_event.mouseButton.button == sf::Mouse::Left){
+													   int block_x = sf_event.mouseButton.x / 32;
+													   int block_y = sf_event.mouseButton.y / 32;
+													   if (map->inBounds(block_x, block_y)){
+														   if (newPath){
+															   map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME));
+															   current_x = start_x = block_x;
+															   current_y = start_y = block_y;
+															   newPath = false;
+															   makingPath = true;
+														   }
+														   else if (changePath && typeid(*map->getEntity(block_x, block_y)) == typeid(Path)){
+															   // reset path and re-make map somehow. . . 
+															   current_x = start_x = block_x;
+															   current_y = start_y = block_y;
+															   changePath = false;
+															   makingPath = true;
+														   }
+													   }
+												   }
 			} break;
 			}
 		}
 
 		window.clear();
 		map->printMap(window);
-		if (resizing){
+		if (resizeMap){
 			instructionText.setString(resizingString);
 		}
-		else if (changingPath){
+		else if (changePath){
 			instructionText.setString(changePathString1);
 		}
-		else{
+		else if (onMenu){
 			instructionText.setString(mainEditString);
 		}
 		window.draw(instructionText);

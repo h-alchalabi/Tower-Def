@@ -58,5 +58,6 @@ public:
 	int numOfNeighborPaths(int x, int y);
 	std::vector<int> getPath();
 	int getPathSteps();
+	void setMapName(std::string filename);
 	std::string getMapName();
 };

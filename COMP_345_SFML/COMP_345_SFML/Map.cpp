@@ -378,6 +378,9 @@ void Map::resize(int newWidth, int newHeight, bool fromLeft, bool fromTop){
 	this->width = newWidth;
 	this->height = newHeight;
 }
+void Map::setMapName(std::string filename){
+	this->mapName = filename;
+}
 std::string Map::getMapName(){
 	return this->mapName;
 }
