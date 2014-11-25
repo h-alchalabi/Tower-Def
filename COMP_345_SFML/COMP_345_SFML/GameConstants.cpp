@@ -5,6 +5,11 @@
 
 using namespace std;
 
+const int GameConstants::TOTAL_NUMBER_OF_WAVES = 9;
+const int GameConstants::MIN_WIDTH = 5;
+const int GameConstants::MIN_HEIGHT = 5;
+const int GameConstants::MAX_WIDTH = 16;
+const int GameConstants::MAX_HEIGHT = 16;
 const string GameConstants::START_IMAGE_NAME = "start";
 const string GameConstants::END_IMAGE_NAME = "end";
 const string GameConstants::PATH_IMAGE_NAME = "path";
@@ -40,7 +45,7 @@ bool GameConstants::collectMoney(int amount){
 	return true;
 }
 void GameConstants::resetMoney(){
-	money = 400;
+	money = 4000;
 }
 std::string GameConstants::getMoneyString(){
 	stringstream ss;
@@ -66,5 +71,5 @@ bool GameConstants::decrementHP(){
 	--playerHP;
 	return true;
 }
-int GameConstants::money = 400;
+int GameConstants::money = 4000;
 int GameConstants::playerHP = 20;

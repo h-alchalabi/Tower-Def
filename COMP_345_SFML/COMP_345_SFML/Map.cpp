@@ -80,7 +80,6 @@ bool Map::addEntity(int x, int y, Path* path){
 	if (path->getImageName() == GameConstants::END_IMAGE_NAME && typeid(*theMap[x][y]) == typeid(Path)){
 		theMap[x][y] = path;
 		theMap[x][y]->setPosition((x * 32), (y * 32));
-		std::cout << "je suis ici" << std::endl;
 		this->end_x = x;
 		this->end_y = y;
 		return true;
@@ -140,8 +139,8 @@ void Map::removeEntity(Path* path){
 }
 
 void Map::printMap(sf::RenderWindow& window){
-	for (int i = 0; i < this->width; ++i){
-		for (int j = 0; j < this->height; ++j){
+	for (int i = 0; i < theMap.size(); ++i){
+		for (int j = 0; j < theMap[i].size(); ++j){
 			window.draw(theMap[i][j]->getSprite());
 		}
 	}
@@ -168,19 +167,22 @@ bool Map::saveMap(std::string fileName, bool overwrite){
 		return false;
 	}
 	else {
-		std::cout << "swagger" << std::endl;
-		file.open("res/info/maps/" + fileName + "_map.txt", ios::out);
+		file.close();
+		this->mapName = fileName;
+		file.open("res/info/maps/" + fileName + "_map.txt", ios::out | ios::trunc);
+
 		// iterate thru j then i, becasue we are writing the file line by line
 		// and j represents the line number.
 		for (int j = 0; j < this->height; ++j){
 			for (int i = 0; i < this->width; ++i){
-				if (i == this->start_x && j == this->start_y){
+				if (theMap[i][j]->getImageName() == GameConstants::START_IMAGE_NAME){
 					file << "S";
+				
 				}
-				else if (i == this->end_x && j == this->end_y){
+				else if (theMap[i][j]->getImageName() == GameConstants::END_IMAGE_NAME){
 					file << "E";
 				}
-				else if (typeid(*theMap[i][j]) == typeid(Path) || typeid(*theMap[i][j]) == typeid(Critter)){
+				else if (typeid(*theMap[i][j]) == typeid(Path)){
 					file << "P";
 				}
 				else {
@@ -190,18 +192,19 @@ bool Map::saveMap(std::string fileName, bool overwrite){
 			file << std::endl;
 		}
 		file.close();
-		file.open("res/info/paths/" + fileName + "_path.txt", ios::out);
+		file.open("res/info/paths/" + fileName + "_path.txt", ios::out | ios::trunc);
 		for (int i = 0; i < thePath.size(); i += 2){
 			file << thePath[i] << "," << thePath[i + 1] << std::endl;
 		}
-		file.close();
 	}
+	file.close();
 	return true;
 }
 bool Map::loadMap(std::string fileName){
 	std::fstream file;
 	file.open("res/info/maps/" + fileName + "_map.txt");
 	if (file){
+		this->mapName = fileName;
 		// get the width & height of the map
 		this->height = 0;
 		std::string line, token;
@@ -263,15 +266,6 @@ bool Map::loadMap(std::string fileName){
 }
 bool Map::inBounds(int x, int y){
 	return (x >= 0 && x < this->width && y >= 0 && y < this->height);
-}
-/*
-Scenarios for Update:
-
-WHAAAAAAA!?!?!?
-
-*/
-void Map::update(){ //TODO
-
 }
 // getters and setters
 void Map::setWidth(int width){
@@ -337,4 +331,53 @@ std::vector<int> Map::getPath(){
 }
 int Map::getPathSteps(){
 	return pathSteps;
+}
+void Map::resize(int newWidth, int newHeight, bool fromLeft, bool fromTop){
+	if (newWidth < this->width || newHeight < this->height){
+		return;
+	}
+	int columnsToAdd = newWidth - this->width;
+	int rowsToAdd = newHeight - this->height;
+	if (fromLeft || fromTop){
+		for (int i = 0; i < thePath.size(); i += 2){
+			if (fromLeft){
+				thePath[i] += columnsToAdd;
+			}
+			if (fromTop){
+				thePath[i + 1] += rowsToAdd;
+			}
+		}
+	}
+	for (int x = 0; x < newWidth; ++x){
+		if (fromLeft && columnsToAdd > 0){
+			theMap.insert(theMap.begin() + 0, vector<Entity*>());
+			theMap[x].resize(this->height);
+			--columnsToAdd;
+		}
+		else if (!fromLeft && columnsToAdd > 0 && x == theMap.size()){
+			theMap.insert(theMap.begin() + x, vector<Entity*>());
+			theMap[x].resize(this->height);
+			--columnsToAdd;
+		}
+		rowsToAdd = newHeight - this->height;
+		for (int y = 0; y < newHeight; ++y){
+			if (fromTop && rowsToAdd > 0){
+				theMap[x].insert(theMap[x].begin() + 0, new Scenery());
+				--rowsToAdd;
+			}
+			else if (!fromTop && rowsToAdd > 0 && y == theMap[x].size()){
+				theMap[x].insert(theMap[x].begin() + y, new Scenery());
+				--rowsToAdd;
+			}
+			else if (theMap[x][y] == NULL){
+				theMap[x][y] = new Scenery();
+			}
+			theMap[x][y]->setPosition(x * 32, y * 32);
+		}
+	}
+	this->width = newWidth;
+	this->height = newHeight;
+}
+std::string Map::getMapName(){
+	return this->mapName;
 }

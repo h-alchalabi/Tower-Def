@@ -22,6 +22,9 @@ bool openMapPrompt(Map* map);
 void handleClick(sf::Event sf_event, Map* map, bool canPlace);
 void init();
 void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons);
+bool saveMapPrompt(Map* map, bool overwrite);
+void resizeMap(Map* map);
+void changeMapPath(Map* map);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -159,7 +162,7 @@ void createMap(){
 		cout << "\tCreating a Map\n";
 		cout << "--------------------------------------------------\n\n";
 		cout << errMsg << endl << endl;
-		cout << "Please enter the width of the map(min: 5, max: 16): ";
+		cout << "Please enter the width of the map(min: " << GameConstants::MIN_WIDTH << ", max: " << GameConstants::MAX_WIDTH << "): ";
 		errMsg = "";
 		try{
 			cin >> width;
@@ -168,11 +171,13 @@ void createMap(){
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 			continue;
 		}
-		if (width >= 5 && width <= 16){
+		if (width >= GameConstants::MIN_WIDTH && width <= GameConstants::MAX_WIDTH){
 			break;
 		}
 		else{
-			errMsg = "***** Width must be between 5 and 16 [inclusive]. *****";
+			stringstream ss;
+			ss << "***** Width must be between " << GameConstants::MIN_WIDTH << " and " << GameConstants::MAX_WIDTH << " [inclusive]. *****";
+			errMsg = ss.str();
 		}
 	}
 	while (true){
@@ -181,7 +186,7 @@ void createMap(){
 		cout << "\tCreating a Map\n";
 		cout << "--------------------------------------------------\n\n";
 		cout << errMsg << endl << endl;
-		cout << "Please enter the height of the map(min: 5, max: 16): ";
+		cout << "Please enter the height of the map(min: " << GameConstants::MIN_HEIGHT << ", max: " << GameConstants::MAX_HEIGHT << "): ";
 		errMsg = "";
 		try{
 			cin >> height;
@@ -190,11 +195,13 @@ void createMap(){
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 			continue;
 		}
-		if (height >= 5 && height <= 16){
+		if (height >= GameConstants::MIN_HEIGHT && height <= GameConstants::MAX_HEIGHT){
 			break;
 		}
 		else{
-			errMsg = "***** Height must be between 5 and 16 [inclusive]. *****";
+			stringstream ss;
+			ss << "***** Height must be between " << GameConstants::MIN_HEIGHT << " and " << GameConstants::MAX_HEIGHT << " [inclusive]. *****";
+			errMsg = ss.str();
 		}
 	}
 
@@ -310,7 +317,7 @@ void createMap(){
 		window.display();
 	}
 	window.close();
-	string fileName = "";
+	string dump = "";
 	if (!map->validateMap()){
 		system("cls");
 		cout << "------------------------------------\n";
@@ -318,58 +325,101 @@ void createMap(){
 		cout << "-----------------------------------\n\n";
 		cout << "Invalid map. Cannot be saved.\n";
 		cout << "Enter any value to continue . . .";
-		cin >> fileName;
+		cin >> dump;
 		return;
 	}
-	char input;
-	while (true){
-		system("cls");
-		cout << "------------------------------------\n";
-		cout << "\tCreating a Map\n";
-		cout << "-----------------------------------\n\n";
-		cout << errMsg << endl << endl;
-		cout << "would you like to save this map? (y/n): ";
-		cin >> input;
-		errMsg = "";
-		if (input == 'n' || input == 'y'){
-			break;
-		}
-		else{
-			errMsg = "***** Invalid Input. Please Try Again. *****";
-		}
-	}
-	if (input == 'n'){
+	saveMapPrompt(map, false);
+}
+void editMap(){
+	Map* map = new Map();
+	if (!openMapPrompt(map)){
 		return;
 	}
-	errMsg = "";
-	while (true){
-		system("cls");
-		cout << "------------------------------------\n";
-		cout << "\tCreating a Map\n";
-		cout << "-----------------------------------\n\n";
-		cout << errMsg << endl << endl;
-		cout << "Enter the file name for this map (no spaces): ";
-		cin >> fileName;
-		errMsg = "";
-		if (map->saveMap(fileName, false)){
-			break;
+	
+	bool resizing = false; 
+	bool changingPath = false;
+
+	string mainEditString = "R - Resize Map\nC - Change Path\nQ - Quit";
+	string resizingString = "Up - Add Row Above\nDown - Add Row Below\nLeft - Add Column To Left\nRight - Add Column To Right";
+	string changePathString1 = "Select a point along your path to start editing.\nTo restart the path, press R.";
+
+	sf::Text instructionText(mainEditString, mainFont);
+	instructionText.setCharacterSize(GameConstants::FONT_SIZE);
+	instructionText.setColor(sf::Color::White);
+	instructionText.setPosition(4, map->getHeight() * 32 + 4);
+
+	sf::RenderWindow window(sf::VideoMode(GameConstants::MAX_WIDTH * 32, GameConstants::MAX_HEIGHT * 32 + 96), "Edit a Map");
+	window.setKeyRepeatEnabled(false);
+	while (window.isOpen()){
+		sf::Event sf_event;
+		while (window.pollEvent(sf_event)){
+			switch (sf_event.type){
+			case sf::Event::Closed:{
+									   window.close();
+			} break;
+			case sf::Event::KeyPressed:{
+										   switch (sf_event.key.code){
+										   case sf::Keyboard::R:{
+																	if (changingPath){
+																		// restartMap
+																	}
+																	else{
+																		resizing = true;
+																	}
+										   } break;
+										   case sf::Keyboard::C:{
+																	changingPath = true;
+										   } break;
+										   case sf::Keyboard::Q:{
+																	window.close();
+										   } break;
+										   case sf::Keyboard::Up:{
+																	 if (resizing && map->getHeight() < GameConstants::MAX_HEIGHT){
+																		 map->resize(map->getWidth(), map->getHeight() + 1, false, true);
+																	 }
+										   } break;
+										   case sf::Keyboard::Down:{
+																	   if (resizing && map->getHeight() < GameConstants::MAX_HEIGHT){
+																		   map->resize(map->getWidth(), map->getHeight() + 1, false, false);
+																	   }
+										   } break;
+										   case sf::Keyboard::Left:{
+																	   if (resizing && map->getWidth() < GameConstants::MAX_WIDTH){
+																		   map->resize(map->getWidth() + 1, map->getHeight(), true, false);
+																		   
+																	   }
+										   } break;
+										   case sf::Keyboard::Right:{
+																		if (resizing && map->getWidth() < GameConstants::MAX_WIDTH){
+																			map->resize(map->getWidth() + 1, map->getHeight(), false, false);
+																		}
+										   } break;
+										   }
+			} break;
+			}
+		}
+
+		window.clear();
+		map->printMap(window);
+		if (resizing){
+			instructionText.setString(resizingString);
+		}
+		else if (changingPath){
+			instructionText.setString(changePathString1);
 		}
 		else{
-			errMsg = "***** File Already Exists. Please Try Again. *****";
+			instructionText.setString(mainEditString);
 		}
+		window.draw(instructionText);
+		window.display();
 	}
-
-	system("cls");
-	cout << "------------------------------------\n";
-	cout << "\tCreating a Map\n";
-	cout << "-----------------------------------\n\n";
-	cout << "Map Saved as: \"" << fileName << "\".\n";
-	cout << "Enter any value to continue . . .";
-	cin >> fileName;
+	saveMapPrompt(map, true);
 }
-void editMap(){ //TODO
-
-}
+/*
+Critters stop at wave 9
+Decrement user HP && check if User be dead.
+Tower Firing, scoring etc...
+*/
 void startGame(){ //TODO
 	Map* map = new Map();
 	string scrap;
@@ -436,8 +486,7 @@ void startGame(){ //TODO
 		while (window.isOpen() && !doneGame)
 		{
 			sf::Event sf_event;
-			while (window.pollEvent(sf_event))
-			{
+			while (window.pollEvent(sf_event)){
 				switch (sf_event.type){
 				case sf::Event::Closed:{
 										   window.close();
@@ -674,4 +723,66 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
 		upgradeButtonText.setPosition(-100, -100);
 		sellButtonText.setPosition(-100, -100);
 	}
+}
+
+void resizeMap(Map* map){
+
+}
+void changeMapPath(Map* map){
+
+}
+bool saveMapPrompt(Map* map, bool overwrite){
+	string errMsg = "", fileName = "";
+	char input;
+	while (true){
+		system("cls");
+		cout << "------------------------------------\n";
+		cout << "\tSaving Map\n";
+		cout << "-----------------------------------\n\n";
+		cout << errMsg << endl << endl;
+		cout << "would you like to save this map? (y/n): ";
+		cin >> input;
+		errMsg = "";
+		if (input == 'n' || input == 'y'){
+			break;
+		}
+		else{
+			errMsg = "***** Invalid Input. Please Try Again. *****";
+		}
+	}
+	if (input == 'n'){
+		return false;
+	}
+	errMsg = "";
+	if (overwrite){
+		int p;
+		cout<< map->saveMap(map->getMapName(), true);
+		cin >> p;
+		return true;
+	}
+	while (true){
+		system("cls");
+		cout << "------------------------------------\n";
+		cout << "\tSaving Map\n";
+		cout << "-----------------------------------\n\n";
+		cout << errMsg << endl << endl;
+		cout << "Enter the file name for this map (no spaces): ";
+		cin >> fileName;
+		errMsg = "";
+		if (map->saveMap(fileName, false)){
+			break;
+		}
+		else{
+			errMsg = "***** File Already Exists. Please Try Again. *****";
+		}
+	}
+
+	system("cls");
+	cout << "------------------------------------\n";
+	cout << "\tSaving Map\n";
+	cout << "-----------------------------------\n\n";
+	cout << "Map Saved as: \"" << fileName << "\".\n";
+	cout << "Enter any value to continue . . .";
+	cin >> fileName;
+	return true;
 }

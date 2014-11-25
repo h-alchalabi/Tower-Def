@@ -7,6 +7,11 @@ using namespace std;
 class GameConstants{
 public:
 	// Constants
+	static const int TOTAL_NUMBER_OF_WAVES;
+	static const int MIN_WIDTH;
+	static const int MIN_HEIGHT;
+	static const int MAX_WIDTH;
+	static const int MAX_HEIGHT;
 	static const string START_IMAGE_NAME;
 	static const string END_IMAGE_NAME;
 	static const string PATH_IMAGE_NAME;

@@ -22,6 +22,7 @@ private:
 	sf::Image mapImage;
 	void resizeMap();
 	int pathSteps;
+	std::string mapName;
 public:
 	~Map();
 	Map();
@@ -38,7 +39,7 @@ public:
 	bool saveMap(std::string fileName, bool overwrite);
 	bool loadMap(std::string fileName);
 	bool inBounds(int x, int y);
-	void update();
+	void resize(int newWidth, int newHeight, bool fromLeft, bool fromTop);
 
 	// getters and setters
 	void setWidth(int width);
@@ -57,4 +58,5 @@ public:
 	int numOfNeighborPaths(int x, int y);
 	std::vector<int> getPath();
 	int getPathSteps();
+	std::string getMapName();
 };
