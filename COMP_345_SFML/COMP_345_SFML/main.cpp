@@ -8,6 +8,7 @@
 #include "IceTower.h"
 #include "NormalTower.h"
 #include "DecoratedTower.h"
+#include "LevelUpTower.h"
 #include "Wave.h"
 #include "dirent.h"
 #include <sstream>
@@ -709,7 +710,14 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 	int block_y = (y - (y % 32))/32;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
 		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
-			cout << ">>>>>>>UPGRADE" << endl;
+			if (GameConstants::spendMoney(currentTower->getUpgradePrice())){
+				map->removeEntity(currentTower);
+				int old_x = currentTower->getSprite().getPosition().x / 32;
+				int old_y = currentTower->getSprite().getPosition().y / 32;
+				currentTower = new  LevelUpTower(currentTower);
+				map->addEntity(old_x, old_y, currentTower);
+				setTowerInfo(currentTower, map->getWidth() * 32, true);
+			}
 		}
 		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
 			map->removeEntity(currentTower);
@@ -751,9 +759,11 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 	}
 	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(NormalTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
-		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
+		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower) ||
+		typeid(*(map->getEntity(block_x, block_y))) == typeid(LevelUpTower)
 		){
-		setTowerInfo((Tower*)(map->getEntity(block_x, block_y)), map->getWidth() * 32, true);
+		currentTower = (Tower*)map->getEntity(block_x, block_y);
+		setTowerInfo(currentTower, map->getWidth() * 32, true);
 	}
 	else if (canPlace){
 		switch (towerType){
@@ -783,10 +793,10 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
 	towerIcon = selectedTower->getSprite();
 	towerIcon.setPosition(mapWidthPixels + 48, 16);
 	string type = "NORMAL";
-	if (typeid(*selectedTower) == typeid(FireTower)){
+	if (selectedTower->getImageName() == GameConstants::FIRE_TOWER_IMAGE_NAME){
 		type = "FIRE";
 	}
-	else if (typeid(*selectedTower) == typeid(IceTower)){
+	else if (selectedTower->getImageName() == GameConstants::ICE_TOWER_IMAGE_NAME){
 		type = "ICE";
 	}
 	stringstream ss;
