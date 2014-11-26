@@ -12,8 +12,8 @@ public:
 	Wave();
 	~Wave();
 	void createWave(int wave);
-	void deploy(Map* map);
-	void move(Map* map);
+	bool deploy(Map* map);
+	bool move(Map* map);
 	void pauseWave();
 	void resumeWave();
 	bool doneWave();

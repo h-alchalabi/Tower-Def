@@ -618,7 +618,9 @@ void startGame(){ //TODO
 								}
 							window.clear();
 			if (!wave->doneWave()){
-				wave->deploy(map);
+				if (!wave->deploy(map)) {
+					doneGame = true;
+				}
 			}
 			map->printMap(window);
 			window.draw(towerIcon);

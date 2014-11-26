@@ -46,7 +46,7 @@ void Wave::createWave(int wave){
 	}
 }
 
-void Wave::deploy(Map* map){//To deploy the critters and to move them.
+bool Wave::deploy(Map* map){//To deploy the critters and to move them.
 	sf::Time currTime = this->deployClock->getElapsedTime();
 	if (!paused && (deployClock->getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds()) >= 200){//if we have already deployed all the critters than simply move them
 		deployClock->restart();
@@ -55,12 +55,16 @@ void Wave::deploy(Map* map){//To deploy the critters and to move them.
 			++critterDeployed;
 		}
 		launchCritter = !launchCritter;
-		move(map); // move all the appearing critters.
+		if (!move(map)) {
+			// move all the appearing critters.
+			return false;
+		}
 	}
-	
+
+	return true;
 }
 
-void Wave::move(Map* map){//moving all critters
+bool Wave::move(Map* map){//moving all critters
 	for (int i = 0; i < critterDeployed && i < critVec.size(); ++i){
 		int currStep = critVec.at(i)->getStep();
 		if (currStep > 0){
@@ -76,9 +80,15 @@ void Wave::move(Map* map){//moving all critters
 			critVec.shrink_to_fit();
 			--critterDeployed;
 			--i;
+			GameConstants::decrementHP();
+			if (GameConstants::getHp() == 0) {
+				return false;
+			}
 		}
 		
 	}
+
+	return true;
 } 
 void Wave::pauseWave(){
 	this->paused = true;
