@@ -718,6 +718,8 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 				map->addEntity(old_x, old_y, currentTower);
 				setTowerInfo(currentTower, map->getWidth() * 32, true);
 			}
+			towerSelectionRect.setPosition(-40, -40);
+			towerType = TowerSelection::NA;
 		}
 		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
 			map->removeEntity(currentTower);
@@ -764,6 +766,8 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		){
 		currentTower = (Tower*)map->getEntity(block_x, block_y);
 		setTowerInfo(currentTower, map->getWidth() * 32, true);
+		towerSelectionRect.setPosition(-40, -40);
+		towerType = TowerSelection::NA;
 	}
 	else if (canPlace){
 		switch (towerType){
