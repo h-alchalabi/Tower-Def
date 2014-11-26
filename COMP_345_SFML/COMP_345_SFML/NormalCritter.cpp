@@ -3,7 +3,7 @@
 
 NormalCritter::NormalCritter(int level) : Critter(GameConstants::NORMAL_CRITTER_IMAGE_NAME){
 	this->level = level;
-	this->maxHP = this->HP = 5*level;
+	this->maxHP = this->HP = 50*level;
 	this->speed = 2;
 	this->reward = 1*level;
 

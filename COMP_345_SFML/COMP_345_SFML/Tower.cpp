@@ -1,94 +1,11 @@
 #include "Tower.h"
 #include "GameConstants.h"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){}
-//Tower::Tower(int damage, int range, int fireRate, int basePrice, int sellPrice,
-//	int upgradedPrice, string towerImageName) : Entity(towerImageName) {
-//	this->x = 0;
-//	this->y = 0;
-//	this->level = 1;
-//	this->damage = damage;
-//	this->range = range;
-//	this->fireRate = fireRate;
-//	this->basePrice = basePrice;
-//	this->sellPrice = sellPrice;
-//	this->upgradedPrice = upgradedPrice;
-//}
-
-//int Tower::getX() {
-//	return x;
-//}
-//
-//int Tower::getY() {
-//	return y;
-//}
-//
-//int Tower::getLevel() {
-//	return level;
-//}
-//
-//int Tower::getDamage() {
-//	return damage;
-//}
-//
-//int Tower::getRange() {
-//	return range;
-//}
-//
-//int Tower::getFireRate() {
-//	return fireRate;
-//}
-//
-//int Tower::getBasePrice() {
-//	return basePrice;
-//}
-//
-//int Tower::getSellPrice() {
-//	return sellPrice;
-//}
-//
-//int Tower::getUpgradePrice() {
-//	return upgradedPrice;
-//}
-//
-//void Tower::setX(int x) {
-//	this->x = x;
-//}
-//
-//void Tower::setY(int y) {
-//	this->y = y;
-//}
-//
-//void Tower::setLevel(int level) {
-//	this->level = level;
-//}
-//
-//void Tower::setDamage(int damage) {
-//	this->damage = damage;
-//}
-//
-//void Tower::setRange(int range) {
-//	this->range = range;
-//}
-//
-//void Tower::setFireRate(int fireRate) {
-//	this->fireRate = fireRate;
-//}
-//
-//void Tower::setBasePrice(int basePrice) {
-//	this->basePrice = basePrice;
-//}
-//
-//void Tower::setSellPrice(int sellPrice) {
-//	this->sellPrice = sellPrice;
-//}
-//
-//void Tower::setUpgradedPrice(int upgradedPrice) {
-//	this->upgradedPrice = upgradedPrice;
-//}
 
 string Tower::to_string() {
 	stringstream ss;
@@ -102,4 +19,48 @@ string Tower::to_string() {
 	ss << "Fire Rate:\t\t" << getFireRate() << endl;
 	string str = ss.str();
 	return str;
+}
+
+void Tower::attack(std::vector<Critter*> critterList){
+	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > 2000 && !paused){
+		towerClock.restart();
+	}
+	else{
+		return;
+	}
+	int closestDistTower = numeric_limits<int>::max();  //The closest distance to the tower
+	int closestCritterTowerIndex = -1;
+	int towerX = this->getSprite().getPosition().x + this->getSprite().getLocalBounds().width / 2;
+	int towerY = this->getSprite().getPosition().y + this->getSprite().getLocalBounds().height / 2;
+	for (int i = 0; i < critterList.size(); i++) {
+		int critterX = critterList[i]->getSprite().getPosition().x + critterList[i]->getSprite().getLocalBounds().width / 2;
+		int critterY = critterList[i]->getSprite().getPosition().y + critterList[i]->getSprite().getLocalBounds().height / 2;
+
+		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + (critterY - towerY, 2)));
+		if (distanceFromTower <= this->getRange()) {
+
+			if (closestDistTower > distanceFromTower) {
+				//Updating the closest critter to the tower in the tower's range
+				closestDistTower = distanceFromTower;
+				closestCritterTowerIndex = i;
+			}
+		}
+
+	}
+	if (closestCritterTowerIndex != -1){
+		this->shoot(critterList[closestCritterTowerIndex]);
+		std::cout << "Hit critter: " << closestCritterTowerIndex << std::endl;
+	}
+}
+void Tower::pause(){
+	this->paused = true;
+	this->pauseStartTime = towerClock.getElapsedTime();
+}
+void Tower::resume(){
+	this->paused = false;
+	this->pauseEndTime = towerClock.getElapsedTime();
+	this->pausedTime += pauseEndTime - pauseStartTime;
+}
+bool Tower::isPaused(){
+	return paused;
 }

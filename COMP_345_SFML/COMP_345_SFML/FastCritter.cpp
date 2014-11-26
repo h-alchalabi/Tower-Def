@@ -3,7 +3,7 @@
 
 FastCritter::FastCritter(int level) : Critter(GameConstants::FAST_CRITTER_IMAGE_NAME){
 	this->level = level;
-	this->maxHP= this->HP = 3*level;
+	this->maxHP= this->HP = 30*level;
 	this->reward = 1 * level;
 	this->speed = 3;
 	}

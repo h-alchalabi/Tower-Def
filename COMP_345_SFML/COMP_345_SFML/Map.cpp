@@ -143,7 +143,6 @@ void Map::printMap(sf::RenderWindow& window){
 		for (int j = 0; j < theMap[i].size(); ++j){
 			window.draw(theMap[i][j]->getSprite());
 			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)){
-				std::cout << "t'was a cirt" << std::endl;
 				float hpWidth = (((Critter*)theMap[i][j])->getHP() * 28.0) / ((Critter*)theMap[i][j])->getMaxHP();
 				sf::RectangleShape healthBar(sf::Vector2<float>(hpWidth, 6));
 				healthBar.setFillColor(sf::Color::Green);

@@ -18,6 +18,7 @@ public:
 	void resumeWave();
 	bool doneWave();
 	bool isPaused();
+	std::vector<Critter*> getCritterVector();
 
 private:
 	int critterDeployed;

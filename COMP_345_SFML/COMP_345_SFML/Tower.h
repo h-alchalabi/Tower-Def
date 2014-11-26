@@ -8,6 +8,7 @@
 #include <sstream>
 #include "Entity.h"
 #include "NormalCritter.h"
+#include "SFML/Graphics.hpp"
 
 using namespace std;
 
@@ -35,6 +36,10 @@ public:
 	void setUpgradedPrice(int upgradedPrice);*/
 	string to_string();
 	virtual void shoot(Critter* targettedCritter) = 0;
+	void attack(std::vector<Critter*> critterList);
+	void pause();
+	void resume();
+	bool isPaused();
 private:
 	/*int x;
 	int y;
@@ -45,4 +50,7 @@ private:
 	int basePrice;
 	int sellPrice;
 	int upgradedPrice;*/
+	sf::Clock towerClock;
+	sf::Time pausedTime, pauseStartTime, pauseEndTime;
+	bool paused;
 };

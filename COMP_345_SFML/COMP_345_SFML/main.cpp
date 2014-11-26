@@ -22,13 +22,15 @@ bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map);
 string getMapList();
 void editMap();
 bool openMapPrompt(Map* map);
-void handleClick(sf::Event sf_event, Map* map, bool canPlace);
+void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& towerList);
 void init();
 void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons);
 bool saveMapPrompt(Map* map, bool overwrite);
 void resizeMap(Map* map);
 void changeMapPath(Map* map);
 void foo(int x, int y, Map*& map);
+void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused);
+int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -338,6 +340,7 @@ void editMap(){
 	if (!openMapPrompt(map)){
 		return;
 	}
+	
 	string mapName = map->getMapName();
 	bool onMenu = true;
 	bool changePath = false;
@@ -461,7 +464,6 @@ void editMap(){
 													   int block_x = sf_event.mouseButton.x / 32;
 													   int block_y = sf_event.mouseButton.y / 32;
 													   if (map->inBounds(block_x, block_y)){
-														   cout << "ahoy" << endl;
 														   if (newPath){
 															   map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME));
 															   current_x = start_x = block_x;
@@ -471,7 +473,6 @@ void editMap(){
 														   }
 														   else if (changePath && typeid(*map->getEntity(block_x, block_y)) == typeid(Path)){
 															   foo(block_x, block_y, map);
-															   cout << "here" << endl;
 															   current_x = start_x = block_x;
 															   current_y = start_y = block_y;
 															   changePath = false;
@@ -570,7 +571,7 @@ void startGame(){ //TODO
 	waveNumberText.setCharacterSize(GameConstants::FONT_SIZE);
 	waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
 
-
+	vector<Tower*> towerList;
 
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
 	window.setKeyRepeatEnabled(false);
@@ -611,13 +612,14 @@ void startGame(){ //TODO
 				} break;
 				case sf::Event::MouseButtonPressed:{
 													   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-														   handleClick(sf_event, map, wave->doneWave());
+														   handleClick(sf_event, map, wave->doneWave(), towerList);
 													   }
 				} break;
 				}
 								}
 							window.clear();
 			if (!wave->doneWave()){
+				towerAction(towerList, wave->getCritterVector(), wave->isPaused());
 				wave->deploy(map);
 			}
 			map->printMap(window);
@@ -702,8 +704,8 @@ string getMapList(){
 	}
 	return fileList;
 }
-void handleClick(sf::Event sf_event, Map* map, bool canPlace){
-
+void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& towerList){
+	int currentTowerIndex = findTowerIndex(currentTower, towerList);
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
 	int block_x = (x - (x % 32))/32;
@@ -712,10 +714,12 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
 			if (GameConstants::spendMoney(currentTower->getUpgradePrice())){
 				map->removeEntity(currentTower);
+				towerList.erase(towerList.begin() + currentTowerIndex);
 				int old_x = currentTower->getSprite().getPosition().x / 32;
 				int old_y = currentTower->getSprite().getPosition().y / 32;
 				currentTower = new  LevelUpTower(currentTower);
 				map->addEntity(old_x, old_y, currentTower);
+				towerList.push_back(currentTower);
 				setTowerInfo(currentTower, map->getWidth() * 32, true);
 			}
 			towerSelectionRect.setPosition(-40, -40);
@@ -723,6 +727,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		}
 		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
 			map->removeEntity(currentTower);
+			towerList.erase(towerList.begin() + currentTowerIndex);
 			GameConstants::collectMoney(currentTower->getSellPrice());
 			towerIcon.setPosition(-100, -100);
 			towerInfoText.setString("");
@@ -775,18 +780,21 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 										Tower* toAdd = new NormalTower();
 										if (GameConstants::spendMoney(toAdd->getBasePrice())){
 											map->addEntity(block_x, block_y, toAdd);
+											towerList.push_back(toAdd);
 										}
 		} break;
 		case TowerSelection::FIRE:{
 									  Tower* toAdd = new FireTower(new NormalTower());
 									  if (GameConstants::spendMoney(toAdd->getBasePrice())){
-											map->addEntity(block_x, block_y, toAdd);
+										  map->addEntity(block_x, block_y, toAdd);
+										  towerList.push_back(toAdd);
 									  }
 		} break;
 		case TowerSelection::ICE:{
 									 Tower* toAdd = new IceTower(new NormalTower());
 									 if (GameConstants::spendMoney(toAdd->getBasePrice())){
 										 map->addEntity(block_x, block_y, toAdd);
+										 towerList.push_back(toAdd);
 									 }
 		}break;
 		}
@@ -909,4 +917,18 @@ void foo(int x, int y, Map*& map){
 			map->addEntity(newPath[i], newPath[i + 1], new Path());
 		}
 	}
+}
+void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused){
+	for (int i = 0; i < towerList.size(); ++i){
+		towerList[i]->attack(critterList);
+	}
+}
+
+int findTowerIndex(Tower* tower, vector<Tower*> towerList){
+	for (int i = 0; i < towerList.size(); ++i){
+		if (towerList[i] == tower){
+			return i;
+		}
+	}
+	return - 1;
 }

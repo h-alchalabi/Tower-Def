@@ -48,7 +48,7 @@ void Wave::createWave(int wave){
 
 void Wave::deploy(Map* map){//To deploy the critters and to move them.
 	sf::Time currTime = this->deployClock->getElapsedTime();
-	if (!paused && (deployClock->getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds()) >= 200){//if we have already deployed all the critters than simply move them
+	if (!paused && (deployClock->getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds()) >= 1000){//if we have already deployed all the critters than simply move them
 		deployClock->restart();
 		pausedTime = sf::Time::Zero;
 		if (critterDeployed < numOfCritters*level && launchCritter){//if they haven't all been deployed than increment the counter
@@ -94,4 +94,7 @@ bool Wave::doneWave(){
 }
 bool Wave::isPaused(){
 	return paused;
+}
+std::vector<Critter*> Wave::getCritterVector(){
+	return this->critVec;
 }
