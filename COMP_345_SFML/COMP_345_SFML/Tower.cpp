@@ -24,6 +24,7 @@ string Tower::to_string() {
 void Tower::attack(std::vector<Critter*> critterList){
 	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > 2000 && !paused){
 		towerClock.restart();
+		pausedTime = sf::Time::Zero;
 	}
 	else{
 		return;
@@ -36,7 +37,7 @@ void Tower::attack(std::vector<Critter*> critterList){
 		int critterX = critterList[i]->getSprite().getPosition().x + critterList[i]->getSprite().getLocalBounds().width / 2;
 		int critterY = critterList[i]->getSprite().getPosition().y + critterList[i]->getSprite().getLocalBounds().height / 2;
 
-		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + (critterY - towerY, 2)));
+		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + pow(critterY - towerY, 2)));
 		if (distanceFromTower <= this->getRange()) {
 
 			if (closestDistTower > distanceFromTower) {
@@ -48,8 +49,10 @@ void Tower::attack(std::vector<Critter*> critterList){
 
 	}
 	if (closestCritterTowerIndex != -1){
+		std::cout << "pre- " << critterList[closestCritterTowerIndex]->getHP();
 		this->shoot(critterList[closestCritterTowerIndex]);
-		std::cout << "Hit critter: " << closestCritterTowerIndex << std::endl;
+		std::cout << " post- " << critterList[closestCritterTowerIndex]->getHP() << std::endl;
+		std::cout << "Hit critter: " << closestCritterTowerIndex << "\nRange: " << this->getRange()<< std::endl;
 	}
 }
 void Tower::pause(){

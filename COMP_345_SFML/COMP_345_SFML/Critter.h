@@ -18,7 +18,7 @@ public:
 	virtual void setCritterStatus(CritterStatus critterStatus, float statusDuration) = 0;
 	void move();
 	int getStep();
-	void tick();
+	void tick(sf::Time pausedTime);
 	~Critter(){};
 	Critter();
 	Critter(std::string imageName);

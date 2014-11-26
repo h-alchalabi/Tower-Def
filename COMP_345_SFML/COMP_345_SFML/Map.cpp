@@ -144,9 +144,16 @@ void Map::printMap(sf::RenderWindow& window){
 			window.draw(theMap[i][j]->getSprite());
 			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)){
 				float hpWidth = (((Critter*)theMap[i][j])->getHP() * 28.0) / ((Critter*)theMap[i][j])->getMaxHP();
+				if (hpWidth < 0){
+					hpWidth = 0;
+				}
+				sf::RectangleShape subHealthBar(sf::Vector2<float>(28, 6));
 				sf::RectangleShape healthBar(sf::Vector2<float>(hpWidth, 6));
+				subHealthBar.setFillColor(sf::Color::Black);
 				healthBar.setFillColor(sf::Color::Green);
+				subHealthBar.setPosition(theMap[i][j]->getSprite().getPosition().x + 2, theMap[i][j]->getSprite().getPosition().y + 2);
 				healthBar.setPosition(theMap[i][j]->getSprite().getPosition().x + 2, theMap[i][j]->getSprite().getPosition().y + 2);
+				window.draw(subHealthBar);
 				window.draw(healthBar);
 			}
 		}

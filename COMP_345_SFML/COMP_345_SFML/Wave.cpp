@@ -60,12 +60,22 @@ bool Wave::deploy(Map* map){//To deploy the critters and to move them.
 			return false;
 		}
 	}
+	for (int i = 0; i < critVec.size(); ++i){
+		critVec[i]->tick(pausedTime);
+	}
 
 	return true;
 }
 
 bool Wave::move(Map* map){//moving all critters
 	for (int i = 0; i < critterDeployed && i < critVec.size(); ++i){
+		if (critVec[i]->getHP() <= 0){
+			map->removeEntity(critVec.at(i));
+			critVec.erase(critVec.begin() + i);
+			--i;
+			--critterDeployed;
+			continue;
+		}
 		int currStep = critVec.at(i)->getStep();
 		if (currStep > 0){
 			map->removeEntity(critVec.at(i));

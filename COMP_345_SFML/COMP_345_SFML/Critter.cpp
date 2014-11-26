@@ -18,10 +18,12 @@ int Critter::getStep(){
 	return step;
 }
 
-void Critter::tick() {
-	if (critterClock.getElapsedTime().asMilliseconds() >= statusTime) {
+void Critter::tick(sf::Time pausedTime) {
+	long elapsedTime = critterClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds();
+	if (elapsedTime >= statusTime) {
 		critterStatus = CritterStatus::NORMAL;
-	} else {
+	}
+	else if (critterStatus != CritterStatus::NORMAL && elapsedTime % 500 == 0){
 		switch (critterStatus) {
 			case CritterStatus::BURN:
 				setHP(HP - 5);

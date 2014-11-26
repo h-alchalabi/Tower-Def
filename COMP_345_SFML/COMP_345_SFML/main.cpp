@@ -620,7 +620,9 @@ void startGame(){ //TODO
 							window.clear();
 			if (!wave->doneWave()){
 				towerAction(towerList, wave->getCritterVector(), wave->isPaused());
-				wave->deploy(map);
+				if (!wave->deploy(map)){
+					doneGame = true;
+				}
 			}
 			map->printMap(window);
 			window.draw(towerIcon);
@@ -919,7 +921,14 @@ void foo(int x, int y, Map*& map){
 	}
 }
 void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused){
+	
 	for (int i = 0; i < towerList.size(); ++i){
+		if (!paused && towerList[i]->isPaused()){
+			towerList[i]->resume();
+		}
+		else if (paused && !towerList[i]->isPaused()){
+			towerList[i]->pause();
+		}
 		towerList[i]->attack(critterList);
 	}
 }
