@@ -347,8 +347,11 @@ void editMap(){
 	int current_x = 0, current_y = 0, start_x = 0, start_y = 0;
 
 	string mainEditString = "R - Resize Map\nC - Change Path\nQ - Quit";
-	string resizingString = "Up - Add Row Above\nDown - Add Row Below\nLeft - Add Column To Left\nRight - Add Column To Right";
+	string resizingString = "Up - Add Row Above\nDown - Add Row Below\nLeft - Add Column To Left\nRight - Add Column To Right\nQ - Back to menu";
 	string changePathString1 = "Select a point along your path to start editing.\nTo restart the path, press R.";
+	string makingPathString = "Use the Arrow Keys to move.\nE - End the Path.";
+	string newPathString = "Please select(click) the start location.";
+
 
 	sf::Text instructionText(mainEditString, mainFont);
 	instructionText.setCharacterSize(GameConstants::FONT_SIZE);
@@ -471,7 +474,7 @@ void editMap(){
 															   current_y = start_y = block_y;
 															   changePath = false;
 															   makingPath = true;
-															   if (map->getEntity(block_x, block_y)->getImageName != GameConstants::START_IMAGE_NAME){
+															   if (map->getEntity(block_x, block_y)->getImageName() != GameConstants::START_IMAGE_NAME){
 																   canEnd = true;
 															   }
 														   }
@@ -491,6 +494,12 @@ void editMap(){
 		}
 		else if (onMenu){
 			instructionText.setString(mainEditString);
+		}
+		else if (newPath){
+			instructionText.setString(newPathString);
+		}
+		else if (makingPath){
+			instructionText.setString(makingPathString);
 		}
 		window.draw(instructionText);
 		window.display();
@@ -837,9 +846,7 @@ bool saveMapPrompt(Map* map, bool overwrite){
 	}
 	errMsg = "";
 	if (overwrite){
-		int p;
 		cout<< map->saveMap(map->getMapName(), true);
-		cin >> p;
 		return true;
 	}
 	while (true){
