@@ -253,7 +253,6 @@ void createMap(){
 			} break;
 			case sf::Event::KeyPressed:{
 										  if (startChosen){
-											  cout << "key Pressed" << sf_event.key.code << " - " << sf::Keyboard::Up << endl;
 											  switch (sf_event.key.code){
 											  case sf::Keyboard::Up:{
 																	   if (canMove(current_x, current_y, current_x, current_y - 1, map)){
@@ -608,7 +607,6 @@ void startGame(){ //TODO
 											   }
 				} break;
 				case sf::Event::MouseButtonPressed:{
-													   cout << "here - click: " << sf_event.mouseButton.button << " - " << sf::Mouse::Button::Left << endl;
 													   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
 														   handleClick(sf_event, map, wave->doneWave());
 													   }
@@ -707,7 +705,6 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 	int y = sf_event.mouseButton.y;
 	int block_x = (x - (x % 32))/32;
 	int block_y = (y - (y % 32))/32;
-	cout << "\nx: " << x << "\ny" << y << "\nblock_x: " << block_x << "\nblock_y" << block_y <<endl;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
 		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
 			cout << ">>>>>>>UPGRADE" << endl;
@@ -881,7 +878,6 @@ void foo(int x, int y, Map*& map){
 	for (int i = 0; i < oldPath.size(); i += 2){
 		newPath.push_back(oldPath[i]);
 		newPath.push_back(oldPath[i+1]);
-		cout << "x: " << oldPath[i] << " y: " << oldPath[i + 1] << endl;
 		if (x == oldPath[i] && y == oldPath[i+1]){
 			break;
 		}
@@ -890,14 +886,11 @@ void foo(int x, int y, Map*& map){
 	map = new Map(map->getWidth(), map->getHeight());
 	map->setMapName(mapName);
 	for (int i = 0; i < newPath.size(); i += 2){
-		cout << "x: " << newPath[i] << " y: " << newPath[i + 1] << endl;
 		if (i == 0){
-			cout << map->addEntity(newPath[i], newPath[i+1], new Path(GameConstants::START_IMAGE_NAME));
-			cout << " start" << endl;
+			map->addEntity(newPath[i], newPath[i+1], new Path(GameConstants::START_IMAGE_NAME));
 		}
 		else{
-			cout << map->addEntity(newPath[i], newPath[i + 1], new Path());
-			cout << " path" << endl;
+			map->addEntity(newPath[i], newPath[i + 1], new Path());
 		}
 	}
 }

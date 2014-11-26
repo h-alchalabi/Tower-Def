@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "Tower.h"
 #include "Critter.h"
+#include "FastCritter.h"
+#include "SlowCritter.h"
 #include "Path.h"
 #include <vector>
 #include <string>

@@ -1,7 +1,8 @@
 #include "SlowCritter.h"
-SlowCritter::SlowCritter(int level) : NormalCritter(level){
+#include "GameConstants.h"
+SlowCritter::SlowCritter(int level) : Critter(GameConstants::SLOW_CRITTER_IMAGE_NAME){
 	//this->level = level;
-	this->HP = 7 * level;
+	this->maxHP = this->HP = 7 * level;
 	this->speed = 1;
 	this->reward = 1 * level;
 }
@@ -10,11 +11,15 @@ SlowCritter::~SlowCritter(){
 
 }
 
-/*int SlowCritter::getHP(){
+int SlowCritter::getHP(){
 	return HP;
 }
 void SlowCritter::setHP(int HP){
 	this->HP = HP;
+}
+
+int SlowCritter::getMaxHP() const{
+	return this->maxHP;
 }
 
 int SlowCritter::getReward(){
@@ -41,4 +46,4 @@ void SlowCritter::setCritterStatus(CritterStatus critterStatus, float statusDura
 
 CritterStatus SlowCritter::getCritterStatus() {
 	return critterStatus;
-}*/
+}

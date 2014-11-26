@@ -34,7 +34,7 @@ public:
 	void setSellPrice(int sellPrice);
 	void setUpgradedPrice(int upgradedPrice);
 	string to_string();
-	virtual void shoot(NormalCritter targettedCritter);
+	virtual void shoot(Critter* targettedCritter);
 private:
 	int x;
 	int y;

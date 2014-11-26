@@ -9,6 +9,8 @@ Critter::Critter() : Entity(GameConstants::CRITTER_IMAGE_NAME){
 	this->step = 0;
 }
 
+Critter::Critter(string imageName): Entity(imageName){}
+
 void Critter::move() {
 	++step;
 }

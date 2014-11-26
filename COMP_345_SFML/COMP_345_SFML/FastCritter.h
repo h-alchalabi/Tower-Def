@@ -1,17 +1,18 @@
 #pragma once
-#include "NormalCritter.h"
-class FastCritter :  public NormalCritter
+#include "Critter.h"
+class FastCritter :  public Critter
 {
 public:
 	FastCritter(int level);
 	~FastCritter();
-	/*int getSpeed();
+	int getSpeed();
 	void setSpeed(int speed);
 	int getHP();
 	void setHP(int HP);
+	int getMaxHP() const;
 	int getReward();
 	void setReward(int reward);
 	CritterStatus getCritterStatus();
-	void setCritterStatus(CritterStatus critterStatus, float statusDuration);*/
+	void setCritterStatus(CritterStatus critterStatus, float statusDuration);
 };
 

@@ -5,7 +5,7 @@
 
 Wave::Wave(){
 	this->level = 1;
-	this->numOfCritters = 10;
+	this->numOfCritters = 4;
 	this->deployClock = new sf::Clock();
 	this->paused = false;
 	this->critterDeployed = 0;
@@ -23,23 +23,24 @@ void Wave::createWave(int wave){
 	switch (wave){
 	case 1:{
 		deploy_delay = GameConstants::NORMAL_CRITTER_DEPLOY_TIME;
-		for (int i = 0; i < numOfCritters; ++i){
+		for (int i = 0; i < numOfCritters*level; ++i){
 			critVec.push_back(CritterFactory::createCritter("normal", level));
 		}
 	}
 		break;
 	case 2:{
 		deploy_delay = GameConstants::SLOW_CRITTER_DEPLOY_TIME;
-		for (int i = 0; i < numOfCritters; ++i){
+		for (int i = 0; i < numOfCritters*level; ++i){
 			critVec.push_back(CritterFactory::createCritter("slow", level));
 		}
 	}
 		break;
 	case 0:{
 		deploy_delay = GameConstants::FAST_CRITTER_DEPLOY_TIME;
-		for (int i = 0; i < numOfCritters; ++i){
+		for (int i = 0; i < numOfCritters*level; ++i){
 			critVec.push_back(CritterFactory::createCritter("fast", level));
 		}
+		++level;
 	}
 		break;
 	}
@@ -47,7 +48,7 @@ void Wave::createWave(int wave){
 
 void Wave::deploy(Map* map){//To deploy the critters and to move them.
 	sf::Time currTime = this->deployClock->getElapsedTime();
-	if (!paused && (deployClock->getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds()) >= 250){//if we have already deployed all the critters than simply move them
+	if (!paused && (deployClock->getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds()) >= 200){//if we have already deployed all the critters than simply move them
 		deployClock->restart();
 		pausedTime = sf::Time::Zero;
 		if (critterDeployed < numOfCritters*level && launchCritter){//if they haven't all been deployed than increment the counter

@@ -9,6 +9,7 @@ public:
 
 	virtual int getSpeed() = 0;
 	virtual int getHP() = 0;
+	virtual int getMaxHP() const = 0;
 	virtual int getReward() = 0;
 	virtual CritterStatus getCritterStatus() = 0;
 	virtual void setHP(int HP) = 0;
@@ -20,8 +21,10 @@ public:
 	void tick();
 	~Critter(){};
 	Critter();
+	Critter(std::string imageName);
 
 protected:
+	int maxHP;
 	int HP;
 	int speed;
 	int reward;

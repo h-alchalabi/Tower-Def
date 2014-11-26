@@ -115,6 +115,6 @@ string Tower::to_string() {
 	return str;
 }
 
-void Tower::shoot(NormalCritter targettedCritter) {
-	targettedCritter.setHP(targettedCritter.getHP() - getDamage());
+void Tower::shoot(Critter* targettedCritter) {
+	targettedCritter->setHP(targettedCritter->getHP() - getDamage());
 }

@@ -6,6 +6,7 @@ public:
 	~NormalCritter();
 	int getSpeed();
 	void setSpeed(int speed);
+	int getMaxHP() const;
 	int getHP();
 	void setHP(int newHP);
 	int getReward();
