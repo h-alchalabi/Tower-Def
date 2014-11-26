@@ -6,6 +6,8 @@
 #include "Tower.h"
 #include "FireTower.h"
 #include "IceTower.h"
+#include "NormalTower.h"
+#include "DecoratedTower.h"
 #include "Wave.h"
 #include "dirent.h"
 #include <sstream>
@@ -729,17 +731,17 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		else if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::NORMAL;
-			setTowerInfo(new Tower(), map->getWidth() * 32, false);
+			setTowerInfo(new NormalTower(), map->getWidth() * 32, false);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::FIRE;
-			setTowerInfo(new FireTower(), map->getWidth() * 32, false);
+			setTowerInfo(new FireTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = TowerSelection::ICE;
-			setTowerInfo(new IceTower(), map->getWidth() * 32, false);
+			setTowerInfo(new IceTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
@@ -747,7 +749,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 		}
 		return;
 	}
-	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(Tower) ||
+	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(NormalTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower)
 		){
@@ -756,19 +758,19 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace){
 	else if (canPlace){
 		switch (towerType){
 		case TowerSelection::NORMAL:{
-										Tower* toAdd = new Tower();
+										Tower* toAdd = new NormalTower();
 										if (GameConstants::spendMoney(toAdd->getBasePrice())){
 											map->addEntity(block_x, block_y, toAdd);
 										}
 		} break;
 		case TowerSelection::FIRE:{
-									  Tower* toAdd = new FireTower();
+									  Tower* toAdd = new FireTower(new NormalTower());
 									  if (GameConstants::spendMoney(toAdd->getBasePrice())){
 											map->addEntity(block_x, block_y, toAdd);
 									  }
 		} break;
 		case TowerSelection::ICE:{
-									 Tower* toAdd = new IceTower();
+									 Tower* toAdd = new IceTower(new NormalTower());
 									 if (GameConstants::spendMoney(toAdd->getBasePrice())){
 										 map->addEntity(block_x, block_y, toAdd);
 									 }

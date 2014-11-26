@@ -96,6 +96,15 @@
     <ClCompile Include="Wave.cpp">
       <Filter>Source Files\Critter</Filter>
     </ClCompile>
+    <ClCompile Include="NormalTower.cpp">
+      <Filter>Source Files\Tower</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelUpTower.cpp">
+      <Filter>Source Files\Tower</Filter>
+    </ClCompile>
+    <ClCompile Include="DecoratedTower.cpp">
+      <Filter>Source Files\Tower</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireTower.h">
@@ -156,6 +165,15 @@
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="Target.h">
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalTower.h">
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelUpTower.h">
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="DecoratedTower.h">
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
   </ItemGroup>

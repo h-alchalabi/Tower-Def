@@ -90,16 +90,19 @@
     <ClCompile Include="FireTower.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="IceTower.cpp" />
+    <ClCompile Include="LevelUpTower.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="NearestCritterTowerStrategy.cpp" />
     <ClCompile Include="NormalCritter.cpp" />
+    <ClCompile Include="NormalTower.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Scenery.cpp" />
     <ClCompile Include="SlowCritter.cpp" />
     <ClCompile Include="Target.cpp" />
     <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="DecoratedTower.cpp" />
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -111,8 +114,10 @@
     <ClInclude Include="FireTower.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="IceTower.h" />
+    <ClInclude Include="LevelUpTower.h" />
     <ClInclude Include="NearestCritterTowerStrategy.h" />
     <ClInclude Include="NormalCritter.h" />
+    <ClInclude Include="NormalTower.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Path.h" />
@@ -122,6 +127,7 @@
     <ClInclude Include="Target.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="DecoratedTower.h" />
     <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>

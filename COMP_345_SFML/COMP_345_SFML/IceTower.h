@@ -1,8 +1,18 @@
-#include "Tower.h"
 #pragma once
-class IceTower : public Tower {
+#include "DecoratedTower.h"
+class IceTower : public DecoratedTower{
 public:
-	IceTower();
-	IceTower(int damage, int range, int fireRate, int basePrice, int sellPrice, int upgradedPrice);
-	void shoot(NormalCritter targettedCritter);
+	IceTower(Tower* decoratedTower);
+	int getX();
+	int getY();
+	int getLevel();
+	int getDamage();
+	int getRange(); // Radius
+	int getFireRate();
+	int getBasePrice();
+	int getSellPrice();
+	int getUpgradePrice();
+	void shoot(Critter* targettedCritter);
+private:
+	int burnDamage;
 };

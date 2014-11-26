@@ -15,4 +15,5 @@ public:
 	sf::Texture getTexture();
 	sf::Sprite getSprite();
 	void setPosition(int x, int y);
+	void setImageName(std::string imageName);
 };

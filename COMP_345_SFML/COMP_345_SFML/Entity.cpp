@@ -4,7 +4,6 @@
 #include "GameConstants.h"
 #include "SFML/Graphics.hpp"
 #include <string>
-
 using namespace std;
 
 Entity::Entity(string image_name){
@@ -23,4 +22,9 @@ sf::Sprite Entity::getSprite(){
 }
 void Entity::setPosition(int x, int y){
 	this->image_sprite.setPosition(x, y);
+}
+void Entity::setImageName(std::string imageName){
+	this->image_name = imageName;
+	this->image_texture.loadFromFile("res/img/" + this->image_name + ".png");
+	this->image_sprite.setTexture(this->image_texture);
 }
