@@ -25,6 +25,7 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons);
 bool saveMapPrompt(Map* map, bool overwrite);
 void resizeMap(Map* map);
 void changeMapPath(Map* map);
+void foo(int x, int y, Map*& map);
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -455,6 +456,7 @@ void editMap(){
 													   int block_x = sf_event.mouseButton.x / 32;
 													   int block_y = sf_event.mouseButton.y / 32;
 													   if (map->inBounds(block_x, block_y)){
+														   cout << "ahoy" << endl;
 														   if (newPath){
 															   map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME));
 															   current_x = start_x = block_x;
@@ -463,11 +465,15 @@ void editMap(){
 															   makingPath = true;
 														   }
 														   else if (changePath && typeid(*map->getEntity(block_x, block_y)) == typeid(Path)){
-															   // reset path and re-make map somehow. . . 
+															   foo(block_x, block_y, map);
+															   cout << "here" << endl;
 															   current_x = start_x = block_x;
 															   current_y = start_y = block_y;
 															   changePath = false;
 															   makingPath = true;
+															   if (map->getEntity(block_x, block_y)->getImageName != GameConstants::START_IMAGE_NAME){
+																   canEnd = true;
+															   }
 														   }
 													   }
 												   }
@@ -861,4 +867,30 @@ bool saveMapPrompt(Map* map, bool overwrite){
 	cout << "Enter any value to continue . . .";
 	cin >> fileName;
 	return true;
+}
+void foo(int x, int y, Map*& map){
+	vector<int> newPath;
+	vector<int> oldPath = map->getPath();
+	for (int i = 0; i < oldPath.size(); i += 2){
+		newPath.push_back(oldPath[i]);
+		newPath.push_back(oldPath[i+1]);
+		cout << "x: " << oldPath[i] << " y: " << oldPath[i + 1] << endl;
+		if (x == oldPath[i] && y == oldPath[i+1]){
+			break;
+		}
+	}
+	string mapName = map->getMapName();
+	map = new Map(map->getWidth(), map->getHeight());
+	map->setMapName(mapName);
+	for (int i = 0; i < newPath.size(); i += 2){
+		cout << "x: " << newPath[i] << " y: " << newPath[i + 1] << endl;
+		if (i == 0){
+			cout << map->addEntity(newPath[i], newPath[i+1], new Path(GameConstants::START_IMAGE_NAME));
+			cout << " start" << endl;
+		}
+		else{
+			cout << map->addEntity(newPath[i], newPath[i + 1], new Path());
+			cout << " path" << endl;
+		}
+	}
 }
