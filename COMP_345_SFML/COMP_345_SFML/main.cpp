@@ -31,6 +31,7 @@ void changeMapPath(Map* map);
 void foo(int x, int y, Map*& map);
 void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused);
 int findTowerIndex(Tower* tower, vector<Tower*> towerList);
+bool gameOverPrompt();
 
 namespace TowerSelection{
 	enum TowerType { NA, NORMAL, FIRE, ICE };
@@ -528,6 +529,9 @@ void startGame(){ //TODO
 		cin >> scrap;
 		return;
 	}
+	
+	do {
+		
 	Wave* wave = new Wave();
 	int waveNumber = 1;
 
@@ -648,6 +652,10 @@ void startGame(){ //TODO
 			}
 			window.display();
 		}
+
+		window.close();
+		map->loadMap(map->getMapName());
+	} while (gameOverPrompt());
 }
 bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map){
 	if (!map->inBounds(new_x, new_y) || (current_x == new_x && current_y == new_y)){
@@ -940,4 +948,31 @@ int findTowerIndex(Tower* tower, vector<Tower*> towerList){
 		}
 	}
 	return - 1;
+}
+
+bool gameOverPrompt() {
+	string errMsg = "", fileName = "";
+
+	char input;
+	while (true){
+		system("cls");
+		cout << "------------------------------------\n";
+		cout << "\tGame Over!\n";
+		cout << "-----------------------------------\n\n";
+		cout << errMsg << endl << endl;
+		cout << "Try again? (y/n): ";
+		cin >> input;
+		errMsg = "";
+		if (input == 'n' || input == 'y'){
+			break;
+		}
+		else{
+			errMsg = "***** Invalid Input. Please Try Again. *****";
+		}
+	}
+
+	if (input == 'n')
+		return false;
+	else
+		return true;
 }
