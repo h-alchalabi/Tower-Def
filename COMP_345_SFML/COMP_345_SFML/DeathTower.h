@@ -1,8 +1,8 @@
 #pragma once
 #include "DecoratedTower.h"
-class IceTower : public DecoratedTower{
+class DeathTower : public DecoratedTower{
 public:
-	IceTower(Tower* decoratedTower);
+	DeathTower(Tower* decoratedTower);
 	int getX();
 	int getY();
 	int getLevel();
