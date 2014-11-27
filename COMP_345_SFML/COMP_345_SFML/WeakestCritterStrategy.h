@@ -5,17 +5,12 @@
 //COMP345 - assignment 3
 //November 20, 2014
 //
-//This is the target class that will be used by a tower to use one of the strategy objects.
+//This is the "nearest critter to a tower" strategy object.
 //
 /*******************************************************************************************************************/
 
 #pragma once
-class Target {
+class WeakestCritterStrategy : public Strategy {
 public:
-	Target();
-	Target(Strategy *initStrategy);
-	void setStrategy(Strategy *newStrategy);
-	int executeStrategy(vector<Critter*> critters, int towerX, int towerY, int towerRange);
-private:
-	Strategy* strategy;
+	int execute(vector<Critter*> critters, int towerX, int towerY, int towerRange);
 };

@@ -9,6 +9,8 @@
 //
 /*******************************************************************************************************************/
 
+Target::Target() {}
+
 Target::Target(Strategy *initStrategy) {
 	this->strategy = initStrategy;
 }
@@ -17,6 +19,6 @@ void Target::setStrategy(Strategy *newStrategy) {
 	this->strategy = newStrategy;
 }
 
-void Target::executeStrategy(vector<Critter*> critters, Tower* tower) {
-	return this->strategy->execute(critters, tower);
+int Target::executeStrategy(vector<Critter*> critters, int towerX, int towerY, int towerRange) {
+	return this->strategy->execute(critters, towerX, towerY, towerRange);
 }

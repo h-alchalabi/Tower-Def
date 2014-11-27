@@ -8,6 +8,7 @@
 #include <sstream>
 #include "Entity.h"
 #include "NormalCritter.h"
+#include "Target.h"
 #include "SFML/Graphics.hpp"
 
 using namespace std;
@@ -40,6 +41,7 @@ public:
 	void pause();
 	void resume();
 	bool isPaused();
+	void setStrategy(Strategy* strategy);
 private:
 	/*int x;
 	int y;
@@ -53,4 +55,5 @@ private:
 	sf::Clock towerClock;
 	sf::Time pausedTime, pauseStartTime, pauseEndTime;
 	bool paused;
+	Target targetStrategy;
 };

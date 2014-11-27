@@ -1,21 +1,20 @@
-#include "NearestCritterTowerStrategy.h"
+#include "WeakestCritterStrategy.h"
 #include <limits>
-#include <math.h>
 
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
 //COMP345 - assignment 3
 //November 20, 2014
 //
-//This is the "nearest critter to a tower" strategy object.
+//This is the "weakest critter" strategy object.
 //
 /*******************************************************************************************************************/
 
-int NearestCritterTowerStrategy::execute(vector<Critter*> critters, int towerX, int towerY, int towerRange) {
-	int closestDistTower = numeric_limits<int>::max();  //The closest distance to the tower
-	int closestCritterTowerIndex = -1;                  //The index of the critter that is the closest to the tower
+int WeakestCritterStrategy::execute(vector<Critter*> critters, int towerX, int towerY, int towerRange) {
+	int smallestHealth = numeric_limits<int>::max(); //The smallest health that will determine the weakest critter
+	int weakestCritterIndex = -1;                    //The index of the weakest critter
 
-	//Determining the closest critter to the tower in the tower's range
+	//Determining the weakest critter in the tower's range
 	//int towerX = tower->getSprite().getPosition().x + tower->getSprite().getLocalBounds().width / 2;
 	//int towerY = tower->getSprite().getPosition().y + tower->getSprite().getLocalBounds().height / 2;
 	for (int i = 0; i < critters.size(); i++) {
@@ -25,14 +24,14 @@ int NearestCritterTowerStrategy::execute(vector<Critter*> critters, int towerX, 
 		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + (critterY - towerY, 2)));
 		//if (distanceFromTower <= tower->getRange()) {
 		if (distanceFromTower <= towerRange) {
-			if (closestDistTower > distanceFromTower) {
-				//Updating the closest critter to the tower in the tower's range
-				closestDistTower = distanceFromTower;
-				closestCritterTowerIndex = i;
+			//The critter is in the tower's range
+			if (smallestHealth > critters[i]->getHP()) {
+				//Updating the weakest critter in the tower's range
+				smallestHealth = critters[i]->getHP();
+				weakestCritterIndex = i;
 			}
 		}
-
 	}
 
-	return closestCritterTowerIndex;
+	return weakestCritterIndex;
 }

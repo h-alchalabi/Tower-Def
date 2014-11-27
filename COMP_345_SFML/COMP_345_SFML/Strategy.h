@@ -2,7 +2,6 @@
 using namespace std;
 #include <vector>
 #include "Critter.h"
-#include "Tower.h"
 
 /*******************************************************************************************************************/
 //Stanley Naikang Luu - 6604706
@@ -16,5 +15,5 @@ using namespace std;
 #pragma once
 class Strategy {
 public:
-	virtual void execute(vector<Critter*> critters, Tower* tower) = 0;
+	virtual int execute(vector<Critter*> critters, int towerX, int towerY, int towerRange) = 0;
 };

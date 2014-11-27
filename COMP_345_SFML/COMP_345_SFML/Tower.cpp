@@ -1,11 +1,13 @@
 #include "Tower.h"
 #include "GameConstants.h"
 #include <string>
-#include <iostream>
+#include "NearestCritterTowerStrategy.h"
 
 using namespace std;
 
-Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){}
+Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){
+	targetStrategy = Target(new NearestCritterTowerStrategy());
+}
 
 string Tower::to_string() {
 	stringstream ss;
@@ -29,30 +31,15 @@ void Tower::attack(std::vector<Critter*> critterList){
 	else{
 		return;
 	}
-	int closestDistTower = numeric_limits<int>::max();  //The closest distance to the tower
-	int closestCritterTowerIndex = -1;
+
 	int towerX = this->getSprite().getPosition().x + this->getSprite().getLocalBounds().width / 2;
 	int towerY = this->getSprite().getPosition().y + this->getSprite().getLocalBounds().height / 2;
-	for (int i = 0; i < critterList.size(); i++) {
-		int critterX = critterList[i]->getSprite().getPosition().x + critterList[i]->getSprite().getLocalBounds().width / 2;
-		int critterY = critterList[i]->getSprite().getPosition().y + critterList[i]->getSprite().getLocalBounds().height / 2;
-
-		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + pow(critterY - towerY, 2)));
-		if (distanceFromTower <= this->getRange()) {
-
-			if (closestDistTower > distanceFromTower) {
-				//Updating the closest critter to the tower in the tower's range
-				closestDistTower = distanceFromTower;
-				closestCritterTowerIndex = i;
-			}
-		}
-
-	}
-	if (closestCritterTowerIndex != -1){
-		std::cout << "pre- " << critterList[closestCritterTowerIndex]->getHP();
-		this->shoot(critterList[closestCritterTowerIndex]);
-		std::cout << " post- " << critterList[closestCritterTowerIndex]->getHP() << std::endl;
-		std::cout << "Hit critter: " << closestCritterTowerIndex << "\nRange: " << this->getRange()<< std::endl;
+	int targettedCritter = targetStrategy.executeStrategy(critterList, towerX, towerY, this->getRange());
+	if (targettedCritter != -1){
+		//std::cout << "pre- " << critterList[targettedCritter]->getHP();
+		this->shoot(critterList[targettedCritter]);
+		//std::cout << " post- " << critterList[targettedCritter]->getHP() << std::endl;
+		//std::cout << "Hit critter: " << targettedCritter << "\nRange: " << this->getRange()<< std::endl;
 	}
 }
 void Tower::pause(){
@@ -66,4 +53,8 @@ void Tower::resume(){
 }
 bool Tower::isPaused(){
 	return paused;
+}
+
+void Tower::setStrategy(Strategy* strategy) {
+	targetStrategy.setStrategy(strategy);
 }

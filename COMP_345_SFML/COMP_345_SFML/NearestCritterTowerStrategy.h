@@ -9,8 +9,9 @@
 //
 /*******************************************************************************************************************/
 
+#pragma once
 class NearestCritterTowerStrategy : public Strategy {
 public:
-	void execute(vector<Critter*> critters, Tower* tower);
+	int execute(vector<Critter*> critters, int towerX, int towerY, int towerRange);
 };
 
