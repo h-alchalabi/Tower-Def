@@ -12,6 +12,8 @@
 #include "LevelUpTower.h"
 #include "Wave.h"
 #include "dirent.h"
+#include "NearestCritterTowerStrategy.h"
+#include "WeakestCritterStrategy.h"
 #include <sstream>
 
 using namespace std;
@@ -34,18 +36,21 @@ void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool pa
 int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 bool gameOverPrompt();
 
-namespace TowerSelection{
+namespace Selection{
 	enum TowerType { NA, NORMAL, FIRE, ICE, THUNDER };
 }
 
-static TowerSelection::TowerType towerType;
+static Selection::TowerType towerType;
 
 static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton, thunderTowerButton;
 static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture, thunderTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
+static sf::RectangleShape strategySelectRect(sf::Vector2<float>(145, 25));
 static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 20));
 static sf::RectangleShape sellButton(sf::Vector2<float>(64, 20));
-static sf::Text upgradeButtonText, sellButtonText, towerInfoText, startGameText;
+static sf::RectangleShape nearestStrategyButton(sf::Vector2<float>(140, 20));
+static sf::RectangleShape weakestStrategyButton(sf::Vector2<float>(128, 20));
+static sf::Text upgradeButtonText, sellButtonText, towerInfoText, strategyText, nearestStrategyText, weakestStrategyText, startGameText;
 static sf::Font mainFont;
 static sf::Sprite towerIcon;
 static Tower* currentTower;
@@ -94,25 +99,25 @@ int main(){
 	window.setKeyRepeatEnabled(false);
 	while (window.isOpen())
 	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			switch (event.type){
-			case sf::Event::Closed:{
-									   window.close();
-			} break;
-			case sf::Event::MouseButtonPressed:
-			{
-												  if (creatingMap){
-													  
-												  }
-			}break;
-			}
-		}
+	sf::Event event;
+	while (window.pollEvent(event))
+	{
+	switch (event.type){
+	case sf::Event::Closed:{
+	window.close();
+	} break;
+	case sf::Event::MouseButtonPressed:
+	{
+	if (creatingMap){
 
-		window.clear();
-		map->printMap(window);
-		window.display();
+	}
+	}break;
+	}
+	}
+
+	window.clear();
+	map->printMap(window);
+	window.display();
 	}*/
 	return 0;
 }
@@ -128,8 +133,7 @@ void init(){
 	iceTowerButton.setTexture(iceTowerTexture);
 	thunderTowerButton.setTexture(thunderTowerTexture);
 
-	towerType = TowerSelection::NA;
-
+	towerType = Selection::NA;
 
 	mainFont.loadFromFile(GameConstants::FONT_FILE_PATH);
 
@@ -140,11 +144,21 @@ void init(){
 	towerSelectionRect.setFillColor(sf::Color::Yellow);
 	towerSelectionRect.setPosition(-100, -100);
 
+	strategySelectRect.setFillColor(sf::Color::Yellow);
+	strategySelectRect.setPosition(-100, -100);
+
 	upgradeButton.setFillColor(sf::Color::Green);
 	upgradeButton.setPosition(-100, -100);
 
 	sellButton.setFillColor(sf::Color::Red);
 	sellButton.setPosition(-100, -100);
+
+	nearestStrategyButton.setFillColor(sf::Color::Blue);
+	nearestStrategyButton.setPosition(-100, -100);
+
+	weakestStrategyButton.setFillColor(sf::Color::Blue);
+	weakestStrategyButton.setPosition(-100, -100);
+
 
 	upgradeButtonText.setFont(mainFont);
 	upgradeButtonText.setString("UPGRADE");
@@ -155,6 +169,21 @@ void init(){
 	sellButtonText.setString("SELL");
 	sellButtonText.setCharacterSize(GameConstants::FONT_SIZE);
 	sellButtonText.setColor(sf::Color::White);
+
+	strategyText.setFont(mainFont);
+	strategyText.setString("STRATEGY");
+	strategyText.setCharacterSize(GameConstants::FONT_SIZE);
+	strategyText.setColor(sf::Color::White);
+
+	nearestStrategyText.setFont(mainFont);
+	nearestStrategyText.setString("NEAREST TO TOWER");
+	nearestStrategyText.setCharacterSize(GameConstants::FONT_SIZE);
+	nearestStrategyText.setColor(sf::Color::White);
+
+	weakestStrategyText.setFont(mainFont);
+	weakestStrategyText.setString("WEAKEST CRITTER");
+	weakestStrategyText.setCharacterSize(GameConstants::FONT_SIZE);
+
 
 	startGameText.setFont(mainFont);
 	startGameText.setString("SPACE - Start a Critter Wave\nP - Pause/Resume Game");
@@ -229,7 +258,7 @@ void createMap(){
 	map->printMap(window);
 	window.display();
 	sf::Event sf_event;
-	
+
 
 	int start_x, start_y;
 
@@ -247,7 +276,7 @@ void createMap(){
 
 	outText.setString(startPrompt);
 
-//	map->addEntity(start_x, start_y, new Path(GameConstants::START_IMAGE_NAME));
+	//	map->addEntity(start_x, start_y, new Path(GameConstants::START_IMAGE_NAME));
 
 	bool editingMap = true;
 	bool canExit = false;
@@ -261,46 +290,46 @@ void createMap(){
 									   window.close();
 			} break;
 			case sf::Event::KeyPressed:{
-										  if (startChosen){
-											  switch (sf_event.key.code){
-											  case sf::Keyboard::Up:{
-																	   if (canMove(current_x, current_y, current_x, current_y - 1, map)){
-																		   --current_y;
-																		   map->addEntity(current_x, current_y, new Path());
-																		   canExit = true;
-																	   }
+										   if (startChosen){
+											   switch (sf_event.key.code){
+											   case sf::Keyboard::Up:{
+																		 if (canMove(current_x, current_y, current_x, current_y - 1, map)){
+																			 --current_y;
+																			 map->addEntity(current_x, current_y, new Path());
+																			 canExit = true;
+																		 }
 
-											  } break;
-											  case sf::Keyboard::Left:{
-																	   if (canMove(current_x, current_y, current_x - 1, current_y, map)){
-																		   --current_x;
-																		   map->addEntity(current_x, current_y, new Path());
-																		   canExit = true;
-																	   }
-											  } break;
-											  case sf::Keyboard::Down:{
-																	   if (canMove(current_x, current_y, current_x, current_y + 1, map)){
-																		   ++current_y;
-																		   map->addEntity(current_x, current_y, new Path());
-																		   canExit = true;
-																	   }
-											  } break;
-											  case sf::Keyboard::Right:{
-																	   if (canMove(current_x, current_y, current_x + 1, current_y, map)){
-																		   ++current_x;
-																		   map->addEntity(current_x, current_y, new Path());
-																		   canExit = true;
-																	   }
-											  } break;
-											  case sf::Keyboard::E:{
-																	   if (canExit){
-																		   editingMap = false;
-																		   map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
-																	   }
-											  } break;
-											  default: break;
-											  }
-										  }
+											   } break;
+											   case sf::Keyboard::Left:{
+																		   if (canMove(current_x, current_y, current_x - 1, current_y, map)){
+																			   --current_x;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canExit = true;
+																		   }
+											   } break;
+											   case sf::Keyboard::Down:{
+																		   if (canMove(current_x, current_y, current_x, current_y + 1, map)){
+																			   ++current_y;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canExit = true;
+																		   }
+											   } break;
+											   case sf::Keyboard::Right:{
+																			if (canMove(current_x, current_y, current_x + 1, current_y, map)){
+																				++current_x;
+																				map->addEntity(current_x, current_y, new Path());
+																				canExit = true;
+																			}
+											   } break;
+											   case sf::Keyboard::E:{
+																		if (canExit){
+																			editingMap = false;
+																			map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
+																		}
+											   } break;
+											   default: break;
+											   }
+										   }
 			}break;
 			case sf::Event::MouseButtonPressed:{
 												   if (!startChosen){
@@ -321,7 +350,7 @@ void createMap(){
 
 		window.clear();
 		map->printMap(window);
-		
+
 		window.draw(outText);
 		window.display();
 	}
@@ -344,7 +373,7 @@ void editMap(){
 	if (!openMapPrompt(map)){
 		return;
 	}
-	
+
 	string mapName = map->getMapName();
 	bool onMenu = true;
 	bool changePath = false;
@@ -385,7 +414,7 @@ void editMap(){
 																		changePath = false;
 																		newPath = true;
 																	}
-																	else if(onMenu){
+																	else if (onMenu){
 																		onMenu = false;
 																		resizeMap = true;
 																	}
@@ -401,7 +430,7 @@ void editMap(){
 																		resizeMap = false;
 																		onMenu = true;
 																	}
-																	else if(onMenu){
+																	else if (onMenu){
 																		window.close();
 																	}
 										   } break;
@@ -417,7 +446,7 @@ void editMap(){
 																	 if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT){
 																		 map->resize(map->getWidth(), map->getHeight() + 1, false, true);
 																	 }
-																	 else if(makingPath){
+																	 else if (makingPath){
 																		 if (canMove(current_x, current_y, current_x, current_y - 1, map)){
 																			 --current_y;
 																			 map->addEntity(current_x, current_y, new Path());
@@ -532,59 +561,68 @@ void startGame(){ //TODO
 		cin >> scrap;
 		return;
 	}
-	
+
 	do {
-		
-	Wave* wave = new Wave();
-	int waveNumber = 1;
 
-	towerType = TowerSelection::NA;
+		Wave* wave = new Wave();
+		int waveNumber = 1;
 
-	upgradeButton.setPosition(-100, -100);
-	sellButton.setPosition(-100, -100);
-	upgradeButtonText.setPosition(-100, -100);
-	sellButtonText.setPosition(-100, -100);
+		towerType = Selection::NA;
 
-	startGameText.setPosition(4, map->getHeight() * 32 + 16);
+		upgradeButton.setPosition(-100, -100);
+		sellButton.setPosition(-100, -100);
+		nearestStrategyButton.setPosition(-100, -100);
+		weakestStrategyButton.setPosition(-100, -100);
+		upgradeButtonText.setPosition(-100, -100);
+		sellButtonText.setPosition(-100, -100);
+		strategyText.setPosition(-100, -100);
+		nearestStrategyButton.setPosition(-100, -100);
+		weakestStrategyButton.setPosition(-100, -100);
+		nearestStrategyText.setPosition(-100, -100);
+		weakestStrategyText.setPosition(-100, -100);
 
-	normalTowerButton.setPosition(16, map->getHeight() * 32 + 48);
-	fireTowerButton.setPosition(64, map->getHeight() * 32 + 48);
-	iceTowerButton.setPosition(112, map->getHeight() * 32 + 48);
-	thunderTowerButton.setPosition(160, map->getHeight() * 32 + 48);
 
-	towerIcon.setPosition(-100, -100);
-	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
-	towerInfoText.setString("");
 
-	sf::Text pausedText("PAUSED", mainFont);
-	pausedText.setColor(sf::Color::White);
-	pausedText.setCharacterSize(GameConstants::FONT_SIZE);
-	pausedText.setPosition(0, 0);
+		startGameText.setPosition(4, map->getHeight() * 32 + 16);
 
-	GameConstants::resetMoney();
-	GameConstants::resetHP();
+		normalTowerButton.setPosition(16, map->getHeight() * 32 + 48);
+		fireTowerButton.setPosition(64, map->getHeight() * 32 + 48);
+		iceTowerButton.setPosition(112, map->getHeight() * 32 + 48);
+		thunderTowerButton.setPosition(160, map->getHeight() * 32 + 48);
 
-	sf::Text playerMoneyText(GameConstants::getMoneyString(), mainFont);
-	playerMoneyText.setColor(sf::Color::White);
-	playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
-	playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 48);
+		towerIcon.setPosition(-100, -100);
+		towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
+		towerInfoText.setString("");
 
-	sf::Text playerHPText(GameConstants::getHPString(), mainFont);
-	playerHPText.setColor(sf::Color::White);
-	playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
-	playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
+		sf::Text pausedText("PAUSED", mainFont);
+		pausedText.setColor(sf::Color::White);
+		pausedText.setCharacterSize(GameConstants::FONT_SIZE);
+		pausedText.setPosition(0, 0);
 
-	sf::Text waveNumberText("Next Wave:\t1", mainFont);
-	waveNumberText.setColor(sf::Color::White);
-	waveNumberText.setCharacterSize(GameConstants::FONT_SIZE);
-	waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
+		GameConstants::resetMoney();
+		GameConstants::resetHP();
 
-	vector<Tower*> towerList;
+		sf::Text playerMoneyText(GameConstants::getMoneyString(), mainFont);
+		playerMoneyText.setColor(sf::Color::White);
+		playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
+		playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 48);
 
-	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
-	window.setKeyRepeatEnabled(false);
-	bool doneGame = false;
-	map->printMap(window); 
+		sf::Text playerHPText(GameConstants::getHPString(), mainFont);
+		playerHPText.setColor(sf::Color::White);
+		playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
+		playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
+
+		sf::Text waveNumberText("Next Wave:\t1", mainFont);
+		waveNumberText.setColor(sf::Color::White);
+		waveNumberText.setCharacterSize(GameConstants::FONT_SIZE);
+		waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
+
+		vector<Tower*> towerList;
+
+		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
+		window.setKeyRepeatEnabled(false);
+		bool doneGame = false;
+		map->printMap(window);
 		while (window.isOpen() && !doneGame)
 		{
 			sf::Event sf_event;
@@ -624,8 +662,8 @@ void startGame(){ //TODO
 													   }
 				} break;
 				}
-								}
-							window.clear();
+			}
+			window.clear();
 			if (!wave->doneWave()){
 				towerAction(towerList, wave->getCritterVector(), wave->isPaused());
 				if (!wave->deploy(map)){
@@ -635,9 +673,10 @@ void startGame(){ //TODO
 			map->printMap(window);
 			window.draw(towerIcon);
 			window.draw(towerInfoText);
-			if (towerType != TowerSelection::NA){
+			if (towerType != Selection::NA){
 				window.draw(towerSelectionRect);
 			}
+			window.draw(strategySelectRect);
 			window.draw(startGameText);
 			window.draw(normalTowerButton);
 			window.draw(fireTowerButton);
@@ -651,6 +690,12 @@ void startGame(){ //TODO
 			window.draw(sellButton);
 			window.draw(upgradeButtonText);
 			window.draw(sellButtonText);
+			window.draw(strategyText);
+			window.draw(nearestStrategyButton);
+			window.draw(weakestStrategyButton);
+			window.draw(nearestStrategyText);
+			window.draw(weakestStrategyText);
+
 			window.draw(waveNumberText);
 			if (wave->isPaused()){
 				window.draw(pausedText);
@@ -658,6 +703,7 @@ void startGame(){ //TODO
 			window.display();
 		}
 
+		strategySelectRect.setPosition(-100, -100);
 		window.close();
 		map->loadMap(map->getMapName());
 	} while (gameOverPrompt());
@@ -667,7 +713,7 @@ bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map){
 		return false;
 	}
 	else if (map->numOfNeighborPaths(new_x, new_y) > 1){
-				return false;
+		return false;
 	}
 	return true;
 }
@@ -723,8 +769,8 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 	int currentTowerIndex = findTowerIndex(currentTower, towerList);
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
-	int block_x = (x - (x % 32))/32;
-	int block_y = (y - (y % 32))/32;
+	int block_x = (x - (x % 32)) / 32;
+	int block_y = (y - (y % 32)) / 32;
 	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
 		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
 			if (GameConstants::spendMoney(currentTower->getUpgradePrice())){
@@ -738,7 +784,8 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 				setTowerInfo(currentTower, map->getWidth() * 32, true);
 			}
 			towerSelectionRect.setPosition(-40, -40);
-			towerType = TowerSelection::NA;
+			towerType = Selection::NA;
+
 		}
 		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
 			map->removeEntity(currentTower);
@@ -754,33 +801,45 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			sellButtonText.setPosition(-100, -100);
 
 			towerSelectionRect.setPosition(-100, -100);
-			towerType = TowerSelection::NA;
+			towerType = Selection::NA;
 
 			currentTower = NULL;
 		}
+		else if (nearestStrategyButton.getGlobalBounds().contains(x, y)){
+			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
+			currentTower->setStrategy(new NearestCritterTowerStrategy());
+
+		}
+
+		else if (weakestStrategyButton.getGlobalBounds().contains(x, y)){
+			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
+			currentTower->setStrategy(new WeakestCritterStrategy());
+		}
 		else if (normalTowerButton.getGlobalBounds().contains(x, y)){
-			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
-			towerType = TowerSelection::NORMAL;
+			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 2);
+			towerType = Selection::NORMAL;
 			setTowerInfo(new NormalTower(), map->getWidth() * 32, false);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
-			towerType = TowerSelection::FIRE;
+			towerType = Selection::FIRE;
 			setTowerInfo(new FireTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (iceTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(iceTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
-			towerType = TowerSelection::ICE;
+			towerType = Selection::ICE;
 			setTowerInfo(new IceTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
 			towerSelectionRect.setPosition(thunderTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
-			towerType = TowerSelection::THUNDER;
+			towerType = Selection::THUNDER;
 			setTowerInfo(new ThunderTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
-			towerType = TowerSelection::NA;
+			towerType = Selection::NA;
 		}
 		return;
 	}
@@ -793,37 +852,46 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 		currentTower = (Tower*)map->getEntity(block_x, block_y);
 		setTowerInfo(currentTower, map->getWidth() * 32, true);
 		towerSelectionRect.setPosition(-40, -40);
-		towerType = TowerSelection::NA;
+		strategySelectRect.setPosition(-100, -100);
+		towerType = Selection::NA;
+		if (typeid(*(currentTower->getStrategy())) == typeid(NearestCritterTowerStrategy)){
+			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
+		}
+		else{
+			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
+		}
 	}
 	else if (canPlace){
 		switch (towerType){
-		case TowerSelection::NORMAL:{
-										Tower* toAdd = new NormalTower();
-										if (GameConstants::spendMoney(toAdd->getBasePrice())){
-											map->addEntity(block_x, block_y, toAdd);
-											towerList.push_back(toAdd);
-										}
+		case Selection::NORMAL:{
+								   Tower* toAdd = new NormalTower();
+								   if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									   map->addEntity(block_x, block_y, toAdd);
+									   towerList.push_back(toAdd);
+								   }
 		} break;
-		case TowerSelection::FIRE:{
-									  Tower* toAdd = new FireTower(new NormalTower());
-									  if (GameConstants::spendMoney(toAdd->getBasePrice())){
-										  map->addEntity(block_x, block_y, toAdd);
-										  towerList.push_back(toAdd);
-									  }
+		case Selection::FIRE:{
+								 Tower* toAdd = new FireTower(new NormalTower());
+								 if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									 map->addEntity(block_x, block_y, toAdd);
+									 towerList.push_back(toAdd);
+								 }
 		} break;
-		case TowerSelection::ICE:{
-									 Tower* toAdd = new IceTower(new NormalTower());
-									 if (GameConstants::spendMoney(toAdd->getBasePrice())){
-										 map->addEntity(block_x, block_y, toAdd);
-										 towerList.push_back(toAdd);
-									 }
+		case Selection::ICE:{
+								Tower* toAdd = new IceTower(new NormalTower());
+								if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									map->addEntity(block_x, block_y, toAdd);
+									towerList.push_back(toAdd);
+								}
 		} break;
-		case TowerSelection::THUNDER:{
-										   Tower* toAdd = new ThunderTower(new NormalTower());
-										   if (GameConstants::spendMoney(toAdd->getBasePrice())) {
-											   map->addEntity(block_x, block_y, toAdd);
-											   towerList.push_back(toAdd);
-										   }
+		case Selection::THUNDER:{
+									Tower* toAdd = new ThunderTower(new NormalTower());
+									if (GameConstants::spendMoney(toAdd->getBasePrice())) {
+										map->addEntity(block_x, block_y, toAdd);
+										towerList.push_back(toAdd);
+									}
 		} break;
 		}
 	}
@@ -857,14 +925,24 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
 	if (showButtons){
 		upgradeButton.setPosition(mapWidthPixels + 4, 148);
 		sellButton.setPosition(mapWidthPixels + 84, 148);
+		nearestStrategyButton.setPosition(mapWidthPixels + 15, 212);
+		weakestStrategyButton.setPosition(mapWidthPixels + 15, 244);
 		upgradeButtonText.setPosition(upgradeButton.getPosition().x + 4, upgradeButton.getPosition().y + 6);
 		sellButtonText.setPosition(sellButton.getPosition().x + 16, sellButton.getPosition().y + 6);
+		strategyText.setPosition(mapWidthPixels + 50, 194);
+		nearestStrategyText.setPosition(nearestStrategyButton.getPosition().x + 4, nearestStrategyButton.getPosition().y + 6);
+		weakestStrategyText.setPosition(weakestStrategyButton.getPosition().x + 4, weakestStrategyButton.getPosition().y + 6);
 	}
 	else {
 		upgradeButton.setPosition(-100, -100);
 		sellButton.setPosition(-100, -100);
 		upgradeButtonText.setPosition(-100, -100);
 		sellButtonText.setPosition(-100, -100);
+		strategyText.setPosition(-100, -100);
+		nearestStrategyButton.setPosition(-100, -100);
+		nearestStrategyText.setPosition(-100, -100);
+		weakestStrategyButton.setPosition(-100, -100);
+		weakestStrategyText.setPosition(-100, -100);
 	}
 }
 
@@ -898,7 +976,7 @@ bool saveMapPrompt(Map* map, bool overwrite){
 	}
 	errMsg = "";
 	if (overwrite){
-		cout<< map->saveMap(map->getMapName(), true);
+		cout << map->saveMap(map->getMapName(), true);
 		return true;
 	}
 	while (true){
@@ -932,8 +1010,8 @@ void foo(int x, int y, Map*& map){
 	vector<int> oldPath = map->getPath();
 	for (int i = 0; i < oldPath.size(); i += 2){
 		newPath.push_back(oldPath[i]);
-		newPath.push_back(oldPath[i+1]);
-		if (x == oldPath[i] && y == oldPath[i+1]){
+		newPath.push_back(oldPath[i + 1]);
+		if (x == oldPath[i] && y == oldPath[i + 1]){
 			break;
 		}
 	}
@@ -942,7 +1020,7 @@ void foo(int x, int y, Map*& map){
 	map->setMapName(mapName);
 	for (int i = 0; i < newPath.size(); i += 2){
 		if (i == 0){
-			map->addEntity(newPath[i], newPath[i+1], new Path(GameConstants::START_IMAGE_NAME));
+			map->addEntity(newPath[i], newPath[i + 1], new Path(GameConstants::START_IMAGE_NAME));
 		}
 		else{
 			map->addEntity(newPath[i], newPath[i + 1], new Path());
@@ -950,7 +1028,7 @@ void foo(int x, int y, Map*& map){
 	}
 }
 void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused){
-	
+
 	for (int i = 0; i < towerList.size(); ++i){
 		if (!paused && towerList[i]->isPaused()){
 			towerList[i]->resume();
@@ -968,7 +1046,7 @@ int findTowerIndex(Tower* tower, vector<Tower*> towerList){
 			return i;
 		}
 	}
-	return - 1;
+	return -1;
 }
 
 bool gameOverPrompt() {
@@ -994,6 +1072,7 @@ bool gameOverPrompt() {
 
 	if (input == 'n')
 		return false;
-	else
+	else {
 		return true;
+	}
 }

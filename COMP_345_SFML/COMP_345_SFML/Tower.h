@@ -42,6 +42,7 @@ public:
 	void resume();
 	bool isPaused();
 	void setStrategy(Strategy* strategy);
+	Strategy* getStrategy();
 private:
 	/*int x;
 	int y;

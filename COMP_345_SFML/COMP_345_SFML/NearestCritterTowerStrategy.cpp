@@ -22,7 +22,7 @@ int NearestCritterTowerStrategy::execute(vector<Critter*> critters, int towerX, 
 		int critterX = critters[i]->getSprite().getPosition().x + critters[i]->getSprite().getLocalBounds().width / 2;
 		int critterY = critters[i]->getSprite().getPosition().y + critters[i]->getSprite().getLocalBounds().height / 2;
 
-		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + (critterY - towerY, 2)));
+		float distanceFromTower = sqrt((pow(critterX - towerX, 2) + pow(critterY - towerY, 2)));
 		//if (distanceFromTower <= tower->getRange()) {
 		if (distanceFromTower <= towerRange) {
 			if (closestDistTower > distanceFromTower) {

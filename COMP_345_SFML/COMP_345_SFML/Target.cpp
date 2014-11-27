@@ -15,6 +15,10 @@ Target::Target(Strategy *initStrategy) {
 	this->strategy = initStrategy;
 }
 
+Strategy* Target::getStrategy() {
+	return this->strategy;
+}
+
 void Target::setStrategy(Strategy *newStrategy) {
 	this->strategy = newStrategy;
 }

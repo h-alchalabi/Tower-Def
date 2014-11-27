@@ -55,6 +55,10 @@ bool Tower::isPaused(){
 	return paused;
 }
 
+Strategy* Tower::getStrategy() {
+	return targetStrategy.getStrategy();
+}
+
 void Tower::setStrategy(Strategy* strategy) {
 	targetStrategy.setStrategy(strategy);
 }
