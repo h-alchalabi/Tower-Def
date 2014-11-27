@@ -13,6 +13,4 @@ public:
 	int getSellPrice();
 	int getUpgradePrice();
 	void shoot(Critter* targettedCritter);
-private:
-	int burnDamage;
 };

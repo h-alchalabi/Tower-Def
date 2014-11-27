@@ -4,7 +4,7 @@ SlowCritter::SlowCritter(int level) : Critter(GameConstants::SLOW_CRITTER_IMAGE_
 	//this->level = level;
 	this->maxHP = this->HP = 70 * level;
 	this->speed = 1;
-	this->reward = 1 * level;
+	this->reward = 10 * level;
 }
 
 SlowCritter::~SlowCritter(){

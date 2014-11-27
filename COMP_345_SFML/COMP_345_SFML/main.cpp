@@ -6,6 +6,7 @@
 #include "Tower.h"
 #include "FireTower.h"
 #include "IceTower.h"
+#include "ThunderTower.h"
 #include "NormalTower.h"
 #include "DecoratedTower.h"
 #include "LevelUpTower.h"
@@ -34,13 +35,13 @@ int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 bool gameOverPrompt();
 
 namespace TowerSelection{
-	enum TowerType { NA, NORMAL, FIRE, ICE };
+	enum TowerType { NA, NORMAL, FIRE, ICE, THUNDER };
 }
 
 static TowerSelection::TowerType towerType;
 
-static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton;
-static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture;
+static sf::Sprite normalTowerButton, fireTowerButton, iceTowerButton, thunderTowerButton;
+static sf::Texture normalTowerTexture, fireTowerTexture, iceTowerTexture, thunderTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
 static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 20));
 static sf::RectangleShape sellButton(sf::Vector2<float>(64, 20));
@@ -120,10 +121,12 @@ void init(){
 	normalTowerTexture.loadFromFile("res/img/" + GameConstants::NORMAL_TOWER_IMAGE_NAME + ".png");
 	fireTowerTexture.loadFromFile("res/img/" + GameConstants::FIRE_TOWER_IMAGE_NAME + ".png");
 	iceTowerTexture.loadFromFile("res/img/" + GameConstants::ICE_TOWER_IMAGE_NAME + ".png");
+	thunderTowerTexture.loadFromFile("res/img/" + GameConstants::THUNDER_TOWER_IMAGE_NAME + ".png");
 
 	normalTowerButton.setTexture(normalTowerTexture);
 	fireTowerButton.setTexture(fireTowerTexture);
 	iceTowerButton.setTexture(iceTowerTexture);
+	thunderTowerButton.setTexture(thunderTowerTexture);
 
 	towerType = TowerSelection::NA;
 
@@ -547,6 +550,7 @@ void startGame(){ //TODO
 	normalTowerButton.setPosition(16, map->getHeight() * 32 + 48);
 	fireTowerButton.setPosition(64, map->getHeight() * 32 + 48);
 	iceTowerButton.setPosition(112, map->getHeight() * 32 + 48);
+	thunderTowerButton.setPosition(160, map->getHeight() * 32 + 48);
 
 	towerIcon.setPosition(-100, -100);
 	towerInfoText.setPosition(map->getWidth() * 32 + 4, 64);
@@ -638,6 +642,7 @@ void startGame(){ //TODO
 			window.draw(normalTowerButton);
 			window.draw(fireTowerButton);
 			window.draw(iceTowerButton);
+			window.draw(thunderTowerButton);
 			playerMoneyText.setString(GameConstants::getMoneyString());
 			window.draw(playerMoneyText);
 			playerHPText.setString(GameConstants::getHPString());
@@ -768,6 +773,11 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			towerType = TowerSelection::ICE;
 			setTowerInfo(new IceTower(new NormalTower()), map->getWidth() * 32, false);
 		}
+		else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
+			towerSelectionRect.setPosition(thunderTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
+			towerType = TowerSelection::THUNDER;
+			setTowerInfo(new ThunderTower(new NormalTower()), map->getWidth() * 32, false);
+		}
 		else {
 			towerSelectionRect.setPosition(-40, -40);
 			towerType = TowerSelection::NA;
@@ -777,6 +787,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(NormalTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(IceTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(FireTower) ||
+		typeid(*(map->getEntity(block_x, block_y))) == typeid(ThunderTower) ||
 		typeid(*(map->getEntity(block_x, block_y))) == typeid(LevelUpTower)
 		){
 		currentTower = (Tower*)map->getEntity(block_x, block_y);
@@ -806,7 +817,14 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 										 map->addEntity(block_x, block_y, toAdd);
 										 towerList.push_back(toAdd);
 									 }
-		}break;
+		} break;
+		case TowerSelection::THUNDER:{
+										   Tower* toAdd = new ThunderTower(new NormalTower());
+										   if (GameConstants::spendMoney(toAdd->getBasePrice())) {
+											   map->addEntity(block_x, block_y, toAdd);
+											   towerList.push_back(toAdd);
+										   }
+		} break;
 		}
 	}
 }
@@ -820,6 +838,9 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
 	}
 	else if (selectedTower->getImageName() == GameConstants::ICE_TOWER_IMAGE_NAME){
 		type = "ICE";
+	}
+	else if (selectedTower->getImageName() == GameConstants::THUNDER_TOWER_IMAGE_NAME) {
+		type = "THUNDER";
 	}
 	stringstream ss;
 	ss << "Level:         " << selectedTower->getLevel() << endl;

@@ -2,7 +2,6 @@
 #include "GameConstants.h"
 
 FireTower::FireTower(Tower* decoratedTower) : DecoratedTower(decoratedTower){
-	this->burnDamage = 2;
 	this->setImageName(GameConstants::FIRE_TOWER_IMAGE_NAME);
 }
 int FireTower::getX(){

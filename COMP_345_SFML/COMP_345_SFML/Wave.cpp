@@ -70,6 +70,7 @@ bool Wave::deploy(Map* map){//To deploy the critters and to move them.
 bool Wave::move(Map* map){//moving all critters
 	for (int i = 0; i < critterDeployed && i < critVec.size(); ++i){
 		if (critVec[i]->getHP() <= 0){
+			GameConstants::collectMoney(critVec.at(i)->getReward());
 			map->removeEntity(critVec.at(i));
 			critVec.erase(critVec.begin() + i);
 			--i;

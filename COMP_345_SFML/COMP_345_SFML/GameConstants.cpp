@@ -17,6 +17,7 @@ const string GameConstants::SCENERY_IMAGE_NAME = "scenery";
 const string GameConstants::NORMAL_TOWER_IMAGE_NAME = "normal_tower";
 const string GameConstants::FIRE_TOWER_IMAGE_NAME = "fire_tower";
 const string GameConstants::ICE_TOWER_IMAGE_NAME = "ice_tower";
+const string GameConstants::THUNDER_TOWER_IMAGE_NAME = "thunder_tower";
 const string GameConstants::CRITTER_IMAGE_NAME = "normal_critter";
 const string GameConstants::NORMAL_CRITTER_IMAGE_NAME = "normal_critter";
 const string GameConstants::FAST_CRITTER_IMAGE_NAME = "fast_critter";

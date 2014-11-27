@@ -19,6 +19,7 @@ public:
 	static const string NORMAL_TOWER_IMAGE_NAME;
 	static const string FIRE_TOWER_IMAGE_NAME;
 	static const string ICE_TOWER_IMAGE_NAME;
+	static const string THUNDER_TOWER_IMAGE_NAME;
 	static const string CRITTER_IMAGE_NAME;
 	static const string NORMAL_CRITTER_IMAGE_NAME;
 	static const string FAST_CRITTER_IMAGE_NAME;

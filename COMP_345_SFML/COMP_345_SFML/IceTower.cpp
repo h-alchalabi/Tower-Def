@@ -16,7 +16,6 @@ int IceTower::getLevel(){
 }
 int IceTower::getDamage(){
 	return DecoratedTower::getDamage();
-	std::cout << "Ice getDamage() = " << getDamage() <<std::endl;
 }
 int IceTower::getRange(){
 	return DecoratedTower::getRange();

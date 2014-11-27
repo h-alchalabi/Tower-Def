@@ -105,6 +105,9 @@
     <ClCompile Include="DecoratedTower.cpp">
       <Filter>Source Files\Tower</Filter>
     </ClCompile>
+    <ClCompile Include="ThunderTower.cpp">
+      <Filter>Source Files\Tower</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireTower.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="DecoratedTower.h">
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="ThunderTower.h">
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
   </ItemGroup>

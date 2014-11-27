@@ -91,6 +91,7 @@
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="IceTower.cpp" />
     <ClCompile Include="LevelUpTower.cpp" />
+    <ClCompile Include="ThunderTower.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="NearestCritterTowerStrategy.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="IceTower.h" />
     <ClInclude Include="LevelUpTower.h" />
+    <ClInclude Include="ThunderTower.h" />
     <ClInclude Include="NearestCritterTowerStrategy.h" />
     <ClInclude Include="NormalCritter.h" />
     <ClInclude Include="NormalTower.h" />
