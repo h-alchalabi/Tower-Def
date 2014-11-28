@@ -1,10 +1,13 @@
-#pragma once
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
 
+#pragma once
 #include <string>
 #include "Observable.h"
 #include "SFML/Graphics.hpp"
 
-class Entity : public Observable{
+class Entity : public Observable {
 private:
 	std::string image_name;
 	sf::Texture image_texture;

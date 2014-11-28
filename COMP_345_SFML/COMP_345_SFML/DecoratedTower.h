@@ -1,10 +1,14 @@
-#pragma once
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
 
+#pragma once
 #include "Tower.h"
 
-class DecoratedTower : public Tower{
+class DecoratedTower : public Tower {
 protected:
 	Tower* decoratedTower;
+
 public:
 	DecoratedTower(Tower* decoratedTower);
 	int getX();

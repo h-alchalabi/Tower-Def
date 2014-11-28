@@ -1,3 +1,7 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #pragma once
 #include "Critter.h"
 #include "CritterFactory.h"
@@ -5,9 +9,7 @@
 #include "Map.h"
 #include "SFML\Graphics.hpp"
 
-class Wave
-{
-	
+class Wave {
 public:
 	Wave();
 	~Wave();
@@ -33,8 +35,6 @@ private:
 	std::vector <Critter*> critVec;
 	Critter* critter;
 	int level;
-	
-
 };
 
 

@@ -1,3 +1,7 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "Map.h"
 #include "GameConstants.h"
 #include <SFML/Graphics.hpp>
@@ -9,16 +13,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-/*
- * Private Functions
- */
-void Map::resizeMap(){
-	// Copy Stanley shiee
-}
-/*
- * Public Functions
- */
-Map::Map(){
+
+Map::Map() {
 	validMap = false;
 	this->width = 0;
 	this->height = 0;
@@ -28,10 +24,12 @@ Map::Map(){
 	this->end_y = 0;
 	this->pathSteps = 0;
 }
-Map::Map(int width, int height){
+
+Map::Map(int width, int height) {
 	init(width, height);
 }
-void Map::init(int width, int height){
+
+void Map::init(int width, int height) {
 	validMap = false;
 	this->width = width;
 	this->height = height;
@@ -42,52 +40,53 @@ void Map::init(int width, int height){
 	this->thePath;
 	this->pathSteps;
 	theMap.resize(this->width);
-	for (int i = 0; i < this->width; ++i){
+	for (int i = 0; i < this->width; ++i) {
 		theMap[i].resize(this->height);
-		for (int j = 0; j < this->height; ++j){
+		for (int j = 0; j < this->height; ++j) {
 			theMap[i][j] = new Scenery();
 			theMap[i][j]->setPosition((i * 32), (j * 32));
 		}
 	}
 }
-bool Map::addEntity(int x, int y, Tower* tower){
-	if (!inBounds(x, y)){
+bool Map::addEntity(int x, int y, Tower* tower) {
+	if (!inBounds(x, y)) {
 		return false;
 	}
-	if (typeid(*theMap[x][y]) == typeid(Scenery)){
+	if (typeid(*theMap[x][y]) == typeid(Scenery)) {
 		theMap[x][y] = tower;
 		theMap[x][y]->setPosition((x * 32), (y * 32));
 		return true;
 	}
 	return false;
 }
-bool Map::addEntity(int x, int y, Critter* critter){
-	if (!inBounds(x, y)){
+
+bool Map::addEntity(int x, int y, Critter* critter) {
+	if (!inBounds(x, y)) {
 		return false;
 	}
-	if (typeid(*theMap[x][y]) == typeid(Path)){
+	if (typeid(*theMap[x][y]) == typeid(Path)) {
 		theMap[x][y] = critter;
 		theMap[x][y]->setPosition((x * 32), (y * 32));
 		return true;
 	}
 	return false;
 }
-bool Map::addEntity(int x, int y, Path* path){
+
+bool Map::addEntity(int x, int y, Path* path) {
 	if (!inBounds(x, y)){
 		return false;
 	}
 
-	if (path->getImageName() == GameConstants::END_IMAGE_NAME && typeid(*theMap[x][y]) == typeid(Path)){
+	if (path->getImageName() == GameConstants::END_IMAGE_NAME && typeid(*theMap[x][y]) == typeid(Path)) {
 		theMap[x][y] = path;
 		theMap[x][y]->setPosition((x * 32), (y * 32));
 		this->end_x = x;
 		this->end_y = y;
 		return true;
-	}
-	else if (typeid(*theMap[x][y]) == typeid(Scenery)){
+	} else if (typeid(*theMap[x][y]) == typeid(Scenery)) {
 		theMap[x][y] = path;
 		theMap[x][y]->setPosition((x * 32), (y * 32));
-		if (path->getImageName() == GameConstants::START_IMAGE_NAME){
+		if (path->getImageName() == GameConstants::START_IMAGE_NAME) {
 			this->start_x = x;
 			this->start_y = y;
 		}
@@ -99,9 +98,10 @@ bool Map::addEntity(int x, int y, Path* path){
 	}
 	return false;
 }
-void Map::removeEntity(Tower* tower){
-	for (int i = 0; i < this->width; ++i){
-		for (int j = 0; j < this->height; ++j){
+
+void Map::removeEntity(Tower* tower) {
+	for (int i = 0; i < this->width; ++i) {
+		for (int j = 0; j < this->height; ++j) {
 			if (theMap[i][j] == tower){
 				theMap[i][j] = new Scenery();
 				theMap[i][j]->setPosition((i * 32), (j * 32));
@@ -109,17 +109,16 @@ void Map::removeEntity(Tower* tower){
 		}
 	}
 }
-void Map::removeEntity(Critter* critter){
-	for (int i = 0; i < this->width; ++i){
-		for (int j = 0; j < this->height; ++j){
-			if (theMap[i][j] == critter){
-				if (i == this->start_x && j == this->start_y){
+
+void Map::removeEntity(Critter* critter) {
+	for (int i = 0; i < this->width; ++i) {
+		for (int j = 0; j < this->height; ++j) {
+			if (theMap[i][j] == critter) {
+				if (i == this->start_x && j == this->start_y) {
 					theMap[i][j] = new Path(GameConstants::START_IMAGE_NAME);
-				}
-				else if (i == this->end_x && j == this->end_y){
+				} else if (i == this->end_x && j == this->end_y) {
 					theMap[i][j] = new Path(GameConstants::END_IMAGE_NAME);
-				}
-				else{
+				} else {
 					theMap[i][j] = new Path();
 				}
 				theMap[i][j]->setPosition((i * 32), (j * 32));
@@ -127,10 +126,11 @@ void Map::removeEntity(Critter* critter){
 		}
 	}
 }
-void Map::removeEntity(Path* path){
-	for (int i = 0; i < this->width; ++i){
-		for (int j = 0; j < this->height; ++j){
-			if (theMap[i][j] == path){
+
+void Map::removeEntity(Path* path) {
+	for (int i = 0; i < this->width; ++i) {
+		for (int j = 0; j < this->height; ++j) {
+			if (theMap[i][j] == path) {
 				theMap[i][j] = new Scenery();
 				theMap[i][j]->setPosition((i * 32), (j * 32));
 			}
@@ -138,13 +138,13 @@ void Map::removeEntity(Path* path){
 	}
 }
 
-void Map::printMap(sf::RenderWindow& window){
-	for (int i = 0; i < theMap.size(); ++i){
-		for (int j = 0; j < theMap[i].size(); ++j){
+void Map::printMap(sf::RenderWindow& window) {
+	for (int i = 0; i < theMap.size(); ++i) {
+		for (int j = 0; j < theMap[i].size(); ++j) {
 			window.draw(theMap[i][j]->getSprite());
-			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)){
+			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)) {
 				float hpWidth = (((Critter*)theMap[i][j])->getHP() * 28.0) / ((Critter*)theMap[i][j])->getMaxHP();
-				if (hpWidth < 0){
+				if (hpWidth < 0) {
 					hpWidth = 0;
 				}
 				sf::RectangleShape subHealthBar(sf::Vector2<float>(28, 6));
@@ -159,14 +159,14 @@ void Map::printMap(sf::RenderWindow& window){
 		}
 	}
 }
-bool Map::validateMap(){ // TODO
-	if (this->start_x == -1 || this->start_y == -1 || this->end_x == -1 || this->end_y == -1){
+bool Map::validateMap() {
+	if (this->start_x == -1 || this->start_y == -1 || this->end_x == -1 || this->end_y == -1) {
 		return false;
 	}
-	for (int i = 0; i < theMap.size(); ++i){
-		for (int j = 0; j < theMap[i].size(); ++j){
-			if (typeid(*theMap[i][j]) == typeid(Path)){
-				if (this->numOfNeighborPaths(i, j) > 2){
+	for (int i = 0; i < theMap.size(); ++i) {
+		for (int j = 0; j < theMap[i].size(); ++j) {
+			if (typeid(*theMap[i][j]) == typeid(Path)) {
+				if (this->numOfNeighborPaths(i, j) > 2) {
 					return false;
 				}
 			}
@@ -174,32 +174,28 @@ bool Map::validateMap(){ // TODO
 	}
 	return true;
 }
-bool Map::saveMap(std::string fileName, bool overwrite){
+
+bool Map::saveMap(std::string fileName, bool overwrite) {
 	std::fstream file;
 	file.open("res/info/maps/" + fileName + "_map.txt");
-	if (file && !overwrite){
+	if (file && !overwrite) {
 		return false;
-	}
-	else {
+	} else {
 		file.close();
 		this->mapName = fileName;
 		file.open("res/info/maps/" + fileName + "_map.txt", ios::out | ios::trunc);
 
 		// iterate thru j then i, becasue we are writing the file line by line
 		// and j represents the line number.
-		for (int j = 0; j < this->height; ++j){
-			for (int i = 0; i < this->width; ++i){
-				if (theMap[i][j]->getImageName() == GameConstants::START_IMAGE_NAME){
+		for (int j = 0; j < this->height; ++j) {
+			for (int i = 0; i < this->width; ++i) {
+				if (theMap[i][j]->getImageName() == GameConstants::START_IMAGE_NAME) {
 					file << "S";
-				
-				}
-				else if (theMap[i][j]->getImageName() == GameConstants::END_IMAGE_NAME){
+				} else if (theMap[i][j]->getImageName() == GameConstants::END_IMAGE_NAME) {
 					file << "E";
-				}
-				else if (typeid(*theMap[i][j]) == typeid(Path)){
+				} else if (typeid(*theMap[i][j]) == typeid(Path)) {
 					file << "P";
-				}
-				else {
+				} else {
 					file << "-";
 				}
 			}
@@ -207,27 +203,28 @@ bool Map::saveMap(std::string fileName, bool overwrite){
 		}
 		file.close();
 		file.open("res/info/paths/" + fileName + "_path.txt", ios::out | ios::trunc);
-		for (int i = 0; i < thePath.size(); i += 2){
+		for (int i = 0; i < thePath.size(); i += 2) {
 			file << thePath[i] << "," << thePath[i + 1] << std::endl;
 		}
 	}
 	file.close();
 	return true;
 }
-bool Map::loadMap(std::string fileName){
+
+bool Map::loadMap(std::string fileName) {
 	std::fstream file;
 	file.open("res/info/maps/" + fileName + "_map.txt");
-	if (file){
+	if (file) {
 		this->mapName = fileName;
 		// get the width & height of the map
 		this->height = 0;
 		std::string line, token;
-		while (file.is_open()){
+		while (file.is_open()) {
 			file >> line;
-			if (file.eof()){
+			if (file.eof()) {
 				break;
 			}
-			if (this->height == 0){
+			if (this->height == 0) {
 				width = line.size();
 			}
 			this->height++;
@@ -235,18 +232,16 @@ bool Map::loadMap(std::string fileName){
 		file.close();
 		this->init(width, height);
 		file.open("res/info/maps/" + fileName + "_map.txt");
-		for (int j = 0; j < this->height; ++j){
+		for (int j = 0; j < this->height; ++j) {
 			file >> line;
-			for (int i = 0; i < this->width; ++i){
+			for (int i = 0; i < this->width; ++i) {
 				token = line.substr(i);
-				if (token.substr(0, 1) == "S"){
+				if (token.substr(0, 1) == "S") {
 					addEntity(i, j, new Path(GameConstants::START_IMAGE_NAME));
-				}
-				else if (token.substr(0, 1) == "E"){
+				} else if (token.substr(0, 1) == "E") {
 					addEntity(i, j, new Path);
 					addEntity(i, j, new Path(GameConstants::END_IMAGE_NAME));
-				}
-				else if (token.substr(0, 1) == "P"){
+				} else if (token.substr(0, 1) == "P") {
 					addEntity(i, j, new Path());
 				}
 			}
@@ -258,9 +253,9 @@ bool Map::loadMap(std::string fileName){
 		char delimiter = ',';
 		thePath.resize(0);
 		pathSteps = 0;
-		while (file.is_open()){
+		while (file.is_open()) {
 			file >> line;
-			if (file.eof()){
+			if (file.eof()) {
 				break;
 			}
 			int x, y;
@@ -272,118 +267,131 @@ bool Map::loadMap(std::string fileName){
 			thePath.push_back(y);
 			++pathSteps;
 		}
-	}
-	else{
+	} else {
 		return false;
 	}
+
 	return true;
 }
-bool Map::inBounds(int x, int y){
+
+bool Map::inBounds(int x, int y) {
 	return (x >= 0 && x < this->width && y >= 0 && y < this->height);
 }
-// getters and setters
-void Map::setWidth(int width){
+
+void Map::setWidth(int width) {
 	this->width = width;
 }
-int Map::getWidth() const{
+
+int Map::getWidth() const {
 	return this->width;
 }
-void Map::setHeight(int height){
+
+void Map::setHeight(int height) {
 	this->height = height;
 }
-int Map::getHeight() const{
+
+int Map::getHeight() const {
 	return this->height;
 }
-void Map::setStartX(int start_x){
+
+void Map::setStartX(int start_x) {
 	this->start_x = start_x;
 }
-int Map::getStartX() const{
+
+int Map::getStartX() const {
 	return this->start_x;
 }
-void Map::setStartY(int start_y){
+
+void Map::setStartY(int start_y) {
 	this->start_y = start_y;
 }
-int Map::getStartY() const{
+
+int Map::getStartY() const {
 	return this->start_y;
 }
-void Map::setEndX(int end_x){
+
+void Map::setEndX(int end_x) {
 	this->end_x = end_x;
 }
-int Map::getEndX() const{
+
+int Map::getEndX() const {
 	return this->end_x;
 }
-void Map::setEndY(int end_y){
+
+void Map::setEndY(int end_y) {
 	this->end_y = end_y;
 }
-int Map::getEndY() const{
+
+int Map::getEndY() const {
 	return this->end_y;
-}
-Entity* Map::getEntity(int x, int y){
+} 
+
+Entity* Map::getEntity(int x, int y) {
 	if (inBounds(x, y)){
 		return theMap[x][y];
 	}
 	return NULL;
 }
-int Map::numOfNeighborPaths(int x, int y){
+int Map::numOfNeighborPaths(int x, int y) {
 	int numOfNeighbors = 0;
-	if (inBounds(x - 1, y) && typeid(*theMap[x - 1][y]) == typeid(Path)){
+	if (inBounds(x - 1, y) && typeid(*theMap[x - 1][y]) == typeid(Path)) {
 		++numOfNeighbors;
 	}
-	if (inBounds(x, y - 1) && typeid(*theMap[x][y - 1]) == typeid(Path)){
+	if (inBounds(x, y - 1) && typeid(*theMap[x][y - 1]) == typeid(Path)) {
 		++numOfNeighbors;
 	}
-	if (inBounds(x + 1, y) && typeid(*theMap[x + 1][y]) == typeid(Path)){
+	if (inBounds(x + 1, y) && typeid(*theMap[x + 1][y]) == typeid(Path)) {
 		++numOfNeighbors;
 	}
-	if (inBounds(x, y + 1) && typeid(*theMap[x][y + 1]) == typeid(Path)){
+	if (inBounds(x, y + 1) && typeid(*theMap[x][y + 1]) == typeid(Path)) {
 		++numOfNeighbors;
 	}
 	return numOfNeighbors;
 }
-std::vector<int> Map::getPath(){
+
+std::vector<int> Map::getPath() {
 	return thePath;
 }
-int Map::getPathSteps(){
+
+int Map::getPathSteps() {
 	return pathSteps;
 }
-void Map::resize(int newWidth, int newHeight, bool fromLeft, bool fromTop){
-	if (newWidth < this->width || newHeight < this->height){
+
+void Map::resize(int newWidth, int newHeight, bool fromLeft, bool fromTop) {
+	if (newWidth < this->width || newHeight < this->height) {
 		return;
 	}
 	int columnsToAdd = newWidth - this->width;
 	int rowsToAdd = newHeight - this->height;
-	if (fromLeft || fromTop){
-		for (int i = 0; i < thePath.size(); i += 2){
-			if (fromLeft){
+	if (fromLeft || fromTop) {
+		for (int i = 0; i < thePath.size(); i += 2) {
+			if (fromLeft) {
 				thePath[i] += columnsToAdd;
 			}
-			if (fromTop){
+			if (fromTop) {
 				thePath[i + 1] += rowsToAdd;
 			}
 		}
 	}
-	for (int x = 0; x < newWidth; ++x){
-		if (fromLeft && columnsToAdd > 0){
+	for (int x = 0; x < newWidth; ++x) {
+		if (fromLeft && columnsToAdd > 0) {
 			theMap.insert(theMap.begin() + 0, vector<Entity*>());
 			theMap[x].resize(this->height);
 			--columnsToAdd;
-		}
-		else if (!fromLeft && columnsToAdd > 0 && x == theMap.size()){
+		} else if (!fromLeft && columnsToAdd > 0 && x == theMap.size()) {
 			theMap.insert(theMap.begin() + x, vector<Entity*>());
 			theMap[x].resize(this->height);
 			--columnsToAdd;
 		}
 		rowsToAdd = newHeight - this->height;
-		for (int y = 0; y < newHeight; ++y){
-			if (fromTop && rowsToAdd > 0){
+		for (int y = 0; y < newHeight; ++y) {
+			if (fromTop && rowsToAdd > 0) {
 				theMap[x].insert(theMap[x].begin() + 0, new Scenery());
 				--rowsToAdd;
-			}
-			else if (!fromTop && rowsToAdd > 0 && y == theMap[x].size()){
+			} else if (!fromTop && rowsToAdd > 0 && y == theMap[x].size()) {
 				theMap[x].insert(theMap[x].begin() + y, new Scenery());
 				--rowsToAdd;
-			}
-			else if (theMap[x][y] == NULL){
+			} else if (theMap[x][y] == NULL) {
 				theMap[x][y] = new Scenery();
 			}
 			theMap[x][y]->setPosition(x * 32, y * 32);
@@ -392,9 +400,11 @@ void Map::resize(int newWidth, int newHeight, bool fromLeft, bool fromTop){
 	this->width = newWidth;
 	this->height = newHeight;
 }
-void Map::setMapName(std::string filename){
+
+void Map::setMapName(std::string filename) {
 	this->mapName = filename;
 }
-std::string Map::getMapName(){
+
+std::string Map::getMapName() {
 	return this->mapName;
 }

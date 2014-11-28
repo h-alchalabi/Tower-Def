@@ -1,36 +1,50 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "FireTower.h"
 #include "GameConstants.h"
 
-FireTower::FireTower(Tower* decoratedTower) : DecoratedTower(decoratedTower){
+FireTower::FireTower(Tower* decoratedTower) : DecoratedTower(decoratedTower) {
 	this->setImageName(GameConstants::FIRE_TOWER_IMAGE_NAME);
 }
-int FireTower::getX(){
+
+int FireTower::getX() {
 	return DecoratedTower::getX();
 }
-int FireTower::getY(){
+
+int FireTower::getY() {
 	return DecoratedTower::getY();
 }
-int FireTower::getLevel(){
+
+int FireTower::getLevel() {
 	return DecoratedTower::getLevel();
 }
-int FireTower::getDamage(){
+
+int FireTower::getDamage() {
 	return DecoratedTower::getDamage() + 5;
 }
-int FireTower::getRange(){
+
+int FireTower::getRange() {
 	return DecoratedTower::getRange();
 }
-int FireTower::getFireRate(){
+
+int FireTower::getFireRate() {
 	return DecoratedTower::getFireRate();
 }
-int FireTower::getBasePrice(){
+
+int FireTower::getBasePrice() {
 	return DecoratedTower::getBasePrice() + 75;
 }
-int FireTower::getSellPrice(){
+
+int FireTower::getSellPrice() {
 	return DecoratedTower::getSellPrice() + 75;
 }
-int FireTower::getUpgradePrice(){
+
+int FireTower::getUpgradePrice() {
 	return DecoratedTower::getUpgradePrice() + 75;
 }
+
 void FireTower::shoot(Critter* targettedCritter) {
 	targettedCritter->setCritterStatus(CritterStatus::BURN, 3000);
 	DecoratedTower::shoot(targettedCritter);

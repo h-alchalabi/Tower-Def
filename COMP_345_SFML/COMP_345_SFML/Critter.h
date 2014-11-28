@@ -1,12 +1,14 @@
-#pragma once
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
 
+#pragma once
 #include "Entity.h"
 
-enum CritterStatus { NORMAL, BURN, FREEZE };
+enum CritterStatus { NORMAL, BURN };
 
 class Critter : public Entity {
 public:
-
 	virtual int getSpeed() = 0;
 	virtual int getHP() = 0;
 	virtual int getMaxHP() const = 0;

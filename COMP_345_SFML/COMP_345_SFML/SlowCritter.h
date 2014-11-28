@@ -1,6 +1,11 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #pragma once
 #include "Critter.h"
-class SlowCritter :  public Critter{
+
+class SlowCritter : public Critter {
 public:
 	SlowCritter();
 	SlowCritter(int level);

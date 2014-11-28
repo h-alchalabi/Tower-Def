@@ -1,39 +1,40 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "NormalCritter.h"
 #include "GameConstants.h"
 
-NormalCritter::NormalCritter(int level) : Critter(GameConstants::NORMAL_CRITTER_IMAGE_NAME){
+NormalCritter::~NormalCritter(){}
+
+NormalCritter::NormalCritter(int level) : Critter(GameConstants::NORMAL_CRITTER_IMAGE_NAME) {
 	this->level = level;
 	this->maxHP = this->HP = 50*level;
 	this->speed = 2;
 	this->reward = 3*level;
-
 }
 
-NormalCritter::~NormalCritter(){
-
-}
-
-int NormalCritter::getHP(){
+int NormalCritter::getHP() {
 	return HP;
 }
 
-int NormalCritter::getMaxHP() const{
+int NormalCritter::getMaxHP() const {
 	return this->maxHP;
 }
 
-void NormalCritter::setHP(int HP){
+void NormalCritter::setHP(int HP) {
 	this->HP = HP;
 }
 
-int NormalCritter::getReward(){
+int NormalCritter::getReward() {
 	return reward;
 }
 
-void NormalCritter::setReward(int reward){
+void NormalCritter::setReward(int reward) {
 	this->reward = reward;
 }
 
-int NormalCritter::getSpeed(){
+int NormalCritter::getSpeed() {
 	return speed;
 }
 
@@ -49,5 +50,4 @@ void NormalCritter::setCritterStatus(CritterStatus critterStatus, float statusDu
 	critterClock.restart();
 	statusTime = statusDuration;
 	this->critterStatus = critterStatus;
-
 }

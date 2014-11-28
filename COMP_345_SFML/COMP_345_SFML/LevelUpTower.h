@@ -1,8 +1,11 @@
-#pragma once
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
 
+#pragma once
 #include "DecoratedTower.h"
 
-class LevelUpTower : public DecoratedTower{
+class LevelUpTower : public DecoratedTower {
 public:
 	LevelUpTower(Tower* decoratedTower);
 	int getX();

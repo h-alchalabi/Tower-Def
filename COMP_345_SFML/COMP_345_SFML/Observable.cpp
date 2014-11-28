@@ -1,39 +1,43 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "Observable.h"
 #include "Observer.h"
 #include <iostream>
 
-Observable::Observable(){
+Observable::Observable() {
 	this->observers = new Observer*[observerCap];
-	for (int i = 0; i < observerCap; ++i){
+	for (int i = 0; i < observerCap; ++i) {
 		observers[i] = nullptr;
 	}
 }
 
-Observable::~Observable(){
-	std::cout << "D: O" << std::endl;
+Observable::~Observable() {
 	delete[] this->observers;
-	std::cout << "D: O - DONE" << std::endl;
 }
 
-void Observable::addObserver(Observer* o){
-	for (int i = 0; i < observerCap; ++i){
-		if (observers[i] == nullptr){
+void Observable::addObserver(Observer* o) {
+	for (int i = 0; i < observerCap; ++i) {
+		if (observers[i] == nullptr) {
 			observers[i] = o;
 			break;
 		}
 	}
 }
-void Observable::removeObserver(Observer* o){
-	for (int i = 0; i < observerCap; ++i){
-		if (observers[i] == o){
+
+void Observable::removeObserver(Observer* o) {
+	for (int i = 0; i < observerCap; ++i) {
+		if (observers[i] == o) {
 			observers[i] = nullptr;
 			break;
 		}
 	}
 }
-void Observable::notify(){
-	for (int i = 0; i < observerCap; ++i){
-		if (observers[i] != nullptr){
+
+void Observable::notify() {
+	for (int i = 0; i < observerCap; ++i) {
+		if (observers[i] != nullptr) {
 			observers[i]->update();
 		}
 	}

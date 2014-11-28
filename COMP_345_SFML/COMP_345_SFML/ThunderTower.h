@@ -1,6 +1,11 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #pragma once
 #include "DecoratedTower.h"
-class ThunderTower : public DecoratedTower{
+
+class ThunderTower : public DecoratedTower {
 public:
 	ThunderTower(Tower* decoratedTower);
 	int getX();

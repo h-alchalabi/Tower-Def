@@ -1,15 +1,10 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "NearestCritterTowerStrategy.h"
 #include <limits>
 #include <math.h>
-
-/*******************************************************************************************************************/
-//Stanley Naikang Luu - 6604706
-//COMP345 - assignment 3
-//November 20, 2014
-//
-//This is the "nearest critter to a tower" strategy object.
-//
-/*******************************************************************************************************************/
 
 int NearestCritterTowerStrategy::execute(vector<Critter*> critters, int towerX, int towerY, int towerRange) {
 	int closestDistTower = numeric_limits<int>::max();  //The closest distance to the tower

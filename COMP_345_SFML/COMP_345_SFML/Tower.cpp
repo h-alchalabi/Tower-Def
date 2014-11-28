@@ -1,11 +1,14 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #include "Tower.h"
 #include "GameConstants.h"
 #include <string>
 #include "NearestCritterTowerStrategy.h"
-
 using namespace std;
 
-Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME){
+Tower::Tower() : Entity(GameConstants::NORMAL_TOWER_IMAGE_NAME) {
 	targetStrategy = Target(new NearestCritterTowerStrategy());
 }
 
@@ -23,36 +26,35 @@ string Tower::to_string() {
 	return str;
 }
 
-void Tower::attack(std::vector<Critter*> critterList){
+void Tower::attack(std::vector<Critter*> critterList) {
 	int towerFireRate = 2100 - this->getFireRate() * 100;
-	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > towerFireRate && !paused){
+	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > towerFireRate && !paused) {
 		towerClock.restart();
 		pausedTime = sf::Time::Zero;
-	}
-	else{
+	} else {
 		return;
 	}
 
 	int towerX = this->getSprite().getPosition().x + this->getSprite().getLocalBounds().width / 2;
 	int towerY = this->getSprite().getPosition().y + this->getSprite().getLocalBounds().height / 2;
 	int targettedCritter = targetStrategy.executeStrategy(critterList, towerX, towerY, this->getRange());
-	if (targettedCritter != -1){
-		//std::cout << "pre- " << critterList[targettedCritter]->getHP();
+	if (targettedCritter != -1) {
 		this->shoot(critterList[targettedCritter]);
-		//std::cout << " post- " << critterList[targettedCritter]->getHP() << std::endl;
-		//std::cout << "Hit critter: " << targettedCritter << "\nRange: " << this->getRange()<< std::endl;
 	}
 }
-void Tower::pause(){
+
+void Tower::pause() {
 	this->paused = true;
 	this->pauseStartTime = towerClock.getElapsedTime();
 }
-void Tower::resume(){
+
+void Tower::resume() {
 	this->paused = false;
 	this->pauseEndTime = towerClock.getElapsedTime();
 	this->pausedTime += pauseEndTime - pauseStartTime;
 }
-bool Tower::isPaused(){
+
+bool Tower::isPaused() {
 	return paused;
 }
 

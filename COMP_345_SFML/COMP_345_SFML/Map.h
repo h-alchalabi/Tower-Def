@@ -1,5 +1,8 @@
-#pragma once
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
 
+#pragma once
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Tower.h"
@@ -10,7 +13,7 @@
 #include <vector>
 #include <string>
 
-class Map{
+class Map {
 private:
 	std::vector<std::vector<Entity*>> theMap;
 	std::vector<int> thePath;
@@ -22,9 +25,9 @@ private:
 	int end_x;
 	int end_y;
 	sf::Image mapImage;
-	void resizeMap();
 	int pathSteps;
 	std::string mapName;
+
 public:
 	~Map();
 	Map();

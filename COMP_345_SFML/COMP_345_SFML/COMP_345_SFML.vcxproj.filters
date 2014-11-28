@@ -111,6 +111,9 @@
     <ClCompile Include="DeathTower.cpp">
       <Filter>Source Files\Tower</Filter>
     </ClCompile>
+    <ClCompile Include="CritterFactory.cpp">
+      <Filter>Source Files\Critter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireTower.h">
@@ -205,13 +208,16 @@
     <Image Include="res\img\fire_tower.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\img\ice_tower.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\img\normal_tower.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\img\critter.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\thunder_tower.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\death_tower.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

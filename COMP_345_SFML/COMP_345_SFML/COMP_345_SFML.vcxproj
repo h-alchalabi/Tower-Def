@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Critter.cpp" />
+    <ClCompile Include="CritterFactory.cpp" />
     <ClCompile Include="DeathTower.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FastCritter.cpp" />
@@ -136,13 +137,14 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\img\critter.png" />
+    <Image Include="res\img\death_tower.png" />
     <Image Include="res\img\end_sample.png" />
     <Image Include="res\img\fire_tower.png" />
-    <Image Include="res\img\ice_tower.png" />
     <Image Include="res\img\normal_tower.png" />
     <Image Include="res\img\path_sample.png" />
     <Image Include="res\img\scenery_sample.png" />
     <Image Include="res\img\start_sample.png" />
+    <Image Include="res\img\thunder_tower.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

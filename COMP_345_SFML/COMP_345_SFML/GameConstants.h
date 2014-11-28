@@ -1,10 +1,14 @@
+/*******************************************************************************************************************/
+//
+/*******************************************************************************************************************/
+
 #pragma once
 #include <string>
 #include "SFML/Graphics.hpp"
 
 using namespace std;
 
-class GameConstants{
+class GameConstants {
 public:
 	// Constants
 	static const int TOTAL_NUMBER_OF_WAVES;
@@ -41,6 +45,7 @@ public:
 	static void resetHP();
 	static std::string getHPString();
 	static bool decrementHP();
+
 private:
 	static int playerHP;
 	static int money;
