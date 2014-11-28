@@ -36,6 +36,7 @@ void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool pa
 int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 bool gameOverPrompt();
 
+//GUI variables for Textures, Text, Fonts, Buttonsizes etc. uninitialized
 namespace Selection{
 	enum TowerType { NA, NORMAL, FIRE, DEATH, THUNDER };
 }
@@ -56,9 +57,11 @@ static sf::Sprite towerIcon;
 static Tower* currentTower;
 
 int main(){
-
+	//sets up the GUI
 	init();
-
+	
+	// Options Menu to call for the action of Starting a game Editting a Map, Creating a Map or Quit
+	// Loops until quit is set to false and will output an error message if
 	string errMsg;
 	bool running = true;
 
@@ -121,8 +124,12 @@ int main(){
 	}*/
 	return 0;
 }
+// initialization of GUI Textures, Fonts, Buttons Etc.
 
 void init(){
+//Textures are loaded from the file and associated with the buttons through  loadFromFile -> setTexture methods.
+//Fonts are loaded from a file and is manipulated through mutator methods in unique ways throughout the UI as it is being created.
+	
 	normalTowerTexture.loadFromFile("res/img/" + GameConstants::NORMAL_TOWER_IMAGE_NAME + ".png");
 	fireTowerTexture.loadFromFile("res/img/" + GameConstants::FIRE_TOWER_IMAGE_NAME + ".png");
 	deathTowerTexture.loadFromFile("res/img/" + GameConstants::DEATH_TOWER_IMAGE_NAME + ".png");
@@ -133,6 +140,8 @@ void init(){
 	deathTowerButton.setTexture(deathTowerTexture);
 	thunderTowerButton.setTexture(thunderTowerTexture);
 
+// The towertype you currently hold is associated to your selection.
+	
 	towerType = Selection::NA;
 
 	mainFont.loadFromFile(GameConstants::FONT_FILE_PATH);
@@ -191,7 +200,8 @@ void init(){
 	startGameText.setColor(sf::Color::White);
 }
 
-
+//Creates a map within maximum and minimum  constants boundaries. They are set through user input of width and height variables.
+//returns an error message otherwise
 void createMap(){
 	int width, height;
 	string errMsg = "";
@@ -243,7 +253,8 @@ void createMap(){
 			errMsg = ss.str();
 		}
 	}
-
+	//if width and height return true creates new map with the values given by the user and creates a new map out of those values
+	//the user is then prompted to create a path via arrow keys
 	string startPrompt, createPrompt;
 
 	Map* map = new Map(width, height);
@@ -253,13 +264,17 @@ void createMap(){
 	outText.setCharacterSize(GameConstants::FONT_SIZE);
 	outText.setPosition(0, map->getHeight() * 32);
 
+	//creates a map in addition to the  UI width and height
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32, map->getHeight() * 32 + 75), "Creating a Map");
 	window.setKeyRepeatEnabled(false);
 	map->printMap(window);
 	window.display();
 	sf::Event sf_event;
 
-
+	/* asks user to select a starting point by clicking on a square which is an  X and Y coordinate.
+	Startprompt  sends a message to the user to select a start location.
+	createprompt prompts the user for movement within the map for creation.
+	*/
 	int start_x, start_y;
 
 	startPrompt = "------------------------------------\n";
@@ -276,8 +291,13 @@ void createMap(){
 
 	outText.setString(startPrompt);
 
-	//	map->addEntity(start_x, start_y, new Path(GameConstants::START_IMAGE_NAME));
-
+	/*	map->addEntity(start_x, start_y, new Path(GameConstants::START_IMAGE_NAME));
+	
+	'startchosen' variable is the toggle that initiates what action the user can take whether it is to click for a 
+	starting point or to move with the arrow keys to continue the map
+	if 'canexit' is set to true from creating a path the user can press the 'E' key to leave the map creation and save his map.
+	The window will then close.
+	*/
 	bool editingMap = true;
 	bool canExit = false;
 	bool startChosen = false;
@@ -356,7 +376,7 @@ void createMap(){
 	}
 	window.close();
 	string dump = "";
-	if (!map->validateMap()){
+	if (!map->validateMap()){ //checks the map for the overall map size.
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tCreating a Map\n";
@@ -366,14 +386,19 @@ void createMap(){
 		cin >> dump;
 		return;
 	}
-	saveMapPrompt(map, false);
+	saveMapPrompt(map, false);//if map is validated save the map
 }
+
+/*The 'editMap' method takes an existing map file and allows you to perform operations on it such as
+resizing the map, altering the path, make a new path. 
+changing the path prompts the user again to choose between changing the path from a point or creating a new one.*/
+
 void editMap(){
 	Map* map = new Map();
 	if (!openMapPrompt(map)){
 		return;
 	}
-
+	
 	string mapName = map->getMapName();
 	bool onMenu = true;
 	bool changePath = false;
@@ -407,7 +432,8 @@ void editMap(){
 			} break;
 			case sf::Event::KeyPressed:{
 										   switch (sf_event.key.code){
-										   case sf::Keyboard::R:{
+										   case sf::Keyboard::R:{//the 'R' key's behaviour differs depending on if in the main menu of editmap
+																//or in the submeny change path
 																	if (changePath){
 																		map = new Map(map->getWidth(), map->getHeight());
 																		map->setMapName(mapName);
@@ -519,7 +545,7 @@ void editMap(){
 			} break;
 			}
 		}
-
+//Displays instructions to the user
 		window.clear();
 		map->printMap(window);
 		if (resizeMap){
@@ -543,6 +569,8 @@ void editMap(){
 	saveMapPrompt(map, true);
 }
 /*
+The 'startgame' method asks for the user to load an already created map
+
 Critters stop at wave 9
 Decrement user HP && check if User be dead.
 Tower Firing, scoring etc...
