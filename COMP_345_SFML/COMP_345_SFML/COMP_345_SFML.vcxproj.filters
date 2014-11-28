@@ -51,9 +51,6 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Source Files\Tower</Filter>
     </ClCompile>
-    <ClCompile Include="IceTower.cpp">
-      <Filter>Source Files\Tower</Filter>
-    </ClCompile>
     <ClCompile Include="FireTower.cpp">
       <Filter>Source Files\Tower</Filter>
     </ClCompile>
@@ -111,12 +108,12 @@
     <ClCompile Include="WeakestCritterStrategy.cpp">
       <Filter>Source Files\Tower</Filter>
     </ClCompile>
+    <ClCompile Include="DeathTower.cpp">
+      <Filter>Source Files\Tower</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireTower.h">
-      <Filter>Header Files\Tower</Filter>
-    </ClInclude>
-    <ClInclude Include="IceTower.h">
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="Tower.h">
@@ -186,6 +183,9 @@
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
     <ClInclude Include="WeakestCritterStrategy.h">
+      <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathTower.h">
       <Filter>Header Files\Tower</Filter>
     </ClInclude>
   </ItemGroup>

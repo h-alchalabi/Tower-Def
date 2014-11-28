@@ -85,11 +85,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Critter.cpp" />
+    <ClCompile Include="DeathTower.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FastCritter.cpp" />
     <ClCompile Include="FireTower.cpp" />
     <ClCompile Include="GameConstants.cpp" />
-    <ClCompile Include="IceTower.cpp" />
     <ClCompile Include="LevelUpTower.cpp" />
     <ClCompile Include="ThunderTower.cpp" />
     <ClCompile Include="main.cpp" />
@@ -110,12 +110,12 @@
   <ItemGroup>
     <ClInclude Include="Critter.h" />
     <ClInclude Include="CritterFactory.h" />
+    <ClInclude Include="DeathTower.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FastCritter.h" />
     <ClInclude Include="FireTower.h" />
     <ClInclude Include="GameConstants.h" />
-    <ClInclude Include="IceTower.h" />
     <ClInclude Include="LevelUpTower.h" />
     <ClInclude Include="ThunderTower.h" />
     <ClInclude Include="NearestCritterTowerStrategy.h" />

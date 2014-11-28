@@ -37,7 +37,7 @@ int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 bool gameOverPrompt();
 
 namespace Selection{
-	enum TowerType { NA, NORMAL, FIRE, ICE, THUNDER };
+	enum TowerType { NA, NORMAL, FIRE, DEATH, THUNDER };
 }
 
 static Selection::TowerType towerType;
@@ -829,7 +829,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 		}
 		else if (deathTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(deathTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
-			towerType = Selection::ICE;
+			towerType = Selection::DEATH;
 			setTowerInfo(new DeathTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
@@ -879,7 +879,7 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 									 towerList.push_back(toAdd);
 								 }
 		} break;
-		case Selection::ICE:{
+		case Selection::DEATH:{
 								Tower* toAdd = new DeathTower(new NormalTower());
 								if (GameConstants::spendMoney(toAdd->getBasePrice())){
 									map->addEntity(block_x, block_y, toAdd);
