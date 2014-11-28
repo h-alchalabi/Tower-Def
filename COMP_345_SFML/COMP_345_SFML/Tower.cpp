@@ -24,7 +24,8 @@ string Tower::to_string() {
 }
 
 void Tower::attack(std::vector<Critter*> critterList){
-	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > 2000 && !paused){
+	int towerFireRate = 2100 - this->getFireRate() * 100;
+	if (towerClock.getElapsedTime().asMilliseconds() - pausedTime.asMilliseconds() > towerFireRate && !paused){
 		towerClock.restart();
 		pausedTime = sf::Time::Zero;
 	}

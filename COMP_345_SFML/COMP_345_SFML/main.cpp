@@ -818,23 +818,27 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			currentTower->setStrategy(new WeakestCritterStrategy());
 		}
 		else if (normalTowerButton.getGlobalBounds().contains(x, y)){
-			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 2);
+			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::NORMAL;
+			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new NormalTower(), map->getWidth() * 32, false);
 		}
 		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::FIRE;
+			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new FireTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (deathTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(deathTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::DEATH;
+			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new DeathTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
 			towerSelectionRect.setPosition(thunderTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::THUNDER;
+			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new ThunderTower(new NormalTower()), map->getWidth() * 32, false);
 		}
 		else {
