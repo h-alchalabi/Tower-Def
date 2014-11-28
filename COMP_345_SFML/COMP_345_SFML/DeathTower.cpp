@@ -49,9 +49,6 @@ int DeathTower::getUpgradePrice() {
 
 void DeathTower::shoot(Critter* targettedCritter) {
 	int critterDeathChance = rand() % 5;
-	if (critterDeathChance == 0) {
-		cout << "Critter dead\n";
+	if (critterDeathChance == 0)
 		targettedCritter->setHP(0);
-	} else 
-	cout << "not dead\n";
 }
