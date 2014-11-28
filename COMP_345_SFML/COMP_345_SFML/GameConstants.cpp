@@ -1,7 +1,3 @@
-/*******************************************************************************************************************/
-//
-/*******************************************************************************************************************/
-
 #include "GameConstants.h"
 #include <string>
 #include <sstream>
@@ -38,6 +34,7 @@ int GameConstants::getMoney() {
 	return money;
 }
 
+//When player spends money to buy/update tower
 bool GameConstants::spendMoney(int amount) {
 	if (money - amount < 0 || amount < 0) {
 		return false;
@@ -46,6 +43,7 @@ bool GameConstants::spendMoney(int amount) {
 	return true;
 }
 
+//When player collects money from eliminated critters
 bool GameConstants::collectMoney(int amount) {
 	if (amount < 0) {
 		return false;
@@ -58,6 +56,7 @@ void GameConstants::resetMoney() {
 	money = 4000;
 }
 
+//Getting the amount of money that was displayed in the GUI
 std::string GameConstants::getMoneyString() {
 	stringstream ss;
 	ss << "Money:\t\t" << money;
@@ -72,6 +71,7 @@ void GameConstants::resetHP() {
 	playerHP = 20;
 }
 
+//Getting the player's HP that was displayed in the GUI
 std::string GameConstants::getHPString() {
 	stringstream ss;
 	ss << "HP:   \t\t" << playerHP;

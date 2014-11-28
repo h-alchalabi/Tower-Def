@@ -1,5 +1,5 @@
 /*******************************************************************************************************************/
-//
+//The map class for the game
 /*******************************************************************************************************************/
 
 #pragma once
@@ -45,8 +45,6 @@ public:
 	bool loadMap(std::string fileName);
 	bool inBounds(int x, int y);
 	void resize(int newWidth, int newHeight, bool fromLeft, bool fromTop);
-
-	// getters and setters
 	void setWidth(int width);
 	int getWidth() const;
 	void setHeight(int height);

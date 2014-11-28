@@ -1,5 +1,6 @@
 /*******************************************************************************************************************/
-//
+//The Critter abstract class where every type of critter will inherit from it. It also extends Entity to be displayed
+//in the map
 /*******************************************************************************************************************/
 
 #pragma once

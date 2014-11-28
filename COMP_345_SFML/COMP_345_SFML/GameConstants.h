@@ -1,5 +1,6 @@
 /*******************************************************************************************************************/
-//
+//Class that stores all the constants that are used in the application and also takes care of the income system
+//as well as the player's HP
 /*******************************************************************************************************************/
 
 #pragma once
