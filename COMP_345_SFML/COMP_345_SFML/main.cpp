@@ -1,18 +1,3 @@
-/*******************************************************************************************************************/
-//Stanley Naikang Luu - 6604706
-//Amanda Tom - 6633463
-//Awais Ali - 6849040
-//Haani Al-Chalabi - 9521577
-//Van Do - 6526276
-//Djamil Francis - 1308637
-
-//COMP345 - Final Project
-//November 28, 2014
-//
-//
-//
-/*******************************************************************************************************************/
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -30,6 +15,7 @@
 #include "NearestCritterTowerStrategy.h"
 #include "WeakestCritterStrategy.h"
 #include <sstream>
+
 using namespace std;
 
 void dropTower(sf::RenderWindow& window, sf::Event sf_event, Map* map);
@@ -43,16 +29,20 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 void init();
 void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons);
 bool saveMapPrompt(Map* map, bool overwrite);
+void resizeMap(Map* map);
+void changeMapPath(Map* map);
 void foo(int x, int y, Map*& map);
 void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused);
 int findTowerIndex(Tower* tower, vector<Tower*> towerList);
 bool gameOverPrompt();
 
+//GUI variables for Textures, Text, Fonts, Buttonsizes etc. uninitialized
 namespace Selection{
 	enum TowerType { NA, NORMAL, FIRE, DEATH, THUNDER };
 }
 
 static Selection::TowerType towerType;
+
 static sf::Sprite normalTowerButton, fireTowerButton, deathTowerButton, thunderTowerButton;
 static sf::Texture normalTowerTexture, fireTowerTexture, deathTowerTexture, thunderTowerTexture;
 static sf::RectangleShape towerSelectionRect(sf::Vector2<float>(40, 40));
@@ -66,14 +56,16 @@ static sf::Font mainFont;
 static sf::Sprite towerIcon;
 static Tower* currentTower;
 
-int main() {
-
+int main(){
+	//sets up the GUI
 	init();
-
+	
+	// Options Menu to call for the action of Starting a game Editting a Map, Creating a Map or Quit
+	// Loops until quit is set to false and will output an error message if
 	string errMsg;
 	bool running = true;
 
-	while (running) {
+	while (running){
 		system("cls");
 		cout << "--------------------------------------------------\n";
 		cout << "\tMain Menu\n";
@@ -87,29 +79,57 @@ int main() {
 		char input;
 		cin >> input;
 		errMsg = "";
-		switch (input) {
-			case 'c':
-				createMap();
-				break;
-			case 'e':
-				 editMap();
-				break;
-			case 's':
-				startGame();
-				break;
-			case 'q':
-				running = false;
-				break;
-			default:
-				errMsg = "***** Invalid Input. Please Try Again. *****";
-				break;
+		switch (input){
+		case 'c':{
+					 createMap();
+		} break;
+		case 'e':{
+					 editMap();
+		} break;
+		case 's':{
+					 startGame();
+		} break;
+		case 'q':{
+					 running = false;
+		} break;
+		default:{
+					errMsg = "***** Invalid Input. Please Try Again. *****";
+		} break;
 		}
 	}
+	/*
+	sf::RenderWindow window(sf::VideoMode(map->getWidth()*32, map->getHeight()*32), "SFML works!");
+	window.setKeyRepeatEnabled(false);
+	while (window.isOpen())
+	{
+	sf::Event event;
+	while (window.pollEvent(event))
+	{
+	switch (event.type){
+	case sf::Event::Closed:{
+	window.close();
+	} break;
+	case sf::Event::MouseButtonPressed:
+	{
+	if (creatingMap){
 
+	}
+	}break;
+	}
+	}
+
+	window.clear();
+	map->printMap(window);
+	window.display();
+	}*/
 	return 0;
 }
+// initialization of GUI Textures, Fonts, Buttons Etc.
 
-void init() {
+void init(){
+//Textures are loaded from the file and associated with the buttons through  loadFromFile -> setTexture methods.
+//Fonts are loaded from a file and is manipulated through mutator methods in unique ways throughout the UI as it is being created.
+	
 	normalTowerTexture.loadFromFile("res/img/" + GameConstants::NORMAL_TOWER_IMAGE_NAME + ".png");
 	fireTowerTexture.loadFromFile("res/img/" + GameConstants::FIRE_TOWER_IMAGE_NAME + ".png");
 	deathTowerTexture.loadFromFile("res/img/" + GameConstants::DEATH_TOWER_IMAGE_NAME + ".png");
@@ -120,6 +140,8 @@ void init() {
 	deathTowerButton.setTexture(deathTowerTexture);
 	thunderTowerButton.setTexture(thunderTowerTexture);
 
+// The towertype you currently hold is associated to your selection.
+	
 	towerType = Selection::NA;
 
 	mainFont.loadFromFile(GameConstants::FONT_FILE_PATH);
@@ -178,11 +200,12 @@ void init() {
 	startGameText.setColor(sf::Color::White);
 }
 
-
-void createMap() {
+//Creates a map within maximum and minimum  constants boundaries. They are set through user input of width and height variables.
+//returns an error message otherwise
+void createMap(){
 	int width, height;
 	string errMsg = "";
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "--------------------------------------------------\n";
 		cout << "\tCreating a Map\n";
@@ -190,22 +213,23 @@ void createMap() {
 		cout << errMsg << endl << endl;
 		cout << "Please enter the width of the map(min: " << GameConstants::MIN_WIDTH << ", max: " << GameConstants::MAX_WIDTH << "): ";
 		errMsg = "";
-		try {
+		try{
 			cin >> width;
 		}
-		catch (...) {
+		catch (...){
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 			continue;
 		}
-		if (width >= GameConstants::MIN_WIDTH && width <= GameConstants::MAX_WIDTH) {
+		if (width >= GameConstants::MIN_WIDTH && width <= GameConstants::MAX_WIDTH){
 			break;
-		} else {
+		}
+		else{
 			stringstream ss;
 			ss << "***** Width must be between " << GameConstants::MIN_WIDTH << " and " << GameConstants::MAX_WIDTH << " [inclusive]. *****";
 			errMsg = ss.str();
 		}
 	}
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "--------------------------------------------------\n";
 		cout << "\tCreating a Map\n";
@@ -213,22 +237,24 @@ void createMap() {
 		cout << errMsg << endl << endl;
 		cout << "Please enter the height of the map(min: " << GameConstants::MIN_HEIGHT << ", max: " << GameConstants::MAX_HEIGHT << "): ";
 		errMsg = "";
-		try {
+		try{
 			cin >> height;
 		}
-		catch (...) {
+		catch (...){
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 			continue;
 		}
-		if (height >= GameConstants::MIN_HEIGHT && height <= GameConstants::MAX_HEIGHT) {
+		if (height >= GameConstants::MIN_HEIGHT && height <= GameConstants::MAX_HEIGHT){
 			break;
-		} else {
+		}
+		else{
 			stringstream ss;
 			ss << "***** Height must be between " << GameConstants::MIN_HEIGHT << " and " << GameConstants::MAX_HEIGHT << " [inclusive]. *****";
 			errMsg = ss.str();
 		}
 	}
-
+	//if width and height return true creates new map with the values given by the user and creates a new map out of those values
+	//the user is then prompted to create a path via arrow keys
 	string startPrompt, createPrompt;
 
 	Map* map = new Map(width, height);
@@ -238,13 +264,17 @@ void createMap() {
 	outText.setCharacterSize(GameConstants::FONT_SIZE);
 	outText.setPosition(0, map->getHeight() * 32);
 
+	//creates a map in addition to the  UI width and height
 	sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32, map->getHeight() * 32 + 75), "Creating a Map");
 	window.setKeyRepeatEnabled(false);
 	map->printMap(window);
 	window.display();
 	sf::Event sf_event;
 
-
+	/* asks user to select a starting point by clicking on a square which is an  X and Y coordinate.
+	Startprompt  sends a message to the user to select a start location.
+	createprompt prompts the user for movement within the map for creation.
+	*/
 	int start_x, start_y;
 
 	startPrompt = "------------------------------------\n";
@@ -261,73 +291,80 @@ void createMap() {
 
 	outText.setString(startPrompt);
 
+	/*	map->addEntity(start_x, start_y, new Path(GameConstants::START_IMAGE_NAME));
+	
+	'startchosen' variable is the toggle that initiates what action the user can take whether it is to click for a 
+	starting point or to move with the arrow keys to continue the map
+	if 'canexit' is set to true from creating a path the user can press the 'E' key to leave the map creation and save his map.
+	The window will then close.
+	*/
 	bool editingMap = true;
 	bool canExit = false;
 	bool startChosen = false;
 	int current_x, current_y;
 
-	while (window.isOpen() && editingMap) {
-		while (window.pollEvent(sf_event)) {
-			switch (sf_event.type) {
-				case sf::Event::Closed:
-					window.close();
-					break;
-				case sf::Event::KeyPressed:
-					if (startChosen) {
-						switch (sf_event.key.code) {
-							case sf::Keyboard::Up:
-								if (canMove(current_x, current_y, current_x, current_y - 1, map)) {
-									--current_y;
-									map->addEntity(current_x, current_y, new Path());
-									canExit = true;
-								}
-								break;
-							case sf::Keyboard::Left:
-								if (canMove(current_x, current_y, current_x - 1, current_y, map)) {
-									--current_x;
-									map->addEntity(current_x, current_y, new Path());
-									canExit = true;
-								}
-								break;
-							case sf::Keyboard::Down:
-								if (canMove(current_x, current_y, current_x, current_y + 1, map)) {
-									++current_y;
-									map->addEntity(current_x, current_y, new Path());
-									canExit = true;
-								}
-								break;
-							case sf::Keyboard::Right:
-								if (canMove(current_x, current_y, current_x + 1, current_y, map)) {
-									++current_x;
-									map->addEntity(current_x, current_y, new Path());
-									canExit = true;
-								}
-								break;
-							case sf::Keyboard::E:
-								if (canExit) {
-									editingMap = false;
-									map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
-								}
-								break;
-							default: 
-								break;
-						}
-					}
-					break;
-				case sf::Event::MouseButtonPressed:
-					if (!startChosen) {
-						if (sf_event.mouseButton.button == sf::Mouse::Left) {
-							int block_x = sf_event.mouseButton.x / 32;
-							int block_y = sf_event.mouseButton.y / 32;
-							if (map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME))) {
-								startChosen = true;
-								outText.setString(createPrompt);
-								current_x = start_x = block_x;
-								current_y = start_y = block_y;
-							}
-						}
-					}
-					break;
+	while (window.isOpen() && editingMap){
+		while (window.pollEvent(sf_event)){
+			switch (sf_event.type){
+			case sf::Event::Closed:{
+									   window.close();
+			} break;
+			case sf::Event::KeyPressed:{
+										   if (startChosen){
+											   switch (sf_event.key.code){
+											   case sf::Keyboard::Up:{
+																		 if (canMove(current_x, current_y, current_x, current_y - 1, map)){
+																			 --current_y;
+																			 map->addEntity(current_x, current_y, new Path());
+																			 canExit = true;
+																		 }
+
+											   } break;
+											   case sf::Keyboard::Left:{
+																		   if (canMove(current_x, current_y, current_x - 1, current_y, map)){
+																			   --current_x;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canExit = true;
+																		   }
+											   } break;
+											   case sf::Keyboard::Down:{
+																		   if (canMove(current_x, current_y, current_x, current_y + 1, map)){
+																			   ++current_y;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canExit = true;
+																		   }
+											   } break;
+											   case sf::Keyboard::Right:{
+																			if (canMove(current_x, current_y, current_x + 1, current_y, map)){
+																				++current_x;
+																				map->addEntity(current_x, current_y, new Path());
+																				canExit = true;
+																			}
+											   } break;
+											   case sf::Keyboard::E:{
+																		if (canExit){
+																			editingMap = false;
+																			map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
+																		}
+											   } break;
+											   default: break;
+											   }
+										   }
+			}break;
+			case sf::Event::MouseButtonPressed:{
+												   if (!startChosen){
+													   if (sf_event.mouseButton.button == sf::Mouse::Left){
+														   int block_x = sf_event.mouseButton.x / 32;
+														   int block_y = sf_event.mouseButton.y / 32;
+														   if (map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME))){
+															   startChosen = true;
+															   outText.setString(createPrompt);
+															   current_x = start_x = block_x;
+															   current_y = start_y = block_y;
+														   }
+													   }
+												   }
+			} break;
 			}
 		}
 
@@ -339,7 +376,7 @@ void createMap() {
 	}
 	window.close();
 	string dump = "";
-	if (!map->validateMap()) {
+	if (!map->validateMap()){ //checks the map for the overall map size.
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tCreating a Map\n";
@@ -349,15 +386,19 @@ void createMap() {
 		cin >> dump;
 		return;
 	}
-	saveMapPrompt(map, false);
+	saveMapPrompt(map, false);//if map is validated save the map
 }
 
-void editMap() {
+/*The 'editMap' method takes an existing map file and allows you to perform operations on it such as
+resizing the map, altering the path, make a new path. 
+changing the path prompts the user again to choose between changing the path from a point or creating a new one.*/
+
+void editMap(){
 	Map* map = new Map();
-	if (!openMapPrompt(map)) {
+	if (!openMapPrompt(map)){
 		return;
 	}
-
+	
 	string mapName = map->getMapName();
 	bool onMenu = true;
 	bool changePath = false;
@@ -373,7 +414,8 @@ void editMap() {
 	string changePathString1 = "Select a point along your path to start editing.\nTo restart the path, press R.";
 	string makingPathString = "Use the Arrow Keys to move.\nE - End the Path.";
 	string newPathString = "Please select(click) the start location.";
-	
+
+
 	sf::Text instructionText(mainEditString, mainFont);
 	instructionText.setCharacterSize(GameConstants::FONT_SIZE);
 	instructionText.setColor(sf::Color::White);
@@ -381,132 +423,144 @@ void editMap() {
 
 	sf::RenderWindow window(sf::VideoMode(GameConstants::MAX_WIDTH * 32, GameConstants::MAX_HEIGHT * 32 + 96), "Edit a Map");
 	window.setKeyRepeatEnabled(false);
-	while (window.isOpen()) {
+	while (window.isOpen()){
 		sf::Event sf_event;
-		while (window.pollEvent(sf_event)) {
-			switch (sf_event.type) {
-				case sf::Event::Closed:
-					window.close();
-					break;
-				case sf::Event::KeyPressed:
-					switch (sf_event.key.code) {
-						case sf::Keyboard::R:
-							if (changePath) {
-								map = new Map(map->getWidth(), map->getHeight());
-								map->setMapName(mapName);
-								changePath = false;
-								newPath = true;
-							} else if (onMenu) {
-								onMenu = false;
-								resizeMap = true;
-							}
-							break;
-						case sf::Keyboard::C:
-							if (onMenu) {
-								onMenu = false;
-								changePath = true;
-							}
-							break;
-						case sf::Keyboard::Q:
-							if (resizeMap) {
-								resizeMap = false;
-								onMenu = true;
-							} else if (onMenu) {
-								window.close();
-							}
-							break;
-						case sf::Keyboard::E:
-							if (makingPath && canEnd){
-								makingPath = false;
-								canEnd = false;
-								onMenu = true;
-								map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
-							}
-							break;
-						case sf::Keyboard::Up:
-							if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT) {
-								map->resize(map->getWidth(), map->getHeight() + 1, false, true);
-							} else if (makingPath) {
-								if (canMove(current_x, current_y, current_x, current_y - 1, map)) {
-									--current_y;
-									map->addEntity(current_x, current_y, new Path());
-									canEnd = true;
-								}
-							}
-							break;
-						case sf::Keyboard::Down:
-							if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT) {
-								map->resize(map->getWidth(), map->getHeight() + 1, false, false);
-							} else if (makingPath) {
-								if (canMove(current_x, current_y, current_x, current_y + 1, map)) {
-									++current_y;
-									map->addEntity(current_x, current_y, new Path());
-									canEnd = true;
-								}
-							}
-							break;
-						case sf::Keyboard::Left:
-							if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH){
-								map->resize(map->getWidth() + 1, map->getHeight(), true, false);
-							} else if (makingPath) {
-								if (canMove(current_x, current_y, current_x - 1, current_y, map)) {
-									--current_x;
-									map->addEntity(current_x, current_y, new Path());
-									canEnd = true;
-								}
-							}
-							break;
-						case sf::Keyboard::Right:
-							if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH) {
-								map->resize(map->getWidth() + 1, map->getHeight(), false, false);
-							} else if (makingPath) {
-								if (canMove(current_x, current_y, current_x + 1, current_y, map)) {
-									++current_x;
-									map->addEntity(current_x, current_y, new Path());
-									canEnd = true;
-								}
-							}
-							break;
-					}
-					break;
-				case sf::Event::MouseButtonPressed:
-					if (sf_event.mouseButton.button == sf::Mouse::Left) {
-						int block_x = sf_event.mouseButton.x / 32;
-						int block_y = sf_event.mouseButton.y / 32;
-						if (map->inBounds(block_x, block_y)) {
-							if (newPath) {
-								map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME));
-								current_x = start_x = block_x;
-								current_y = start_y = block_y;
-								newPath = false;
-								makingPath = true;
-							} else if (changePath && typeid(*map->getEntity(block_x, block_y)) == typeid(Path)) {
-								foo(block_x, block_y, map);
-								current_x = start_x = block_x;
-								current_y = start_y = block_y;
-								changePath = false;
-								makingPath = true;
-								if (map->getEntity(block_x, block_y)->getImageName() != GameConstants::START_IMAGE_NAME) {
-									canEnd = true;
-								}
-							}
-						}
-					}
-					break;
+		while (window.pollEvent(sf_event)){
+			switch (sf_event.type){
+			case sf::Event::Closed:{
+									   window.close();
+			} break;
+			case sf::Event::KeyPressed:{
+										   switch (sf_event.key.code){
+										   case sf::Keyboard::R:{//the 'R' key's behaviour differs depending on if in the main menu of editmap
+																//or in the submeny change path
+																	if (changePath){
+																		map = new Map(map->getWidth(), map->getHeight());
+																		map->setMapName(mapName);
+																		changePath = false;
+																		newPath = true;
+																	}
+																	else if (onMenu){
+																		onMenu = false;
+																		resizeMap = true;
+																	}
+										   } break;
+										   case sf::Keyboard::C:{
+																	if (onMenu){
+																		onMenu = false;
+																		changePath = true;
+																	}
+										   } break;
+										   case sf::Keyboard::Q:{
+																	if (resizeMap){
+																		resizeMap = false;
+																		onMenu = true;
+																	}
+																	else if (onMenu){
+																		window.close();
+																	}
+										   } break;
+										   case sf::Keyboard::E:{
+																	if (makingPath && canEnd){
+																		makingPath = false;
+																		canEnd = false;
+																		onMenu = true;
+																		map->addEntity(current_x, current_y, new Path(GameConstants::END_IMAGE_NAME));
+																	}
+										   } break;
+										   case sf::Keyboard::Up:{
+																	 if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT){
+																		 map->resize(map->getWidth(), map->getHeight() + 1, false, true);
+																	 }
+																	 else if (makingPath){
+																		 if (canMove(current_x, current_y, current_x, current_y - 1, map)){
+																			 --current_y;
+																			 map->addEntity(current_x, current_y, new Path());
+																			 canEnd = true;
+																		 }
+																	 }
+										   } break;
+										   case sf::Keyboard::Down:{
+																	   if (resizeMap && map->getHeight() < GameConstants::MAX_HEIGHT){
+																		   map->resize(map->getWidth(), map->getHeight() + 1, false, false);
+																	   }
+																	   else if (makingPath){
+																		   if (canMove(current_x, current_y, current_x, current_y + 1, map)){
+																			   ++current_y;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canEnd = true;
+																		   }
+																	   }
+										   } break;
+										   case sf::Keyboard::Left:{
+																	   if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH){
+																		   map->resize(map->getWidth() + 1, map->getHeight(), true, false);
+																	   }
+																	   else if (makingPath){
+																		   if (canMove(current_x, current_y, current_x - 1, current_y, map)){
+																			   --current_x;
+																			   map->addEntity(current_x, current_y, new Path());
+																			   canEnd = true;
+																		   }
+																	   }
+										   } break;
+										   case sf::Keyboard::Right:{
+																		if (resizeMap && map->getWidth() < GameConstants::MAX_WIDTH){
+																			map->resize(map->getWidth() + 1, map->getHeight(), false, false);
+																		}
+																		else if (makingPath){
+																			if (canMove(current_x, current_y, current_x + 1, current_y, map)){
+																				++current_x;
+																				map->addEntity(current_x, current_y, new Path());
+																				canEnd = true;
+																			}
+																		}
+										   } break;
+										   }
+			} break;
+			case sf::Event::MouseButtonPressed:{
+												   if (sf_event.mouseButton.button == sf::Mouse::Left){
+													   int block_x = sf_event.mouseButton.x / 32;
+													   int block_y = sf_event.mouseButton.y / 32;
+													   if (map->inBounds(block_x, block_y)){
+														   if (newPath){
+															   map->addEntity(block_x, block_y, new Path(GameConstants::START_IMAGE_NAME));
+															   current_x = start_x = block_x;
+															   current_y = start_y = block_y;
+															   newPath = false;
+															   makingPath = true;
+														   }
+														   else if (changePath && typeid(*map->getEntity(block_x, block_y)) == typeid(Path)){
+															   foo(block_x, block_y, map);
+															   current_x = start_x = block_x;
+															   current_y = start_y = block_y;
+															   changePath = false;
+															   makingPath = true;
+															   if (map->getEntity(block_x, block_y)->getImageName() != GameConstants::START_IMAGE_NAME){
+																   canEnd = true;
+															   }
+														   }
+													   }
+												   }
+			} break;
 			}
 		}
-
+//Displays instructions to the user
 		window.clear();
 		map->printMap(window);
-		if (resizeMap) {
+		if (resizeMap){
 			instructionText.setString(resizingString);
-		} else if (changePath) {
+		}
+		else if (changePath){
 			instructionText.setString(changePathString1);
-		} else if (onMenu) {
+		}
+		else if (onMenu){
 			instructionText.setString(mainEditString);
-		} else if (newPath) {
+		}
+		else if (newPath){
 			instructionText.setString(newPathString);
-		} else if (makingPath) {
+		}
+		else if (makingPath){
 			instructionText.setString(makingPathString);
 		}
 		window.draw(instructionText);
@@ -514,16 +568,17 @@ void editMap() {
 	}
 	saveMapPrompt(map, true);
 }
-
 /*
+The 'startgame' method asks for the user to load an already created map
+
 Critters stop at wave 9
 Decrement user HP && check if User be dead.
 Tower Firing, scoring etc...
 */
-void startGame() {
+void startGame(){ //TODO
 	Map* map = new Map();
 	string scrap;
-	if (!openMapPrompt(map)) {
+	if (!openMapPrompt(map)){
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tStart a Game\n";
@@ -536,6 +591,7 @@ void startGame() {
 	}
 
 	do {
+
 		Wave* wave = new Wave();
 		int waveNumber = 1;
 
@@ -552,6 +608,8 @@ void startGame() {
 		weakestStrategyButton.setPosition(-100, -100);
 		nearestStrategyText.setPosition(-100, -100);
 		weakestStrategyText.setPosition(-100, -100);
+
+
 
 		startGameText.setPosition(4, map->getHeight() * 32 + 16);
 
@@ -593,54 +651,57 @@ void startGame() {
 		window.setKeyRepeatEnabled(false);
 		bool doneGame = false;
 		map->printMap(window);
-		while (window.isOpen() && !doneGame) {
+		while (window.isOpen() && !doneGame)
+		{
 			sf::Event sf_event;
-			while (window.pollEvent(sf_event)) {
-				switch (sf_event.type) {
-					case sf::Event::Closed:
-						window.close();
-						break;
-					case sf::Event::KeyPressed:
-						switch (sf_event.key.code) {
-							case sf::Keyboard::P:
-								if (!wave->doneWave()) {
-									if (wave->isPaused()) {
-										wave->resumeWave();
-									} else {
-										wave->pauseWave();
-									}
-								}
-								break;
-							case sf::Keyboard::Space:
-								if (waveNumber >= GameConstants::NUMBER_OF_WAVES) {
-									doneGame = true;
-								} else if (wave->doneWave()) {
-									wave->createWave(waveNumber++);
-									stringstream ss;
-									ss << "Next Wave:\t" << waveNumber;
-									waveNumberText.setString(ss.str());
-								}
-								break;
-						}
-						break;
-					case sf::Event::MouseButtonPressed:
-						if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
-							handleClick(sf_event, map, wave->doneWave(), towerList);
-						}
-						break;
+			while (window.pollEvent(sf_event)){
+				switch (sf_event.type){
+				case sf::Event::Closed:{
+										   window.close();
+				} break;
+				case sf::Event::KeyPressed:{
+											   switch (sf_event.key.code){
+											   case sf::Keyboard::P:{
+																		if (!wave->doneWave()){
+																			if (wave->isPaused()){
+																				wave->resumeWave();
+																			}
+																			else{
+																				wave->pauseWave();
+																			}
+																		}
+											   }break;
+											   case sf::Keyboard::Space:{
+																			if (waveNumber >= GameConstants::NUMBER_OF_WAVES){
+																				doneGame = true;
+																			}
+																			else if (wave->doneWave()){
+																				wave->createWave(waveNumber++);
+																				stringstream ss;
+																				ss << "Next Wave:\t" << waveNumber;
+																				waveNumberText.setString(ss.str());
+																			}
+											   }break;
+											   }
+				} break;
+				case sf::Event::MouseButtonPressed:{
+													   if (sf_event.mouseButton.button == sf::Mouse::Button::Left){
+														   handleClick(sf_event, map, wave->doneWave(), towerList);
+													   }
+				} break;
 				}
 			}
 			window.clear();
-			if (!wave->doneWave()) {
+			if (!wave->doneWave()){
 				towerAction(towerList, wave->getCritterVector(), wave->isPaused());
-				if (!wave->deploy(map)) {
+				if (!wave->deploy(map)){
 					doneGame = true;
 				}
 			}
 			map->printMap(window);
 			window.draw(towerIcon);
 			window.draw(towerInfoText);
-			if (towerType != Selection::NA) {
+			if (towerType != Selection::NA){
 				window.draw(towerSelectionRect);
 			}
 			window.draw(strategySelectRect);
@@ -664,7 +725,7 @@ void startGame() {
 			window.draw(weakestStrategyText);
 
 			window.draw(waveNumberText);
-			if (wave->isPaused()) {
+			if (wave->isPaused()){
 				window.draw(pausedText);
 			}
 			window.display();
@@ -675,23 +736,22 @@ void startGame() {
 		map->loadMap(map->getMapName());
 	} while (gameOverPrompt());
 }
-
-bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map) {
-	if (!map->inBounds(new_x, new_y) || (current_x == new_x && current_y == new_y)) {
+bool canMove(int current_x, int current_y, int new_x, int new_y, Map* map){
+	if (!map->inBounds(new_x, new_y) || (current_x == new_x && current_y == new_y)){
 		return false;
-	} else if (map->numOfNeighborPaths(new_x, new_y) > 1){
+	}
+	else if (map->numOfNeighborPaths(new_x, new_y) > 1){
 		return false;
 	}
 	return true;
 }
-
-bool openMapPrompt(Map* map) {
+bool openMapPrompt(Map* map){
 	string errMsg = "", mapList, fileName;
 	mapList = getMapList();
-	if (mapList == "") {
+	if (mapList == ""){
 		return false;
 	}
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tOpen a Map\n";
@@ -702,47 +762,46 @@ bool openMapPrompt(Map* map) {
 		cout << "Enter the file name for the map (no spaces): ";
 		cin >> fileName;
 		errMsg = "";
-		if (map->loadMap(fileName)) {
+		if (map->loadMap(fileName)){
 			break;
-		} else {
+		}
+		else{
 			errMsg = "***** File Does Not Exist. Please Try Again. *****";
 		}
 	}
 	return true;
 }
-
-string getMapList() {
+string getMapList(){
 	string fileList = "";
 	DIR* dir;
 	struct dirent* ent;
 	dir = opendir("res/info/maps");
-	if (dir != NULL) {
+	if (dir != NULL){
 		ent = readdir(dir);
-		while (ent != NULL) {
-			if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+		while (ent != NULL){
+			if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0){
 				string temp = ent->d_name;
 				fileList += "\n" + temp.substr(0, temp.size() - 8);
 			}
 			ent = readdir(dir);
 		}
 		closedir(dir);
-	} else {
+	}
+	else {
 		cout << "Couldn't Open Directory.";
 		system("exit");
 	}
 	return fileList;
 }
-
-void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& towerList) {
+void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& towerList){
 	int currentTowerIndex = findTowerIndex(currentTower, towerList);
 	int x = sf_event.mouseButton.x;
 	int y = sf_event.mouseButton.y;
 	int block_x = (x - (x % 32)) / 32;
 	int block_y = (y - (y % 32)) / 32;
-	if (!map->inBounds(block_x, block_y)) { 
-		//make use of this for upgrading
-		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace) {
-			if (GameConstants::spendMoney(currentTower->getUpgradePrice())) {
+	if (!map->inBounds(block_x, block_y)){ // TODO make use of this for upgrading
+		if (upgradeButton.getGlobalBounds().contains(x, y) && canPlace){
+			if (GameConstants::spendMoney(currentTower->getUpgradePrice())){
 				map->removeEntity(currentTower);
 				towerList.erase(towerList.begin() + currentTowerIndex);
 				int old_x = currentTower->getSprite().getPosition().x / 32;
@@ -754,7 +813,9 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			}
 			towerSelectionRect.setPosition(-40, -40);
 			towerType = Selection::NA;
-		} else if (sellButton.getGlobalBounds().contains(x, y) && canPlace) {
+
+		}
+		else if (sellButton.getGlobalBounds().contains(x, y) && canPlace){
 			map->removeEntity(currentTower);
 			towerList.erase(towerList.begin() + currentTowerIndex);
 			GameConstants::collectMoney(currentTower->getSellPrice());
@@ -771,39 +832,47 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			towerType = Selection::NA;
 
 			currentTower = NULL;
-		} else if (nearestStrategyButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (nearestStrategyButton.getGlobalBounds().contains(x, y)){
 			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
 			currentTower->setStrategy(new NearestCritterTowerStrategy());
-		} else if (weakestStrategyButton.getGlobalBounds().contains(x, y)) {
+
+		}
+
+		else if (weakestStrategyButton.getGlobalBounds().contains(x, y)){
 			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
 			currentTower->setStrategy(new WeakestCritterStrategy());
-		} else if (normalTowerButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (normalTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::NORMAL;
 			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new NormalTower(), map->getWidth() * 32, false);
-		} else if (fireTowerButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (fireTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(fireTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::FIRE;
 			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new FireTower(new NormalTower()), map->getWidth() * 32, false);
-		} else if (deathTowerButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (deathTowerButton.getGlobalBounds().contains(x, y)){
 			towerSelectionRect.setPosition(deathTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::DEATH;
 			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new DeathTower(new NormalTower()), map->getWidth() * 32, false);
-		} else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (thunderTowerButton.getGlobalBounds().contains(x, y)) {
 			towerSelectionRect.setPosition(thunderTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
 			towerType = Selection::THUNDER;
 			strategySelectRect.setPosition(-100, -100);
 			setTowerInfo(new ThunderTower(new NormalTower()), map->getWidth() * 32, false);
-		} else {
+		}
+		else {
 			towerSelectionRect.setPosition(-40, -40);
 			towerType = Selection::NA;
 		}
-		
 		return;
 	}
 	if (typeid(*(map->getEntity(block_x, block_y))) == typeid(NormalTower) ||
@@ -817,62 +886,60 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 		towerSelectionRect.setPosition(-40, -40);
 		strategySelectRect.setPosition(-100, -100);
 		towerType = Selection::NA;
-		if (typeid(*(currentTower->getStrategy())) == typeid(NearestCritterTowerStrategy)) {
+		if (typeid(*(currentTower->getStrategy())) == typeid(NearestCritterTowerStrategy)){
 			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
-		} else {
+		}
+		else{
 			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
 		}
-	} else if (canPlace) {
-		switch (towerType) {
-			case Selection::NORMAL: {
-				Tower* toAdd = new NormalTower();
-				if (GameConstants::spendMoney(toAdd->getBasePrice())) {
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
-				break;
-			}
-			case Selection::FIRE: {
-				Tower* toAdd = new FireTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())){
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
-				break;
-			}
-			case Selection::DEATH: {
-				Tower* toAdd = new DeathTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())) {
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
-				break;
-			}
-			case Selection::THUNDER: {
-				Tower* toAdd = new ThunderTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())) {
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
-				break;
-
-			}
+	}
+	else if (canPlace){
+		switch (towerType){
+		case Selection::NORMAL:{
+								   Tower* toAdd = new NormalTower();
+								   if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									   map->addEntity(block_x, block_y, toAdd);
+									   towerList.push_back(toAdd);
+								   }
+		} break;
+		case Selection::FIRE:{
+								 Tower* toAdd = new FireTower(new NormalTower());
+								 if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									 map->addEntity(block_x, block_y, toAdd);
+									 towerList.push_back(toAdd);
+								 }
+		} break;
+		case Selection::DEATH:{
+								Tower* toAdd = new DeathTower(new NormalTower());
+								if (GameConstants::spendMoney(toAdd->getBasePrice())){
+									map->addEntity(block_x, block_y, toAdd);
+									towerList.push_back(toAdd);
+								}
+		} break;
+		case Selection::THUNDER:{
+									Tower* toAdd = new ThunderTower(new NormalTower());
+									if (GameConstants::spendMoney(toAdd->getBasePrice())) {
+										map->addEntity(block_x, block_y, toAdd);
+										towerList.push_back(toAdd);
+									}
+		} break;
 		}
 	}
 }
-
-void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
+void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons){
 	currentTower = selectedTower;
 	towerIcon = selectedTower->getSprite();
 	towerIcon.setPosition(mapWidthPixels + 48, 16);
 	string type = "NORMAL";
-	if (selectedTower->getImageName() == GameConstants::FIRE_TOWER_IMAGE_NAME) {
+	if (selectedTower->getImageName() == GameConstants::FIRE_TOWER_IMAGE_NAME){
 		type = "FIRE";
-	} else if (selectedTower->getImageName() == GameConstants::DEATH_TOWER_IMAGE_NAME) {
+	}
+	else if (selectedTower->getImageName() == GameConstants::DEATH_TOWER_IMAGE_NAME){
 		type = "DEATH";
-	} else if (selectedTower->getImageName() == GameConstants::THUNDER_TOWER_IMAGE_NAME) {
+	}
+	else if (selectedTower->getImageName() == GameConstants::THUNDER_TOWER_IMAGE_NAME) {
 		type = "THUNDER";
 	}
 	stringstream ss;
@@ -887,7 +954,7 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
 	string temp;
 	towerInfoText.setString(ss.str());
 
-	if (showButtons) {
+	if (showButtons){
 		upgradeButton.setPosition(mapWidthPixels + 4, 148);
 		sellButton.setPosition(mapWidthPixels + 84, 148);
 		nearestStrategyButton.setPosition(mapWidthPixels + 15, 212);
@@ -897,7 +964,8 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
 		strategyText.setPosition(mapWidthPixels + 50, 194);
 		nearestStrategyText.setPosition(nearestStrategyButton.getPosition().x + 4, nearestStrategyButton.getPosition().y + 6);
 		weakestStrategyText.setPosition(weakestStrategyButton.getPosition().x + 4, weakestStrategyButton.getPosition().y + 6);
-	} else {
+	}
+	else {
 		upgradeButton.setPosition(-100, -100);
 		sellButton.setPosition(-100, -100);
 		upgradeButtonText.setPosition(-100, -100);
@@ -910,10 +978,16 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
 	}
 }
 
-bool saveMapPrompt(Map* map, bool overwrite) {
+void resizeMap(Map* map){
+
+}
+void changeMapPath(Map* map){
+
+}
+bool saveMapPrompt(Map* map, bool overwrite){
 	string errMsg = "", fileName = "";
 	char input;
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tSaving Map\n";
@@ -922,21 +996,22 @@ bool saveMapPrompt(Map* map, bool overwrite) {
 		cout << "would you like to save this map? (y/n): ";
 		cin >> input;
 		errMsg = "";
-		if (input == 'n' || input == 'y') {
+		if (input == 'n' || input == 'y'){
 			break;
-		} else {
+		}
+		else{
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 		}
 	}
-	if (input == 'n') {
+	if (input == 'n'){
 		return false;
 	}
 	errMsg = "";
-	if (overwrite) {
+	if (overwrite){
 		cout << map->saveMap(map->getMapName(), true);
 		return true;
 	}
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tSaving Map\n";
@@ -945,9 +1020,10 @@ bool saveMapPrompt(Map* map, bool overwrite) {
 		cout << "Enter the file name for this map (no spaces): ";
 		cin >> fileName;
 		errMsg = "";
-		if (map->saveMap(fileName, false)) {
+		if (map->saveMap(fileName, false)){
 			break;
-		} else {
+		}
+		else{
 			errMsg = "***** File Already Exists. Please Try Again. *****";
 		}
 	}
@@ -961,43 +1037,44 @@ bool saveMapPrompt(Map* map, bool overwrite) {
 	cin >> fileName;
 	return true;
 }
-
-void foo(int x, int y, Map*& map) {
+void foo(int x, int y, Map*& map){
 	vector<int> newPath;
 	vector<int> oldPath = map->getPath();
-	for (int i = 0; i < oldPath.size(); i += 2) {
+	for (int i = 0; i < oldPath.size(); i += 2){
 		newPath.push_back(oldPath[i]);
 		newPath.push_back(oldPath[i + 1]);
-		if (x == oldPath[i] && y == oldPath[i + 1]) {
+		if (x == oldPath[i] && y == oldPath[i + 1]){
 			break;
 		}
 	}
 	string mapName = map->getMapName();
 	map = new Map(map->getWidth(), map->getHeight());
 	map->setMapName(mapName);
-	for (int i = 0; i < newPath.size(); i += 2) {
-		if (i == 0) {
+	for (int i = 0; i < newPath.size(); i += 2){
+		if (i == 0){
 			map->addEntity(newPath[i], newPath[i + 1], new Path(GameConstants::START_IMAGE_NAME));
-		} else {
+		}
+		else{
 			map->addEntity(newPath[i], newPath[i + 1], new Path());
 		}
 	}
 }
+void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused){
 
-void towerAction(vector<Tower*> towerList, vector<Critter*> critterList, bool paused) {
-	for (int i = 0; i < towerList.size(); ++i) {
-		if (!paused && towerList[i]->isPaused()) {
+	for (int i = 0; i < towerList.size(); ++i){
+		if (!paused && towerList[i]->isPaused()){
 			towerList[i]->resume();
-		} else if (paused && !towerList[i]->isPaused()) {
+		}
+		else if (paused && !towerList[i]->isPaused()){
 			towerList[i]->pause();
 		}
 		towerList[i]->attack(critterList);
 	}
 }
 
-int findTowerIndex(Tower* tower, vector<Tower*> towerList) {
-	for (int i = 0; i < towerList.size(); ++i) {
-		if (towerList[i] == tower) {
+int findTowerIndex(Tower* tower, vector<Tower*> towerList){
+	for (int i = 0; i < towerList.size(); ++i){
+		if (towerList[i] == tower){
 			return i;
 		}
 	}
@@ -1008,7 +1085,7 @@ bool gameOverPrompt() {
 	string errMsg = "", fileName = "";
 
 	char input;
-	while (true) {
+	while (true){
 		system("cls");
 		cout << "------------------------------------\n";
 		cout << "\tGame Over!\n";
@@ -1017,9 +1094,10 @@ bool gameOverPrompt() {
 		cout << "Try again? (y/n): ";
 		cin >> input;
 		errMsg = "";
-		if (input == 'n' || input == 'y') {
+		if (input == 'n' || input == 'y'){
 			break;
-		} else {
+		}
+		else{
 			errMsg = "***** Invalid Input. Please Try Again. *****";
 		}
 	}
