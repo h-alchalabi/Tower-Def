@@ -162,7 +162,7 @@ void Map::printMap(sf::RenderWindow& window) {
 
 			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)) {
 				//Displaying the HP bar of each critter
-				float hpWidth = (((Critter*)theMap[i][j])->getHP() * 28.0) / ((Critter*)theMap[i][j])->getMaxHP();
+				float hpWidth = ((Critter*)theMap[i][j])->getHPBarWidth();
 				if (hpWidth < 0) {
 					hpWidth = 0;
 				}

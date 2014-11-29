@@ -7,13 +7,15 @@ SlowCritter::SlowCritter(int level) : Critter(GameConstants::SLOW_CRITTER_IMAGE_
 	this->maxHP = this->HP = 70 * level;
 	this->speed = 1;
 	this->reward = 10 * level;
+	this->HPBarWidth = (HP * 28) / maxHP;
 }
 
 int SlowCritter::getHP() {
-	return HP;
+	return this-> HP;
 }
 void SlowCritter::setHP(int HP) {
 	this->HP = HP;
+	notify();
 }
 
 int SlowCritter::getMaxHP() const {
@@ -21,15 +23,23 @@ int SlowCritter::getMaxHP() const {
 }
 
 int SlowCritter::getReward() {
-	return reward;
+	return this->reward;
 }
 
 void SlowCritter::setReward(int reward) {
 	this->reward = reward;
 }
 
+float SlowCritter::getHPBarWidth(){
+	return this->HPBarWidth;
+}
+
+void SlowCritter::setHPBarWidth(float HPBarWidth){
+	this->HPBarWidth = HPBarWidth;
+}
+
 int SlowCritter::getSpeed() {
-	return speed;
+	return this->speed;
 }
 
 void SlowCritter::setSpeed(int speed) {

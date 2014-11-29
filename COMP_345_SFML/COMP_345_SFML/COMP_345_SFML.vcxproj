@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="Critter.cpp" />
     <ClCompile Include="CritterFactory.cpp" />
+    <ClCompile Include="CritterHPBarDisplay.cpp" />
     <ClCompile Include="DeathTower.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FastCritter.cpp" />
@@ -111,6 +112,7 @@
   <ItemGroup>
     <ClInclude Include="Critter.h" />
     <ClInclude Include="CritterFactory.h" />
+    <ClInclude Include="CritterHPBarDisplay.h" />
     <ClInclude Include="DeathTower.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Entity.h" />

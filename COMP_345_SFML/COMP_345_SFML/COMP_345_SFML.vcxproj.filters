@@ -114,6 +114,9 @@
     <ClCompile Include="CritterFactory.cpp">
       <Filter>Source Files\Critter</Filter>
     </ClCompile>
+    <ClCompile Include="CritterHPBarDisplay.cpp">
+      <Filter>Source Files\Critter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireTower.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="DeathTower.h">
       <Filter>Header Files\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="CritterHPBarDisplay.h">
+      <Filter>Header Files\Critter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "CritterFactory.h"
 #include <vector>
 #include "Map.h"
+#include "CritterHPBarDisplay.h"
 #include "SFML\Graphics.hpp"
 
 class Wave {

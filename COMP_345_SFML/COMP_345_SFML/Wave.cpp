@@ -47,6 +47,12 @@ void Wave::createWave(int wave) {
 			}
 			break;
 	}
+	// create an observer for each critter
+	vector<CritterHPBarDisplay*> critterHPBar;
+	for (int i = 0; i < critVec.size(); ++i){
+		critterHPBar.push_back(new CritterHPBarDisplay(critVec[i]));
+		critVec[i]->addObserver(critterHPBar[i]);
+	}
 }
 
 //To deploy the critters and to move them.
