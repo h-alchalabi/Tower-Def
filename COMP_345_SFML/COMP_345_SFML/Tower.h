@@ -1,5 +1,6 @@
 /*******************************************************************************************************************/
-//
+//The Tower abstract class where every type of critter will inherit from it. It also extends Entity to be displayed
+//in the map
 /*******************************************************************************************************************/
 
 #pragma once
@@ -33,8 +34,8 @@ public:
 	Strategy* getStrategy();
 
 private:
-	sf::Clock towerClock;
-	sf::Time pausedTime, pauseStartTime, pauseEndTime;
-	bool paused;
-	Target targetStrategy;
+	sf::Clock towerClock;                               //Used to keep track of the tower's fire rate and the pause time
+	sf::Time pausedTime, pauseStartTime, pauseEndTime;  //Used to keep track of the pause time
+	bool paused;                                        //Used to determine if the game is paused
+	Target targetStrategy;                              //Target strategy used by the tower
 };

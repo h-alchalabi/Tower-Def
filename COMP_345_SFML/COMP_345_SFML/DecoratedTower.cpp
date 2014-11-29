@@ -1,7 +1,3 @@
-/*******************************************************************************************************************/
-// Decorator Class for tower which allows for stacking of decorations.
-/*******************************************************************************************************************/
-
 #include "DecoratedTower.h"
 
 DecoratedTower::DecoratedTower(Tower* decoratedTower) {

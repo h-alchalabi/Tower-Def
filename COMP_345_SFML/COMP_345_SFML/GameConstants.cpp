@@ -74,7 +74,7 @@ void GameConstants::resetHP() {
 //Getting the player's HP that was displayed in the GUI
 std::string GameConstants::getHPString() {
 	stringstream ss;
-	ss << "HP:   \t\t" << playerHP;
+	ss << "Lives:   \t" << playerHP;
 	return ss.str();
 }
 

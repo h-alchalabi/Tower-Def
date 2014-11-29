@@ -1,5 +1,5 @@
 /*******************************************************************************************************************/
-//
+//This type of tower is a tower which can burn a critter (thus decrementing the critter's HP every second)
 /*******************************************************************************************************************/
 
 #pragma once
@@ -12,7 +12,7 @@ public:
 	int getY();
 	int getLevel();
 	int getDamage();
-	int getRange(); // Radius
+	int getRange();
 	int getFireRate();
 	int getBasePrice();
 	int getSellPrice();

@@ -1,7 +1,3 @@
-/*******************************************************************************************************************/
-//
-/*******************************************************************************************************************/
-
 #include "FireTower.h"
 #include "GameConstants.h"
 
@@ -46,6 +42,7 @@ int FireTower::getUpgradePrice() {
 }
 
 void FireTower::shoot(Critter* targettedCritter) {
+	//Shooting the critter as well as burning it
 	targettedCritter->setCritterStatus(CritterStatus::BURN, 3000);
 	DecoratedTower::shoot(targettedCritter);
 }

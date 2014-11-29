@@ -1,5 +1,8 @@
 /*******************************************************************************************************************/
-//
+//Used for the decorator pattern
+//Increases the level of the tower by 1.
+//All stats are incremented by either constant values or percentages.
+//Fire rate increases every two levels.
 /*******************************************************************************************************************/
 
 #pragma once

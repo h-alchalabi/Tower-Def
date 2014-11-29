@@ -1,7 +1,3 @@
-/*******************************************************************************************************************/
-//
-/*******************************************************************************************************************/
-
 #include "DeathTower.h"
 #include "GameConstants.h"
 #include <iostream>
@@ -24,7 +20,7 @@ int DeathTower::getLevel() {
 }
 
 int DeathTower::getDamage() {
-	return DecoratedTower::getDamage();
+	return DecoratedTower::getDamage() - 10;
 }
 
 int DeathTower::getRange() {
@@ -48,7 +44,12 @@ int DeathTower::getUpgradePrice() {
 }
 
 void DeathTower::shoot(Critter* targettedCritter) {
+	//Used to determine the odds of eliminating a critter instantly
 	int critterDeathChance = rand() % 5;
+
 	if (critterDeathChance == 0)
+		//Eliminating the critter
 		targettedCritter->setHP(0);
+	else
+		targettedCritter->setHP(targettedCritter->getHP() - this->getDamage());
 }

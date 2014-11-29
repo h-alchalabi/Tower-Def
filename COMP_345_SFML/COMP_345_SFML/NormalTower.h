@@ -1,5 +1,5 @@
 /*******************************************************************************************************************/
-//
+//This is the regular tower in the game (no specific special attribute).
 /*******************************************************************************************************************/
 
 #pragma once
@@ -12,7 +12,7 @@ public:
 	int getY();
 	int getLevel();
 	int getDamage();
-	int getRange(); // Radius
+	int getRange();
 	int getFireRate();
 	int getBasePrice();
 	int getSellPrice();

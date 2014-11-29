@@ -1,5 +1,5 @@
 /*******************************************************************************************************************/
-//
+//This type of tower is a tower which has a higher fire rate than any other tower type
 /*******************************************************************************************************************/
 
 #pragma once
@@ -12,7 +12,7 @@ public:
 	int getY();
 	int getLevel();
 	int getDamage();
-	int getRange(); // Radius
+	int getRange();
 	int getFireRate();
 	int getBasePrice();
 	int getSellPrice();
