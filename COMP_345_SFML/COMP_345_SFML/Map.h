@@ -34,6 +34,7 @@ public:
 	Map(int width, int height);
 	void init(int width, int height);
 	bool addEntity(int x, int y, Tower* tower);
+	bool canAddTower(int x, int y, Tower* tower);
 	bool addEntity(int x, int y, Critter* critter);
 	bool addEntity(int x, int y, Path* path);
 	void removeEntity(Tower* tower);

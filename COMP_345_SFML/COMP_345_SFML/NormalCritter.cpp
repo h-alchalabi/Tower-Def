@@ -8,7 +8,7 @@ NormalCritter::NormalCritter(int level) : Critter(GameConstants::NORMAL_CRITTER_
 	this->maxHP = this->HP = 50*level;
 	this->speed = 2;
 	this->reward = 3*level;
-	this->HPBarWidth = (HP * 28) / maxHP;
+	this->HPBarLength = (HP * 28) / maxHP;
 }
 
 int NormalCritter::getHP() {
@@ -24,12 +24,12 @@ void NormalCritter::setHP(int HP) {
 	notify();
 }
 
-float NormalCritter::getHPBarWidth(){
-	return this->HPBarWidth;
+float NormalCritter::getHPBarLength(){
+	return this->HPBarLength;
 }
 
-void NormalCritter::setHPBarWidth(float HPBarWidth){
-	this->HPBarWidth = HPBarWidth;
+void NormalCritter::setHPBarLength(float HPBarLength){
+	this->HPBarLength = HPBarLength;
 }
 
 int NormalCritter::getReward() {

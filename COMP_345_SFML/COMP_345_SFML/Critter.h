@@ -14,12 +14,12 @@ public:
 	virtual int getHP() = 0;
 	virtual int getMaxHP() const = 0;
 	virtual int getReward() = 0;
-	virtual float getHPBarWidth() = 0;
+	virtual float getHPBarLength() = 0;
 	virtual CritterStatus getCritterStatus() = 0;
 	virtual void setHP(int HP) = 0;
 	virtual void setReward(int reward) = 0;
 	virtual void setSpeed(int speed) = 0;
-	virtual void setHPBarWidth(float HPBarWidth) = 0;
+	virtual void setHPBarLength(float HPBarLength) = 0;
 	virtual void setCritterStatus(CritterStatus critterStatus, float statusDuration) = 0;
 	void move();
 	int getStep();
@@ -35,7 +35,7 @@ protected:
 	int reward;
 	int level;
 	int step;
-	float HPBarWidth;
+	float HPBarLength;
 	CritterStatus critterStatus;
 	sf::Clock critterClock;
 	float statusTime;

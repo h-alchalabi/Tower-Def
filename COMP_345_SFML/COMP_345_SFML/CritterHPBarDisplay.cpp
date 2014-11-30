@@ -1,17 +1,12 @@
 #include "CritterHPBarDisplay.h"
 
-
-CritterHPBarDisplay::CritterHPBarDisplay(Critter* critter)
-{
+CritterHPBarDisplay::CritterHPBarDisplay(Critter* critter) {
 	this->critter = critter;
 }
 
+CritterHPBarDisplay::~CritterHPBarDisplay(){}
 
-CritterHPBarDisplay::~CritterHPBarDisplay()
-{
-}
-
-void CritterHPBarDisplay::update(){
-	// sets the HPBarWidth as HP changes
-	critter->setHPBarWidth(critter->getHP() * 28 / critter->getMaxHP());
+void CritterHPBarDisplay::update() {
+	// sets the HPBarLength as HP changes
+	critter->setHPBarLength(critter->getHP() * 28 / critter->getMaxHP());
 }

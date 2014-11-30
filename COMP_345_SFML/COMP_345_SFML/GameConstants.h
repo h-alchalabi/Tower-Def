@@ -39,6 +39,7 @@ public:
 	// Shared Variables.
 	static int getMoney();
 	static bool spendMoney(int amount);
+	static bool canSpendMoney(int amount);
 	static bool collectMoney(int amount);
 	static void resetMoney();
 	static std::string getMoneyString();

@@ -29,6 +29,7 @@
 #include "dirent.h"
 #include "NearestCritterTowerStrategy.h"
 #include "WeakestCritterStrategy.h"
+#include "StrongestCritterStrategy.h"
 #include <sstream>
 using namespace std;
 
@@ -62,7 +63,8 @@ static sf::RectangleShape upgradeButton(sf::Vector2<float>(64, 20));
 static sf::RectangleShape sellButton(sf::Vector2<float>(64, 20));
 static sf::RectangleShape nearestStrategyButton(sf::Vector2<float>(140, 20));
 static sf::RectangleShape weakestStrategyButton(sf::Vector2<float>(128, 20));
-static sf::Text upgradeButtonText, sellButtonText, towerInfoText, strategyText, nearestStrategyText, weakestStrategyText, startGameText;
+static sf::RectangleShape strongestStrategyButton(sf::Vector2<float>(144, 20));
+static sf::Text upgradeButtonText, sellButtonText, towerInfoText, strategyText, nearestStrategyText, weakestStrategyText, strongestStrategyText, startGameText;
 static sf::Font mainFont;
 static sf::Sprite towerIcon;
 static Tower* currentTower;
@@ -172,6 +174,13 @@ void init() {
 	weakestStrategyText.setFont(mainFont);
 	weakestStrategyText.setString("WEAKEST CRITTER");
 	weakestStrategyText.setCharacterSize(GameConstants::FONT_SIZE);
+
+	//Set up the strongest critter strategy button (as well as the text inside the button)
+	strongestStrategyButton.setFillColor(sf::Color::Blue);
+	strongestStrategyButton.setPosition(-100, -100);
+	strongestStrategyText.setFont(mainFont);
+	strongestStrategyText.setString("STRONGEST CRITTER");
+	strongestStrategyText.setCharacterSize(GameConstants::FONT_SIZE);
 
 	//Set up the "STRATEGY" string to be displayed
 	strategyText.setFont(mainFont);
@@ -598,15 +607,17 @@ void startGame() {
 		//Not displaying those buttons and the text inside of it
 		upgradeButton.setPosition(-100, -100);
 		sellButton.setPosition(-100, -100);
-		nearestStrategyButton.setPosition(-100, -100);
-		weakestStrategyButton.setPosition(-100, -100);
+		//nearestStrategyButton.setPosition(-100, -100);
+		//weakestStrategyButton.setPosition(-100, -100);
 		upgradeButtonText.setPosition(-100, -100);
 		sellButtonText.setPosition(-100, -100);
 		strategyText.setPosition(-100, -100);
 		nearestStrategyButton.setPosition(-100, -100);
 		weakestStrategyButton.setPosition(-100, -100);
+		strongestStrategyButton.setPosition(-100, -100);
 		nearestStrategyText.setPosition(-100, -100);
 		weakestStrategyText.setPosition(-100, -100);
+		strongestStrategyText.setPosition(-100, -100);
 
 		//Set the display location of the start game instruction on the GUI
 		startGameText.setPosition(4, map->getHeight() * 32 + 16);
@@ -636,24 +647,24 @@ void startGame() {
 		sf::Text playerMoneyText(GameConstants::getMoneyString(), mainFont);
 		playerMoneyText.setColor(sf::Color::White);
 		playerMoneyText.setCharacterSize(GameConstants::FONT_SIZE);
-		playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 48);
+		playerMoneyText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
 
 		//Set up the player's HP text on the GUI
 		sf::Text playerHPText(GameConstants::getHPString(), mainFont);
 		playerHPText.setColor(sf::Color::White);
 		playerHPText.setCharacterSize(GameConstants::FONT_SIZE);
-		playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 64);
+		playerHPText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
 
 		//Set up the next wave text on the GUI
 		sf::Text waveNumberText("Next Wave:\t1", mainFont);
 		waveNumberText.setColor(sf::Color::White);
 		waveNumberText.setCharacterSize(GameConstants::FONT_SIZE);
-		waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 80);
+		waveNumberText.setPosition(map->getWidth() * 32 + 4, map->getHeight() * 32 + 96);
 
 		vector<Tower*> towerList;
 
 		//Opening the start game window
-		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 96), "Starting Game");
+		sf::RenderWindow window(sf::VideoMode(map->getWidth() * 32 + 192, map->getHeight() * 32 + 128), "Starting Game");
 		window.setKeyRepeatEnabled(false);
 
 		bool doneGame = false;  //Used to determine if the game is over 
@@ -738,8 +749,10 @@ void startGame() {
 			window.draw(strategyText);
 			window.draw(nearestStrategyButton);
 			window.draw(weakestStrategyButton);
+			window.draw(strongestStrategyButton);
 			window.draw(nearestStrategyText);
 			window.draw(weakestStrategyText);
+			window.draw(strongestStrategyText);
 			window.draw(waveNumberText);
 			if (wave->isPaused()) {
 				//The game is paused
@@ -880,11 +893,17 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
 			currentTower->setStrategy(new NearestCritterTowerStrategy());
-		} else if (weakestStrategyButton.getGlobalBounds().contains(x, y)) {
+		}
+		else if (weakestStrategyButton.getGlobalBounds().contains(x, y)) {
 			//Selected the weakest critter strategy for the selected tower
 			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
 			currentTower->setStrategy(new WeakestCritterStrategy());
+		} else if (strongestStrategyButton.getGlobalBounds().contains(x, y)) {
+			//Selected the strongest critter strategy for the selected tower
+			strategySelectRect.setSize(sf::Vector2<float>(strongestStrategyButton.getSize().x + 8, strongestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(strongestStrategyButton.getPosition().x - 4, strongestStrategyButton.getPosition().y - 4);
+			currentTower->setStrategy(new StrongestCritterStrategy());
 		} else if (normalTowerButton.getGlobalBounds().contains(x, y)) {
 			//Selected the normal tower to potentially buy it
 			towerSelectionRect.setPosition(normalTowerButton.getPosition().x - 4, normalTowerButton.getPosition().y - 4);
@@ -938,47 +957,44 @@ void handleClick(sf::Event sf_event, Map* map, bool canPlace, vector<Tower*>& to
 		if (typeid(*(currentTower->getStrategy())) == typeid(NearestCritterTowerStrategy)) {
 			strategySelectRect.setSize(sf::Vector2<float>(nearestStrategyButton.getSize().x + 8, nearestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(nearestStrategyButton.getPosition().x - 4, nearestStrategyButton.getPosition().y - 4);
-		} else {
+		} else if (typeid(*(currentTower->getStrategy())) == typeid(WeakestCritterStrategy)) {
 			strategySelectRect.setSize(sf::Vector2<float>(weakestStrategyButton.getSize().x + 8, weakestStrategyButton.getSize().y + 8));
 			strategySelectRect.setPosition(weakestStrategyButton.getPosition().x - 4, weakestStrategyButton.getPosition().y - 4);
+		} else {
+			strategySelectRect.setSize(sf::Vector2<float>(strongestStrategyButton.getSize().x + 8, strongestStrategyButton.getSize().y + 8));
+			strategySelectRect.setPosition(strongestStrategyButton.getPosition().x - 4, strongestStrategyButton.getPosition().y - 4);
 		}
 	} else if (canPlace) {
 		//Place a tower on the map
 
+		Tower* toAdd = NULL;
+
 		//Determining the type of tower that will be added on the map
 		switch (towerType) {
 			case Selection::NORMAL: {
-				//Buying the normal tower and add it to the map
-				Tower* toAdd = new NormalTower();
-				if (GameConstants::spendMoney(toAdd->getBasePrice())){
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
+				//Buying the normal tower
+				toAdd = new NormalTower();
 			} break;
 			case Selection::FIRE: {
-				//Buying the fire tower and add it to the map
-				Tower* toAdd = new FireTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())){
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
+				//Buying the fire tower
+				toAdd = new FireTower(new NormalTower());
 			} break;
 			case Selection::DEATH: {
-				//Buying the death tower and add it to the map
-				Tower* toAdd = new DeathTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())){
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
+				//Buying the death tower
+				toAdd = new DeathTower(new NormalTower());
 			} break;
 			case Selection::THUNDER:{
-				//Buying the thunder tower and add it to the map
-				Tower* toAdd = new ThunderTower(new NormalTower());
-				if (GameConstants::spendMoney(toAdd->getBasePrice())) {
-					map->addEntity(block_x, block_y, toAdd);
-					towerList.push_back(toAdd);
-				}
+				//Buying the thunder tower
+				toAdd = new ThunderTower(new NormalTower());
 			} break;
+		}
+
+		//Determining if the tower can be bought and added to the desired location in the map
+		if (GameConstants::canSpendMoney(toAdd->getBasePrice()) && map->canAddTower(block_x, block_y, toAdd)) {
+			//Buying the selected tower and place it on the desired location in the map
+			GameConstants::spendMoney(toAdd->getBasePrice());
+			map->addEntity(block_x, block_y, toAdd);
+			towerList.push_back(toAdd);
 		}
 	}
 }
@@ -1021,11 +1037,13 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
 		sellButton.setPosition(mapWidthPixels + 84, 148);
 		nearestStrategyButton.setPosition(mapWidthPixels + 15, 212);
 		weakestStrategyButton.setPosition(mapWidthPixels + 15, 244);
+		strongestStrategyButton.setPosition(mapWidthPixels + 15, 276);
 		upgradeButtonText.setPosition(upgradeButton.getPosition().x + 4, upgradeButton.getPosition().y + 6);
 		sellButtonText.setPosition(sellButton.getPosition().x + 16, sellButton.getPosition().y + 6);
 		strategyText.setPosition(mapWidthPixels + 50, 194);
 		nearestStrategyText.setPosition(nearestStrategyButton.getPosition().x + 4, nearestStrategyButton.getPosition().y + 6);
 		weakestStrategyText.setPosition(weakestStrategyButton.getPosition().x + 4, weakestStrategyButton.getPosition().y + 6);
+		strongestStrategyText.setPosition(strongestStrategyButton.getPosition().x + 4, strongestStrategyButton.getPosition().y + 6);
 	} else {
 		//When wanting to buy a tower
 		//Not displaying the upgrade/sell tower button and the strategy selection button along with the text inside them
@@ -1038,6 +1056,8 @@ void setTowerInfo(Tower* selectedTower, int mapWidthPixels, bool showButtons) {
 		nearestStrategyText.setPosition(-100, -100);
 		weakestStrategyButton.setPosition(-100, -100);
 		weakestStrategyText.setPosition(-100, -100);
+		strongestStrategyButton.setPosition(-100, -100);
+		strongestStrategyText.setPosition(-100, -100);
 	}
 }
 

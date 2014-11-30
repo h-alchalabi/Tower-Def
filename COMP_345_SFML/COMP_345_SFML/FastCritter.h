@@ -13,8 +13,8 @@ public:
 	void setSpeed(int speed);
 	int getHP();
 	void setHP(int HP);
-	float getHPBarWidth();
-	void setHPBarWidth(float HPBarWidth);
+	float getHPBarLength();
+	void setHPBarLength(float HPBarLength);
 	int getMaxHP() const;
 	int getReward();
 	void setReward(int reward);

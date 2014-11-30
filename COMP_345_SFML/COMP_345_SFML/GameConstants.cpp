@@ -5,8 +5,8 @@
 using namespace std;
 
 const int GameConstants::TOTAL_NUMBER_OF_WAVES = 9;
-const int GameConstants::MIN_WIDTH = 5;
-const int GameConstants::MIN_HEIGHT = 5;
+const int GameConstants::MIN_WIDTH = 8;
+const int GameConstants::MIN_HEIGHT = 8;
 const int GameConstants::MAX_WIDTH = 16;
 const int GameConstants::MAX_HEIGHT = 16;
 const string GameConstants::START_IMAGE_NAME = "start";
@@ -43,6 +43,13 @@ bool GameConstants::spendMoney(int amount) {
 	return true;
 }
 
+//Verifying if the player has enough money to purchase a tower
+bool GameConstants::canSpendMoney(int amount) {
+	if (money - amount < 0 || amount < 0)
+		return false;
+	return true;
+}
+
 //When player collects money from eliminated critters
 bool GameConstants::collectMoney(int amount) {
 	if (amount < 0) {
@@ -74,7 +81,7 @@ void GameConstants::resetHP() {
 //Getting the player's HP that was displayed in the GUI
 std::string GameConstants::getHPString() {
 	stringstream ss;
-	ss << "Lives:   \t" << playerHP;
+	ss << "Lives:    \t" << playerHP;
 	return ss.str();
 }
 

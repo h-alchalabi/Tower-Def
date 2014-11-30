@@ -8,7 +8,7 @@ FastCritter::FastCritter(int level) : Critter(GameConstants::FAST_CRITTER_IMAGE_
 	this->maxHP= this->HP = 30*level;
 	this->reward = 5 * level;
 	this->speed = 3;
-	this->HPBarWidth = (HP * 28) / maxHP;
+	this->HPBarLength = (HP * 28) / maxHP;
 }
 
 int FastCritter::getHP() {
@@ -32,12 +32,12 @@ void FastCritter::setReward(int reward) {
 	this->reward = reward;
 }
 
-float FastCritter::getHPBarWidth(){
-	return this->HPBarWidth;
+float FastCritter::getHPBarLength(){
+	return this->HPBarLength;
 }
 
-void FastCritter::setHPBarWidth(float HPBarWidth){
-	this->HPBarWidth = HPBarWidth;
+void FastCritter::setHPBarLength(float HPBarLength){
+	this->HPBarLength = HPBarLength;
 }
 
 int FastCritter::getSpeed() {

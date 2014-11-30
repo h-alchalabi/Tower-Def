@@ -62,6 +62,14 @@ bool Map::addEntity(int x, int y, Tower* tower) {
 	return false;
 }
 
+//Verifying if a tower can be placed on the selected location
+bool Map::canAddTower(int x, int y, Tower* tower) {
+	if (inBounds(x, y) && (typeid(*theMap[x][y]) == typeid(Scenery)))
+		return true;
+	else
+		return false;
+}
+
 //Adding a critter on the map
 bool Map::addEntity(int x, int y, Critter* critter) {
 	//Determining if the critter can be placed on the map
@@ -162,7 +170,7 @@ void Map::printMap(sf::RenderWindow& window) {
 
 			if (typeid(*theMap[i][j]) == typeid(NormalCritter) || typeid(*theMap[i][j]) == typeid(FastCritter) || typeid(*theMap[i][j]) == typeid(SlowCritter)) {
 				//Displaying the HP bar of each critter
-				float hpWidth = ((Critter*)theMap[i][j])->getHPBarWidth();
+				float hpWidth = ((Critter*)theMap[i][j])->getHPBarLength();
 				if (hpWidth < 0) {
 					hpWidth = 0;
 				}

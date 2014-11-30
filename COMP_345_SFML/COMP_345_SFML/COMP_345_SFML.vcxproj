@@ -93,6 +93,7 @@
     <ClCompile Include="FireTower.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="LevelUpTower.cpp" />
+    <ClCompile Include="StrongestCritterStrategy.cpp" />
     <ClCompile Include="ThunderTower.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="FireTower.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="LevelUpTower.h" />
+    <ClInclude Include="StrongestCritterStrategy.h" />
     <ClInclude Include="ThunderTower.h" />
     <ClInclude Include="NearestCritterTowerStrategy.h" />
     <ClInclude Include="NormalCritter.h" />
